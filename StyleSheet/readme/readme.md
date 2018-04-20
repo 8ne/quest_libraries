@@ -1,0 +1,17 @@
+# StyleSheet 2.21
+---
+#### With StyleSheet it is possible to extract the modified CSS code from the HTML code of the game (accessible via the HTML tools) and then integrate it into the source code or export it as a CSS file.
+---
+
+![Preview StyleSheet](https://i.imgur.com/2JQmeEe.gif)
+
+---
+**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/blob/master/StyleSheet/StyleSheet.zip?raw=true)**
+
+---
+
+*Have fun with the library!*
+
+![enter image description here](https://i.imgur.com/lNRf4L7.png)
+
+---

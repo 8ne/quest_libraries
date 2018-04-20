@@ -1,8 +1,9 @@
 # Titel 1.0
-### Beschreiung
+---
+#### Beschreiung
 ---
 
-![enter image description here](https://i.imgur.com/1Lvp5Ug.gif)
+![Preview Titel](https://i.imgur.com/1Lvp5Ug.gif)
 
 ---
 **[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/blob/master/DevMode/DevMode.aslx)**
