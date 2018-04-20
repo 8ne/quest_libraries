@@ -1,0 +1,387 @@
+﻿<?xml version="1.0"?>
+<library>
+<!--
+  ****************************************************************************************************
+  This script is still in beta-stage, because I haven't gotten to the complete test yet.
+  ****************************************************************************************************
+  ProcessTextAdvanced - Advanced text processor commands
+  by SoonGames, 2017
+  Version 0.6 Beta
+  ****************************************************************************************************
+  Quest-Version: 5.7
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  Download the ProcessTextAdvanced.aslx, integrate it as Library in Quest.
+  ****************************************************************************************************
+  Instruction
+  
+  Check whether an object is in a container:
+  {is object1 in object2:text}
+  
+  Check whether an object is not in a container:
+  {isnot object1 in object2:text}
+  
+  Output object:
+  {#object1}
+  
+  Output object with content (e. g. box (contains pencils and paper clips)):
+  {##object1}
+
+  Checking whether an object is open:
+  {isopen:text}
+
+  Check whether an object is closed:
+  {isclose:text}
+
+  Check if an object is switched on:
+  {ison:text}
+
+  Check whether an object is switched off:
+  {isoff:text}  
+  ****************************************************************************************************
+  
+-->
+
+  <function name="ProcessTextCommand" parameters="section, data" type="string">
+    if (StartsWith(section, "if ")) {
+      return (ProcessTextCommand_If(section, data))
+    }
+    else if (StartsWith(section, "either ")) {
+      return (ProcessTextCommand_Either(section, data))
+    }
+    else if (StartsWith(section, "here ")) {
+      return (ProcessTextCommand_Here(section, data, true))
+    }
+    else if (StartsWith(section, "nothere ")) {
+      return (ProcessTextCommand_Here(section, data, false))
+    }
+    else if (StartsWith(section, "popup:")) {
+      return (ProcessTextCommand_Popup(Mid(section, 7), data))
+    }
+    else if (StartsWith(section, "i:")) {
+      return (ProcessTextCommand_Format(Mid(section, 3), data, "i"))
+    }
+    else if (StartsWith(section, "u:")) {
+      return (ProcessTextCommand_Format(Mid(section, 3), data, "u"))
+    }
+    else if (StartsWith(section, "b:")) {
+      return (ProcessTextCommand_Format(Mid(section, 3), data, "b"))
+    }
+    else if (StartsWith(section, "s:")) {
+      return (ProcessTextCommand_Format(Mid(section, 3), data, "s"))
+    }
+    else if (StartsWith(section, "color:")) {
+      return (ProcessTextCommand_Colour(Mid(section, 7), data))
+    }
+    else if (StartsWith(section, "colour:")) {
+      return (ProcessTextCommand_Colour(Mid(section, 8), data))
+    }
+    else if (StartsWith(section, "back:")) {
+      return (ProcessTextCommand_Background(Mid(section, 6), data))
+    }
+    else if (StartsWith(section, "object:")) {
+      return (ProcessTextCommand_Object(section, data))
+    }
+    else if (StartsWith(section, "##")) {
+      return (ProcessTextCommand_ObjectAdvanced(section, data, 3))
+    }
+    else if (StartsWith(section, "#")) {
+      return (ProcessTextCommand_ObjectAdvanced(section, data, 2))
+    }
+    else if (StartsWith(section, "command:")) {
+      return (ProcessTextCommand_Command(Mid(section, 9), data))
+    }
+    else if (StartsWith(section, "page:")) {
+      return (ProcessTextCommand_Command(Mid(section, 6), data))
+    }
+    else if (StartsWith(section, "exit:")) {
+      return (ProcessTextCommand_Exit(section, data))
+    }
+    else if (StartsWith(section, "once:")) {
+      return (ProcessTextCommand_Once(section, data))
+    }
+    else if (StartsWith(section, "notfirst:")) {
+      return (ProcessTextCommand_NotFirst(section, data))
+    }
+    else if (StartsWith(section, "random:")) {
+      return (ProcessTextCommand_Random(section, data))
+    }
+    else if (StartsWith(section, "rndalt:")) {
+      return (ProcessTextCommand_RandomAlias(section, data))
+    }
+    else if (StartsWith(section, "img:")) {
+      return (ProcessTextCommand_Img(section, data))
+    }
+    else if (StartsWith(section, "counter:")) {
+      return (ProcessTextCommand_Counter(Mid(section, 9), data))
+    }
+    else if (StartsWith(section, "select:")) {
+      return (ProcessTextCommand_Select(section, data))
+    }
+    else if (StartsWith(section, "eval:")) {
+      return (ProcessTextCommand_Eval(Mid(section, 6), data))
+    }
+    else if (StartsWith(section, "=")) {
+      return (ProcessTextCommand_Eval(Mid(section, 2), data))
+    }
+    else if (StartsWith(section, "is ")) {
+      return (ProcessTextCommand_IsIn(section, data, true))
+    }
+    else if (StartsWith(section, "isnot ")) {
+      return (ProcessTextCommand_IsIn(section, data, false))
+    }
+    else if (StartsWith(section, "isopen ")) {
+      return (ProcessTextCommand_IsOpen(section, data))
+    }
+    else if (StartsWith(section, "isclose ")) {
+      return (ProcessTextCommand_IsClose(section, data))
+    }
+    else if (StartsWith(section, "ison ")) {
+      return (ProcessTextCommand_IsOn(section, data))
+    }
+    else if (StartsWith(section, "isoff ")) {
+      return (ProcessTextCommand_IsOff(section, data))
+    }
+    else {
+      dot = Instr(section, ".")
+      if (dot = 0) {
+        return ("@@@open@@@" + ProcessTextSection(section, data) + "@@@close@@@")
+      }
+      else {
+        objectname = Left(section, dot - 1)
+        attributename = Mid(section, dot + 1)
+        if (objectname = "this") {
+          object = game.text_processor_this
+        }
+        else {
+          object = GetObject(objectname)
+        }
+        if (object = null) {
+          return ("@@@open@@@" + ProcessTextSection(section, data) + "@@@close@@@")
+        }
+        else {
+          if (HasAttribute(object, attributename)) {
+            type = TypeOf(object, attributename)
+            switch (type) {
+              case ("string", "int", "double") {
+                return (ToString(GetAttribute(object, attributename)))
+              }
+              case ("boolean") {
+                result = GetAttribute(object, attributename)
+                if (result) {
+                  return ("true")
+                }
+                else {
+                  return ("false")
+                }
+              }
+              default {
+                return ("(" + type + ")")
+              }
+            }
+          }
+          else {
+            return ("")
+          }
+        }
+      }
+    }
+  </function>
+  <function name="ProcessTextCommand_ObjectAdvanced" parameters="section, data, len" type="string">
+    starts = Left(section, len - 1)
+    withcontent = StartsWith(starts, "##")
+    command = Mid(section, len)
+    colon = LengthOf(command) + 1
+    
+    if (colon = 0) {
+      return ("@@@open@@@" + section + "@@@close@@@")
+    }
+    else {
+      condition = Left(command, colon - 1)
+      if (not game.text_processor_this = null) {
+        condition = Replace(condition, "this", game.text_processor_this.name)
+      }
+      object = Eval(condition)
+      if (object = null) {
+        return ("@@@open@@@" + section + "@@@close@@@")
+      }
+      
+      text = ObjectLink(object)
+      if (withcontent) {
+        childdesc = FormatObjectList(" (" + object.contentsprefix, object, Template("And"), ")")
+        if (DoesInherit (object, "container_base")) {
+          if (object.isopen) {
+            text = text + childdesc
+          }
+          else {
+            if (HasAttribute(object, "transparent")) {
+              if (object.transparent) {
+                text = text + childdesc
+              }
+            }
+          }
+        }
+      }
+      return (text)
+    }
+  </function>
+  <function name="ProcessTextCommand_IsIn" parameters="section, data, flag" type="string">
+    len = 7
+    if (flag) {
+      len = 4
+    }
+    command = Mid(section, len)
+    command = Replace (command, " in ", ",")
+    colon = Instr(command, ",")
+    command2 = Mid(command, colon + 1)
+    colon2 = Instr(command2, ":")
+    if (colon2 = 0) {
+      colon2 = LengthOf(command2) + 1
+    }
+    if (colon = 0) {
+      return ("@@@open@@@" + section + "@@@close@@@")
+    }
+    else {
+      text = Mid(command2, colon2 + 1)
+      condition1 = Left(command, colon - 1)
+      condition2 = Left(command2, colon2 - 1)
+      if (not game.text_processor_this = null) {
+        condition1 = Replace(condition1, "this", game.text_processor_this.name)
+      }
+      object1 = Eval(condition1)
+      if (not game.text_processor_this = null) {
+        condition2 = Replace(condition2, "this", game.text_processor_this.name)
+      }
+      object2 = Eval(condition2)
+      if (object1 = null or object2 = null) {
+        return ("@@@open@@@" + section + "@@@close@@@")
+      }
+      if (DoesInherit (object2, "container_base")) {
+        if (object2.isopen) {
+          visible = true
+        }
+        else {
+          if (HasAttribute(object2, "transparent")) {
+            if (object2.transparent) {
+              visible = true
+            }
+          }
+          else {
+            visible = false
+          }
+        }
+      }
+      else {
+        visible = false
+      }
+    }
+    if (visible) {
+      if (text = "") {
+        text = DynamicTemplate("HereToSee", object1, object2)
+      }
+      if (object1.parent = object2 and flag) {
+        return (ProcessTextSection(text, data))
+      }
+      else if (not object1.parent = object2 and not flag) {
+        return (ProcessTextSection(text, data))
+      }
+      else {
+        return ("")
+      }
+    }
+    else {
+      return ("")
+    }
+  </function>
+  <function name="ProcessTextCommand_IsOpen" parameters="section, data" type="string">
+    len = 7
+    command = Mid(section, len)
+    colon = Instr(command, ":")
+    if (colon = 0) {
+      return ("@@@open@@@" + section + "@@@close@@@")
+    }
+    else {
+      text = Mid(command, colon + 1)
+      condition = Left(command, colon - 1)
+      if (not game.text_processor_this = null) {
+        condition = Replace(condition, "this", game.text_processor_this.name)
+      }
+      object = Eval(condition)
+      if (object.isopen) {
+        return (ProcessTextSection(text, data))
+      }
+      else {
+        return ("")
+      }
+    }
+  </function>
+  <function name="ProcessTextCommand_IsClose" parameters="section, data" type="string">
+    len = 8
+    command = Mid(section, len)
+    colon = Instr(command, ":")
+    if (colon = 0) {
+      return ("@@@open@@@" + section + "@@@close@@@")
+    }
+    else {
+      text = Mid(command, colon + 1)
+      condition = Left(command, colon - 1)
+      if (not game.text_processor_this = null) {
+        condition = Replace(condition, "this", game.text_processor_this.name)
+      }
+      object = Eval(condition)
+      if (not object.isopen) {
+        return (ProcessTextSection(text, data))
+      }
+      else {
+        return ("")
+      }
+    }
+  </function>
+  <function name="ProcessTextCommand_IsOn" parameters="section, data" type="string">
+    len = 5
+    command = Mid(section, len)
+    colon = Instr(command, ":")
+    if (colon = 0) {
+      return ("@@@open@@@" + section + "@@@close@@@")
+    }
+    else {
+      text = Mid(command, colon + 1)
+      condition = Left(command, colon - 1)
+      if (not game.text_processor_this = null) {
+        condition = Replace(condition, "this", game.text_processor_this.name)
+      }
+      object = Eval(condition)
+      if (IsSwitchedOn(object)) {
+        return (ProcessTextSection(text, data))
+      }
+      else {
+        return ("")
+      }
+    }
+  </function>
+  <function name="ProcessTextCommand_IsOff" parameters="section, data" type="string">
+    len = 6
+    command = Mid(section, len)
+    colon = Instr(command, ":")
+    if (colon = 0) {
+      return ("@@@open@@@" + section + "@@@close@@@")
+    }
+    else {
+      text = Mid(command, colon + 1)
+      condition = Left(command, colon - 1)
+      if (not game.text_processor_this = null) {
+        condition = Replace(condition, "this", game.text_processor_this.name)
+      }
+      object = Eval(condition)
+      if (not IsSwitchedOn(object)) {
+        return (ProcessTextSection(text, data))
+      }
+      else {
+        return ("")
+      }
+    }
+  </function>
+
+</library>

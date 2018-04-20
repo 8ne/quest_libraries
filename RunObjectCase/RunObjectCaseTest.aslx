@@ -1,0 +1,81 @@
+<!--Saved by Quest 5.7.6590.33353-->
+<asl version="550">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <include ref="RunObjectCase.aslx" />
+  <game name="RunObjectCaseTest">
+    <gameid>a8bd918b-b6ff-429a-b8f7-0f6dd1c1d8a4</gameid>
+    <version>1.0</version>
+    <firstpublished>2018</firstpublished>
+    <showscore type="boolean">false</showscore>
+    <showhealth type="boolean">false</showhealth>
+    <showmoney type="boolean">false</showmoney>
+    <attr name="feature_limitinventory" type="boolean">false</attr>
+    <attr name="feature_lightdark" type="boolean">false</attr>
+    <attr name="feature_asktell" type="boolean">false</attr>
+    <attr name="feature_annotations" type="boolean">false</attr>
+    <attr name="feature_advancedwearables" type="boolean">false</attr>
+    <attr name="feature_advancedscripts" type="boolean">false</attr>
+    <appendobjectdescription type="boolean">false</appendobjectdescription>
+    <allowlookdirections type="boolean">false</allowlookdirections>
+    <multiplecommands type="boolean">false</multiplecommands>
+  </game>
+  <object name="room">
+    <inherit name="editor_room" />
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+    </object>
+    <object name="case">
+      <inherit name="editor_object" />
+      <inherit name="container_open" />
+      <inherit name="wearable" />
+      <inherit name="switchable" />
+      <inherit name="edible" />
+      <alias>Case</alias>
+      <feature_container />
+      <isopen type="boolean">false</isopen>
+      <attr name="feature_usegive" type="boolean">false</attr>
+      <attr name="feature_switchable" type="boolean">false</attr>
+      <attr name="feature_edible" type="boolean">false</attr>
+      <attr name="feature_wearable" type="boolean">false</attr>
+      <feature_lightdark />
+      <attr name="feature_player" type="boolean">false</attr>
+      <attr name="feature_startscript" type="boolean">false</attr>
+      <inroomdescription type="string"></inroomdescription>
+      <take />
+      <wear_slots type="stringlist" />
+      <lightsource type="boolean">false</lightsource>
+      <look type="script">
+        msg ("A black case.")
+        if (case.isopen) {
+          RunObjectCase (case, "onopen")
+        }
+      </look>
+      <ondrop type="script">
+        msg ("DROPSCR")
+      </ondrop>
+      <ontake type="script">
+        msg ("AFTERTAKING")
+      </ontake>
+      <onopen type="script">
+        msg ("There are dozens of banknotes inside.")
+      </onopen>
+      <onclose type="script">
+      </onclose>
+      <addscript type="script">
+      </addscript>
+      <onswitchon type="script">
+        msg ("AFTERSWITCHON")
+      </onswitchon>
+      <onswitchoff type="script">
+        msg ("AFTERSWITCHOFF")
+      </onswitchoff>
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Open</value>
+        <value>Close</value>
+      </displayverbs>
+    </object>
+  </object>
+</asl>

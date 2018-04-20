@@ -1,0 +1,23 @@
+<!--Saved by Quest 5.7.6590.33353-->
+<asl version="550">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <include ref="StyleSheet.aslx" />
+  <game name="Testgame">
+    <inherit name="cssintern" />
+    <gameid>e74ca531-4540-42f0-9ede-216d630fba62</gameid>
+    <version>1.0</version>
+    <firstpublished>2018</firstpublished>
+    <subtitle>Testing AdvancedSurface</subtitle>
+    <author>SoonGames</author>
+    <cssextractfromhtml />
+    <csscode type="string"></csscode>
+  </game>
+  <object name="room">
+    <inherit name="editor_room" />
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+    </object>
+  </object>
+</asl>

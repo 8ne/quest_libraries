@@ -1,0 +1,36 @@
+<!--Saved by Quest 5.7.6590.33353-->
+<asl version="550">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <include ref="RunCommand.aslx" />
+  <game name="RunCommandTest">
+    <gameid>a8bd918b-b6ff-429a-b8f7-0f6dd1c1d8a4</gameid>
+    <version>1.0</version>
+    <firstpublished>2018</firstpublished>
+  </game>
+  <object name="room">
+    <inherit name="editor_room" />
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+    </object>
+    <object name="table">
+      <inherit name="editor_object" />
+      <alias>Table</alias>
+      <take type="boolean">false</take>
+      <takemsg>Test</takemsg>
+      <attr name="feature_usegive" type="boolean">false</attr>
+      <move type="script">
+        msg ("You move the table aside and discover a trapdoor underneath.")
+      </move>
+      <push type="script">
+        RunCommand1 ("move", table)
+      </push>
+      <pull type="script">
+        RunCommand1 ("move", table)
+      </pull>
+      <useanything type="script">
+      </useanything>
+    </object>
+  </object>
+</asl>

@@ -1,0 +1,545 @@
+<?xml version="1.0"?>
+<library>
+
+  <!--
+
+  ****************************************************************************************************
+  StyleSheet - With this you can comfortably integrate style sheets via the Game-Tab.
+  by SoonGames, 2018
+  Version 2.1
+  ****************************************************************************************************
+  Quest-Version: 5.7
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  Download the StyleSheet.zip, unpack in game path and integrate StyleSheet.aslx as Library in Quest.
+  ****************************************************************************************************
+  Go to Game / Stylesheet and choose how you want to implement the StyleSheet.
+  Either internal or external.
+  ****************************************************************************************************
+  
+  ****************************************************************************************************
+  Version 2.1
+  Bug fixing of parallel functions.
+  ****************************************************************************************************
+  Version 2.0
+  The name has been changed to 'Stylesheet'.
+  Only the changes are extracted.
+  Extraction by pressing CTRL + ENTER.
+  Automatic setting of the interface language.
+  ****************************************************************************************************
+  Version 1.5
+  Simplification of the extraction process.
+  ****************************************************************************************************
+  
+-->
+
+  <javascript src="StyleSheet_lib/StyleSheet.js" />
+
+  <!-- Languages -->
+  <!-- English -->
+  <template name="EditorGameStyleSheet">Stylesheet</template>
+  <template name="EditorGameSSInformation">Information</template>
+  <template name="EditorGameSSInformationText"><![CDATA[If the script 'User Interface Initialization' is already in use under the tab 'Advanced Scripts', simply add the function 'setStyleSheet' or, if you don't need the script, set the attribute 'inituserinterface' to 'Null' in the tab 'Attributes'. Otherwise, there is no need for personal involvement.]]></template>
+  <template name="EditorGameSSStyleSheet">Stylesheet</template>
+  <template name="EditorGameSSNoStyleSheet">Without</template>
+  <template name="EditorGameSSInstruction">Instruction</template>
+  <template name="EditorGameSSextracts">Extractions</template>
+  <template name="EditorGameSSExtractFromHTML">Extract CSS from HTML</template>
+  <template name="EditorGameSSextractIds">Extract IDs</template>
+  <template name="EditorGameSSextractClasses">Extract Classes</template>
+  <template name="EditorGameSSextractStyle">Extract Inline Styles</template>
+  <template name="EditorGameSSextractAnonStyle">Extract Anonymous Inline Styles (If the parent has a class or ID of anonymous elements, the inline styles are extracted)</template>
+  <template name="EditorGameSSextractTempIDs">Temporarily generated IDs (IDs created during the game, e. g. divOutputAlign with sequence number. It is recommended to leave the checkbox unchecked)</template>
+  <template name="EditorGameSSInternInstruction"><![CDATA[Select the 'Extract CSS from HTML' option. Start the game. Change the interface using HTML tools. Close the tool and press CTRL + ENTER. If a success message has appeared the game again stop and the extracted CSS code from the clipboard in the text field provided for this purpose. Adjustments may still have to be made in the CSS code to achieve the optimum result. Before publishing the game, the extraction option should be deactivated again.]]></template>
+  <template name="EditorGameSSIntern">Implement in game code</template>
+  <template name="EditorGameSSInternCSSCode">CSS-Code</template>
+  <template name="EditorGameSSExternInstruction"><![CDATA[The generated CSS code from the HTML element can be store in an external CSS file with the extension 'css' and selected here.]]></template>
+  <template name="EditorGameSSOptions">Options</template>
+  <template name="EditorGameSSExtern">Using an External StyleSheet</template>
+  <template name="EditorGameSSExternCSSFile">CSS-File</template>
+  <template name="EditorGameSSImportant">Automatically enforce stylesheet assignments for all attributes</template>
+  <template name="EditorGameSSSuccess">The StyleSheet was successfully generated and saved to the clipboard.</template>
+  <template name="EditorGameSSError">An error occurred during extraction:</template>
+
+  <!-- Deutsch -->
+  <template name="EditorGameStyleSheetDE">Stylesheet</template>
+  <template name="EditorGameSSInformationDE">Information</template>
+  <template name="EditorGameSSInformationTextDE"><![CDATA[Falls das Skript 'Initialisierung der Benutzeroberfläche' unter dem Tab 'Erweiterte Skripte' bereits in Verwendung ist einfach die Funktion 'setStyleSheet' hinzufügen oder, falls das Skript nicht benötigt wird, im Tab 'Attribute' das Attribut 'inituserinterface' auf 'Null' stellen. Anderenfalls bedarf es keines eigenen Zutuns.]]></template>
+  <template name="EditorGameSSStyleSheetDE">Stylesheet</template>
+  <template name="EditorGameSSNoStyleSheetDE">Ohne</template>
+  <template name="EditorGameSSInstructionDE">Anleitung</template>
+  <template name="EditorGameSSextractsDE">Extrahierungen</template>
+  <template name="EditorGameSSExtractFromHTMLDE">Extrahiere CSS aus HTML</template>
+  <template name="EditorGameSSextractIdsDE">IDs extrahieren</template>
+  <template name="EditorGameSSextractClassesDE">Klassen extrahieren</template>
+  <template name="EditorGameSSextractStyleDE">Inline-Styles extrahieren</template>
+  <template name="EditorGameSSextractAnonStyleDE">Anonyme Inline-Styles extrahieren (Wenn das Elternteil eine Klasse oder ID von anonymen Elementen besitzt, werden die Inline-Styles extrahiert)</template>
+  <template name="EditorGameSSextractTempIDsDE">Temporär generierte IDs (IDs, die während des Spiels erstellt werden, z. B. divOutputAlign mit Folgenummer. Es wird empfohlen, die Checkbox nicht zu aktivieren)</template>
+  <template name="EditorGameSSInternInstructionDE"><![CDATA[Die Option 'Extrahiere CSS aus HTML' wählen. Das Spiel starten. Die Oberfläche mithilfe der HTML-Tools ändern. Das Tool schließen und die Tastenkombination STRG + ENTER drücken. Ist eine Erfolgsmeldung erschienen das Spiel wieder stoppen und den extrahierten CSS-Code aus der Zwischenablage in das hierfür vorgesehene Textfeld einfügen. Es müssen eventuell noch Anpassungen im CSS-Code vorgenommen werden um das optimale Ergebnis zu erzielen. Vor dem Veröffentlichen des Spiels sollte die Extrahieren-Option wieder deaktiviert werden.]]></template>
+  <template name="EditorGameSSOptionsDE">Optionen</template>
+  <template name="EditorGameSSInternDE">In Spielcode implementieren</template>
+  <template name="EditorGameSSInternCSSCodeDE">CSS-Code</template>
+  <template name="EditorGameSSExternInstructionDE"><![CDATA[Der generierte CSS-Code aus dem HTML-Element kann in eine externe CSS-Datei mit der Endung 'css' gespeichert und hier ausgewählt werden.]]></template>
+  <template name="EditorGameSSExternDE">Externes StyleSheet verwenden</template>
+  <template name="EditorGameSSExternCSSFileDE">CSS-Datei</template>
+  <template name="EditorGameSSImportantDE">Für alle Attribute Stylesheet-Zuweisungen automatisch erzwingen</template>
+  <template name="EditorGameSSSuccessDE">Der StyleSheet wurde erfolgreich extrahiert und in die Zwischenablage gespeichert.</template>
+  <template name="EditorGameSSErrorDE">Ein Fehler ist bei der Extrahierung aufgetreten:</template>
+
+  <function name="addStyleSheet" parameters="css">
+    AddExternalStylesheet("data:text/css," + urlEncode(css))
+  </function>
+
+  <function name="urlEncode" parameters="s" type="string">
+    <![CDATA[
+    s = removeEnter(s)
+    s = importantStyleSheet(s)
+    s = Replace(s, "%", "%25")
+    s = Replace(s, " ", "%20")
+    s = Replace(s, "\"", "%22")
+    s = Replace(s, "#", "%23")
+    s = Replace(s, "$", "%24")
+    s = Replace(s, "&", "%26")
+    s = Replace(s, "'", "%27")
+    s = Replace(s, ",", "%2C")
+    s = Replace(s, ":", "%3A")
+    s = Replace(s, ";", "%3B")
+    s = Replace(s, "<", "%3C")
+    s = Replace(s, "=", "%3D")
+    s = Replace(s, ">", "%3E")
+    s = Replace(s, ">", "%3F")
+    s = Replace(s, "{", "%7B")
+    s = Replace(s, "}", "%7D")
+    return(s)
+  ]]>
+  </function>
+
+  <function name="removeEnter" parameters="s" type="string">
+    <![CDATA[
+      s = Replace(s, "<br/>", "")
+      return(s)
+  ]]>
+  </function>
+
+  <function name="importantStyleSheet" parameters="s" type="string">
+    if (GetBoolean(game, "cssimportant")) {
+      s = Replace(s, " !important;", ";")
+      s = Replace(s, ";", " !important;")
+    }
+      return(s)
+  </function>
+
+  <function name="setStyleSheet">
+    if (game.languageid = "de") {
+      game.csssuccessmessage = "[EditorGameSSSuccessDE]"
+      game.csserrormessage = "[EditorGameSSErrorDE]"
+    } else {
+      game.csssuccessmessage = "[EditorGameSSSuccess]"
+      game.csserrormessage = "[EditorGameSSError]"
+    }
+
+    switch (game.csslocation) {
+      case ("cssintern") JS.addStyleSheet (game.csscode, game.cssimportant, game.cssextractfromhtml, game.cssextracttempids, game.cssextractids, game.cssextractclasses, game.cssextractstyle, game.cssextractanonstyle, game.csssuccessmessage, game.csserrormessage)
+      case ("cssextern") if (not game.cssfile = "") addStyleSheet (GetFileData(game.cssfile)) // JS.addStyleSheetExt(GetFileURL(game.cssfile), game.cssimportant) // Does not work with Javascript
+    }
+  </function>
+  
+  <!-- Types -->
+    
+  <type name="extractions">
+    <cssextractfromhtml type="boolean">false</cssextractfromhtml>
+    <cssextractids type="boolean">true</cssextractids>
+    <cssextractclasses type="boolean">true</cssextractclasses>
+    <cssextractstyle type="boolean">true</cssextractstyle>
+    <cssextractanonstyle type="boolean">false</cssextractanonstyle>
+    <cssextracttempids type="boolean">false</cssextracttempids>
+  </type>
+    
+  <type name="cssintern">
+    <csslocation type="string">cssintern</csslocation>
+    <cssimportant type="boolean">true</cssimportant>
+    <inherit name="extractions" />
+    <csscode type="string"></csscode>
+    <feature_advancedscripts type="boolean">true</feature_advancedscripts>
+    <inituserinterface type="script">
+      setStyleSheet
+    </inituserinterface>
+  </type>
+
+  <type name="cssextern">
+    <csslocation type="string">cssextern</csslocation>
+    <cssimportant type="boolean">true</cssimportant>
+    <cssfile type="string"></cssfile>
+    <feature_advancedscripts type="boolean">true</feature_advancedscripts>
+    <inituserinterface type="script">
+      setStyleSheet
+    </inituserinterface>
+  </type>
+
+  <!-- Interface -->
+
+  <!-- English -->
+
+  <tab>
+    <parent>_GameEditor</parent>
+    <caption>[EditorGameStyleSheet]</caption>
+    <onlydisplayif>not game.languageid = "de"</onlydisplayif>
+   
+    <control>
+      <controltype>dropdowntypes</controltype>
+      <caption>[EditorGameSSStyleSheet]</caption>
+      <types>*=[EditorGameSSNoStyleSheet]; cssintern=[EditorGameSSIntern]; cssextern=[EditorGameSSExtern];</types>
+      <width>150</width>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInformation]</caption>
+      <mustnotinherit>cssintern; cssextern</mustnotinherit>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSInformationText]</caption>
+      <mustnotinherit>cssintern; cssextern</mustnotinherit>
+      <advanced/>
+    </control>
+
+    <!-- Intern -->
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSIntern]</caption>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInstruction]</caption>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSInternInstruction]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSOptions]</caption>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSImportant]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssimportant</attribute>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+      
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSextracts]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSExtractFromHTML]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractfromhtml</attribute>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractIds]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractids</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractClasses]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractclasses</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractStyle]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractstyle</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractAnonStyle]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractanonstyle</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractTempIDs]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextracttempids</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInternCSSCode]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <controltype>richtext</controltype>
+      <attribute>csscode</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <notextprocessor/>
+    </control>
+
+    <!-- Extern -->
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSExtern]</caption>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInstruction]</caption>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSExternInstruction]</caption>
+      <mustinherit>cssextern</mustinherit>
+      <advanced/>
+    </control>
+    
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSOptions]</caption>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSImportant]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssimportant</attribute>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+ 
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSExternCSSFile]</caption>
+      <mustinherit>cssextern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <controltype>file</controltype>
+      <attribute>cssfile</attribute>
+      <source>*.css</source>
+      <filefiltername>StyleSheet</filefiltername>
+      <width>300</width>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+    
+  </tab>
+
+  <!-- Deutsch -->
+
+  <tab>
+    <parent>_GameEditor</parent>
+    <caption>[EditorGameStyleSheetDE]</caption>
+    <onlydisplayif>game.languageid = "de"</onlydisplayif>
+   
+    <control>
+      <controltype>dropdowntypes</controltype>
+      <caption>[EditorGameSSStyleSheetDE]</caption>
+      <types>*=[EditorGameSSNoStyleSheetDE]; cssintern=[EditorGameSSInternDE]; cssextern=[EditorGameSSExternDE];</types>
+      <width>150</width>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInformationDE]</caption>
+      <mustnotinherit>cssintern; cssextern</mustnotinherit>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSInformationTextDE]</caption>
+      <mustnotinherit>cssintern; cssextern</mustnotinherit>
+      <advanced/>
+    </control>
+
+    <!-- Intern -->
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInternDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInstructionDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSInternInstructionDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSOptionsDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSImportantDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssimportant</attribute>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+      
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSextractsDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSExtractFromHTMLDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractfromhtml</attribute>
+      <mustinherit>cssintern</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractIdsDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractids</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractClassesDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractclasses</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractStyleDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractstyle</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractAnonStyleDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextractanonstyle</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSextractTempIDsDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssextracttempids</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInternCSSCodeDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <controltype>richtext</controltype>
+      <attribute>csscode</attribute>
+      <mustinherit>cssintern</mustinherit>
+      <notextprocessor/>
+    </control>
+
+    <!-- Extern -->
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSExternDE]</caption>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSInstructionDE]</caption>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSExternInstructionDE]</caption>
+      <mustinherit>cssextern</mustinherit>
+      <advanced/>
+    </control>
+    
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSOptionsDE]</caption>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameSSImportantDE]</caption>
+      <controltype>checkbox</controltype>
+      <attribute>cssimportant</attribute>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+ 
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorGameSSExternCSSFileDE]</caption>
+      <mustinherit>cssextern</mustinherit>
+      <advanced/>
+    </control>
+
+    <control>
+      <controltype>file</controltype>
+      <attribute>cssfile</attribute>
+      <source>*.css</source>
+      <filefiltername>StyleSheet</filefiltername>
+      <width>300</width>
+      <mustinherit>cssextern</mustinherit>
+    </control>
+    
+  </tab>
+
+</library>

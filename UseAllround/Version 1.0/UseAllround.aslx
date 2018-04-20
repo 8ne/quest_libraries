@@ -1,0 +1,109 @@
+﻿<?xml version="1.0"?>
+<library>
+
+<!--
+
+  ****************************************************************************************************
+  UseAllround - use the 'use' verb global for opening, switching and put on
+  by SoonGames, 2017
+  Version 1.0
+  ****************************************************************************************************
+  Quest-Version: 5.7
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  Download the UseAllround.aslx, integrate it as Library in Quest.
+  ****************************************************************************************************
+  Under the tab "Use as" you can now select whether you want to use it as "Open","Switch" or "Put on".
+  Put on" can be combined with "Open" or "Switch" as one uses "Use with" and the other only "Use".
+  ****************************************************************************************************
+  
+-->
+
+  <template name="PutOn1">Put</template>
+  <template name="PutOn2">on</template>
+  
+  <template name="EditorObjectUseAsTabCaption">Use as</template>
+  <template name="EditorObjectUseAsCaption1">Use as 'Open / Close' or 'Switch on / off'</template>
+  <template name="EditorObjectUseAsCaption2">And / or use as 'put on'</template>
+  <template name="EditorObjectUseAsNot">Without</template>
+  <template name="EditorObjectUseAsOpen">Open / Close</template>
+  <template name="EditorObjectUseAsSwitch">Switch on / off</template>
+  <template name="EditorObjectUseAsPut">Put on</template>
+
+  <function name="UseAllround" parameters="typ, object1, object2">
+    switch (LCase(typ)) {
+      case (LCase(Template("Open"))) {
+        if (not object1.isopen) {
+          HandleSingleCommand (Template("Open") + " " + GetDisplayAlias(object1))
+        }
+        else {
+          HandleSingleCommand (Template("Close") + " " + GetDisplayAlias(object1))
+        }
+      }
+      case (LCase(Template("SwitchOn"))) {
+        if (not IsSwitchedOn(object1)) {
+          HandleSingleCommand (Template("SwitchOn") + " " + GetDisplayAlias(object1))
+        }
+        else {
+          HandleSingleCommand (Template("SwitchOff") + " " + GetDisplayAlias(object1))
+        }
+      }
+      case (LCase(Template("PutOn1"))) {
+        HandleSingleCommand (Template("PutOn1") + " " + GetDisplayAlias(object2) + " " + Template("PutOn2")  + " " + GetDisplayAlias(object1))
+      }
+      default {
+        HandleSingleCommand (typ + " " + GetDisplayAlias(object1))
+      }
+    }
+  </function>
+  
+  <type name="useasopen">
+    <feature_usegive type="boolean">true</feature_usegive>
+    <use type="script">
+      UseAllround (Template("Open"), this, null)
+    </use>
+  </type>
+  
+  <type name="useasswitch">
+    <feature_usegive type="boolean">true</feature_usegive>
+    <use type="script">
+      UseAllround (Template("SwitchOn"), this, null)
+    </use>
+  </type>
+  
+  <type name="useasput">
+    <feature_usegive type="boolean">true</feature_usegive>
+    <useon type="scriptdictionary"/>
+    <useanything type="script">
+      UseAllround (Template("PutOn1"), this, object)
+    </useanything>
+    <selfuseon type="scriptdictionary"/>
+    <selfuseanything type="script">
+      UseAllround (Template("PutOn1"), this, object)
+    </selfuseanything>
+  </type>
+  
+  <!-- Interface -->
+  <tab>
+    <parent>_ObjectEditor</parent>
+    <caption>[EditorObjectUseAsTabCaption]</caption>
+    <mustnotinherit>editor_room; defaultplayer</mustnotinherit>
+
+    <control>
+      <controltype>dropdowntypes</controltype>
+      <caption>[EditorObjectUseAsCaption1]</caption>
+      <types>*=[EditorObjectUseAsNot]; useasopen=[EditorObjectUseAsOpen]; useasswitch=[EditorObjectUseAsSwitch]</types>
+      <width>150</width>
+    </control>
+    
+    <control>
+      <controltype>dropdowntypes</controltype>
+      <caption>[EditorObjectUseAsCaption2]</caption>
+      <types>*=[EditorObjectUseAsNot]; useasput=[EditorObjectUseAsPut]</types>
+      <width>150</width>
+    </control>
+  </tab>
+
+</library>

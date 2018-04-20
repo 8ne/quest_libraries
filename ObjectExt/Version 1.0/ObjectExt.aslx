@@ -1,0 +1,182 @@
+<?xml version="1.0"?>
+<library>
+<!--
+
+  ****************************************************************************************************
+  ObjectExt - Alias extensions for open, switch and in container
+  by SoonGames, 2017
+  Version 1.0
+  ****************************************************************************************************
+  Quest-Version: 5.7
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  Download the ObjectExt.aslx, integrate it as Library in Quest and add the
+  'InitObjectExt' function to the game.start-script.
+  ****************************************************************************************************
+  
+-->
+
+  <!-- The Extension-Templates - You can customize the templates as you like. -->
+  <template name="ObjectAliasExtOpen"> (open)</template><!-- open -->
+  <template name="ObjectAliasExtSwitchedOn"> (switched on)</template><!-- switched on -->
+  <template name="ObjectAliasExtInContainer">     </template><!-- In a container -->
+
+  <type name="defaultobject">
+    <visible/>
+    <displayverbs type="simplestringlist">[LookAt];[Take]</displayverbs>
+    <inventoryverbs type="simplestringlist">[LookAt];[Use];[Drop]</inventoryverbs>
+    <take type="boolean">false</take>
+    <use type="boolean">false</use>
+    <givesingle type="boolean">false</givesingle>
+    <drop/>
+    <gender>[NeutralGender]</gender>
+    <article>[NeutralArticle]</article>
+    <possessive>[NeutralPossessive]</possessive>
+    <isopen type="boolean">false</isopen>
+    <open type="boolean">false</open>
+    <close type="boolean">false</close>
+    <container type="boolean">false</container>
+    <descprefix>[YouAreIn]</descprefix>
+    <objectslistprefix>[SeeListHeader]</objectslistprefix>
+    <exitslistprefix>[GoListHeader]</exitslistprefix>
+    <contentsprefix>[ContainerContentsPrefix]</contentsprefix>
+    <description type="string"></description>
+    <implementation_notes type="string"></implementation_notes>
+    <scenery type="boolean">false</scenery>
+    <hidechildren type="boolean">false</hidechildren>
+    <listchildren type="boolean">false</listchildren>
+    <usedefaultprefix/>
+    <changedparent type="script">
+      if (game.pov = this) {
+        if (IsDefined("oldvalue")) {
+          OnEnterRoom(oldvalue)
+        }
+        else {
+          OnEnterRoom(null)
+        }
+        if (game.gridmap) {
+          MergePOVCoordinates
+        }
+      }
+      this.hasbeenmoved = true
+      SetObjectExtInContainer (this)
+    </changedparent>
+    <changedisopen type="script">
+      if (this.isopen and HasScript(this, "onopen")) {
+        do (this, "onopen")
+      }
+      if (not this.isopen and HasScript(this, "onclose")) {
+        do (this, "onclose")
+      }
+      SetObjectExtOpen (this)
+    </changedisopen>
+    <changedlocked type="script">
+      if (this.locked and HasScript(this, "onlock")) {
+        do (this, "onlock")
+      }
+      if (not this.locked and HasScript(this, "onunlock")) {
+        do (this, "onunlock")
+      }
+    </changedlocked>
+    <changedswitchedon type="script">
+      if (this.switchedon and HasScript(this, "onswitchon")) {
+        do (this, "onswitchon")
+      }
+      if (not this.switchedon and HasScript(this, "onswitchoff")) {
+        do (this, "onswitchoff")
+      }
+      SetObjectExtSwitch (this)
+    </changedswitchedon>
+    <volume type="int">0</volume>
+    <price type="int">0</price>
+    <dark type="boolean">false</dark>
+    <lightstrength type="string"></lightstrength>
+    <darklevel type="boolean">false</darklevel>
+    <grid_width type="int">1</grid_width>
+    <grid_length type="int">1</grid_length>
+    <grid_fill>White</grid_fill>
+    <grid_border>Black</grid_border>
+    <grid_borderwidth type="int">1</grid_borderwidth>
+    <grid_bordersides type="int">15</grid_bordersides>
+    <grid_render type="boolean">false</grid_render>
+    <grid_label type="string"></grid_label>
+    <grid_parent_offset_auto/>
+    <grid_parent_offset_x type="int">0</grid_parent_offset_x>
+    <grid_parent_offset_y type="int">0</grid_parent_offset_y>
+    <pov_alias>[SelfAlias]</pov_alias>
+    <pov_alt type="simplestringlist">[SelfAlt]</pov_alt>
+    <pov_look>[DefaultSelfDescription]</pov_look>
+    <pov_gender>[SelfGender]</pov_gender>
+    <pov_article>[SelfArticle]</pov_article>
+    <pov_possessive>[SelfPossessive]</pov_possessive>
+    <feature_usegive type="boolean">false</feature_usegive>
+    <feature_container type="boolean">false</feature_container>
+    <feature_switchable type="boolean">false</feature_switchable>
+    <feature_edible type="boolean">false</feature_edible>
+    <feature_player type="boolean">false</feature_player>
+    <feature_lightdark type="boolean">false</feature_lightdark>
+    <visited type="boolean">false</visited>
+    <hasbeenmoved type="boolean">false</hasbeenmoved>
+  </type>
+  
+  <function name="InitObjectExt">
+    foreach (object, AllObjects()) {
+      if (not HasAttribute(object, "alias")) {
+        object.alias = object.name
+      }
+      if (not HasAttribute(object, "listalias")) {
+        object.listalias = object.alias
+      }
+      SetObjectExtInContainer (object)
+      SetObjectExtOpen (object)
+      SetObjectExtSwitch (object)
+    }
+  </function>
+  
+  <function name="SetObjectExtInContainer" parameters="object">
+    // Extensions for objects in a container
+    ext = ""
+    par = object.parent
+    object.listalias = Replace (object.listalias, Template("ObjectAliasExtInContainer"), "")
+    while (not par = game.pov and not par = null) {
+      if (HasAttribute(par, "container")) {
+        if (GetBoolean(par, "container")) {
+          ext = ext + Template("ObjectAliasExtInContainer")
+        }
+      }
+      par = par.parent
+    }
+    object.listalias = ext + object.listalias
+  </function>
+  
+  <function name="SetObjectExtOpen" parameters="object">
+    // Extensions for open objects
+    if (DoesInherit (object, "container_base") and GetBoolean(object, "close") and HasAttribute(object, "isopen")) {
+      if (object.isopen) {
+        object.alias = object.alias + Template("ObjectAliasExtOpen")
+        object.listalias = object.listalias + Template("ObjectAliasExtOpen")
+      }
+      else {
+        object.alias = Replace (object.alias, Template("ObjectAliasExtOpen"), "")
+        object.listalias = Replace (object.listalias, Template("ObjectAliasExtOpen"), "")
+      }
+    }  
+  </function>
+  
+  <function name="SetObjectExtSwitch" parameters="object">
+    // Extensions for switched objects
+    if (HasAttribute (object, "switchedon")) {
+      if (object.switchedon) {
+        object.alias = object.alias + Template("ObjectAliasExtSwitchedOn")
+        object.listalias = object.listalias + Template("ObjectAliasExtSwitchedOn")
+      }
+      else {
+        object.alias = Replace (object.alias, Template("ObjectAliasExtSwitchedOn"), "")
+        object.listalias = Replace (object.listalias, Template("ObjectAliasExtSwitchedOn"), "")
+      }
+    }
+  </function>
+  
+</library>

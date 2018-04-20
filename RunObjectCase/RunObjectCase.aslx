@@ -1,0 +1,68 @@
+﻿<?xml version="1.0"?>
+<library>
+
+<!--
+
+  ****************************************************************************************************
+  RunObjectCase - Executes the script or displays the text from the respective object case.
+  by SoonGames, 2018
+  Version 1.0
+  ****************************************************************************************************
+  Quest-Version: 5.7
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  Download the RunObjectCase.aslx, integrate it as Library in Quest.
+  ****************************************************************************************************
+  Under Add Script / Add Scripts you will find a new item named "Run object case".
+  ****************************************************************************************************
+
+-->
+
+  <template name="EditorScriptsObjectsRunObjectCaseAdd">Run object case</template>
+  <template name="EditorScriptsObjectsRunObjectCaseObject">Run the following case of the object</template>
+  <template name="EditorObjectOptionsCannotswitchon">Leave blank to allow the object to be turned on - give a message if it cannot be turned on (eg requires power or repair)</template>  
+
+<!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
+<!--
+  <template name="EditorScriptsObjectsRunObjectCaseAdd">Objektfall ausführen</template>
+  <template name="EditorScriptsObjectsRunObjectCaseObject">Führe folgenden Fall des Objektes aus</template>
+  <template name="EditorObjectOptionsCannotswitchon">Falls das Objekt nicht eingeschaltet werden kann, weil es z. B. defekt ist (Ohne Eingabe = Standardverhalten)</template>  
+-->
+
+  <editor>
+    <appliesto>(function)RunObjectCase</appliesto>
+    <display>Get #0's #1</display>
+    <category>[EditorScriptsObjectsObjects]</category>
+    <add>[EditorScriptsObjectsRunObjectCaseAdd]</add>
+    <create>RunObjectCase (,)</create>
+    <onlydisplayif>GetString(game, "_editorstyle") = null</onlydisplayif>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorScriptsObjectsRunObjectCaseObject]</caption>
+    </control>
+
+    <control>
+      <controltype>expression</controltype>
+      <attribute>0</attribute>
+      <simple>name</simple>
+      <simpleeditor>objects</simpleeditor>
+    </control>
+
+    <control>
+      <controltype>dropdown</controltype>
+      <attribute>1</attribute>
+      <validvalues type="simplestringdictionary">"look"=[EditorGameSetup]: [EditorObjectOptionsLookatobject]; "listalias"=[EditorObjectObjectObject]: [EditorObjectObjectAliastodisplay]; "takemsg"=[EditorObjectInventoryInventory]: [EditorObjectInventoryTakemessage]; "ontake"=[EditorObjectInventoryInventory]: [EditorObjectInventoryAftertaking]; "take"=[EditorObjectInventoryInventory]: [EditorObjectInventoryTake]; "dropmsg"=[EditorObjectInventoryInventory]: [EditorObjectInventoryDropmessage]; "ondrop"=[EditorObjectInventoryInventory]: [EditorObjectInventoryAfterdropping]; "drop"=[EditorObjectInventoryInventory]: [EditorObjectInventoryDrop]; "openmsg"=[EditorObjectContainerContainer]: [EditorObjectContainerMessagetoprint]; "closemsg"=[EditorObjectContainerContainer]: [EditorObjectContainerMessagetoprint2]; "onopen"=[EditorObjectContainerContainer]: [EditorObjectContainerAfteropening]; "onclose"=[EditorObjectContainerContainer]: [EditorObjectContainerAfterclosing]; "addscript"=[EditorObjectContainerContainer]: [EditorObjectContainerAddScript]; "nokeymessage"=[EditorObjectContainerContainer]: [EditorObjectContainerIftheplayer]; "unlockmessage"=[EditorObjectContainerContainer]: [EditorObjectContainerUnlockmessage]; "lockmessage"=[EditorObjectContainerContainer]: [EditorObjectContainerLockmessage]; "onlock"=[EditorObjectContainerContainer]: [EditorObjectContainerAfterlocking]; "onunlock"=[EditorObjectContainerContainer]: [EditorObjectContainerAfterunlocking]; "wearmsg"=[EditorObjectWearableWearable]: [EditorObjectWearableWearMessage]; "removemsg"=[EditorObjectWearableWearable]: [EditorObjectWearableRemoveMessage]; "switchonmsg"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsMessagetoprint]; "switchoffmsg"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsMessagetoprint2]; "cannotswitchon"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsCannotswitchon]; "switchedondesc"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsExtraobject]; "switchedoffdesc"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsExtraobject2]; "onswitchon"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsAfterswitching]; "onswitchoff"=[EditorObjectOptionsSwitchable]: [EditorObjectOptionsAfterswitching2]; "eatmsg"=[EditorObjectOptionsEdible]: [EditorObjectOptionsMessageEat]; "pov_look"=[EditorObjectOptionsPlayer]: [EditorObjectOptionsLookatobject];</validvalues>
+      <freetext/>      
+    </control>
+    
+  </editor>
+  
+  <function name="RunObjectCase" parameters="object,attribute">
+      if (HasString(object, attribute)) msg(GetString (object, attribute))
+      else if (HasScript(object, attribute)) do (object, attribute)
+  </function>
+  
+</library>

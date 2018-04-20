@@ -1,0 +1,65 @@
+<!--Saved by Quest 5.7.6590.33353-->
+<asl version="550">
+  <include ref="English.aslx" />
+  <include ref="Core.aslx" />
+  <include ref="DevMode.aslx" />
+  <game name="DevModeTest">
+    <inherit name="devmode" />
+    <gameid>bd79c279-e9ee-47e6-950f-f40b823b0ad5</gameid>
+    <version>1.0</version>
+    <firstpublished>2018</firstpublished>
+    <feature_advancedscripts />
+    <statusattributes type="stringdictionary" />
+    <attr name="devmode_setinitscript" type="boolean">false</attr>
+    <devmode_changepovpos />
+    <devmode_changepov />
+    <deactivatecommandlinks type="boolean">false</deactivatecommandlinks>
+    <enablehyperlinks />
+    <devmode_setverbs />
+    <devmode_attributes type="stringdictionary">
+      <item>
+        <key>game.showtitle</key>
+        <value>false</value>
+      </item>
+    </devmode_attributes>
+    <pov type="object">player1</pov>
+    <attr name="devmode_initscript" type="script">
+    </attr>
+    <scopebackdrop type="script">
+    </scopebackdrop>
+    <unresolvedcommandhandler type="script">
+    </unresolvedcommandhandler>
+    <start type="script">
+    </start>
+    <attr name="devmode_pov">player2</attr>
+    <attr name="devmode_povpos">room2</attr>
+  </game>
+  <object name="room1">
+    <inherit name="editor_room" />
+    <object name="player1">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+      <inherit name="plural" />
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+      </displayverbs>
+    </object>
+    <object name="player2">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+      <feature_player />
+      <displayverbs type="stringlist">
+        <value>Look at</value>
+        <value>Take</value>
+      </displayverbs>
+    </object>
+    <object name="table">
+      <inherit name="editor_object" />
+      <alias>Brown Table</alias>
+    </object>
+  </object>
+  <object name="room2">
+    <inherit name="editor_room" />
+  </object>
+</asl>
