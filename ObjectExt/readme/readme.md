@@ -8,7 +8,10 @@
 ![Preview ObjectExt](https://i.imgur.com/RFR4RKc.png)
 
 ---
-**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)**
+
+---
+**[You want to see all libraries of SoonGames? Just click here!](https://github.com/SoonGames/quest_libraries)**
 
 ---
 

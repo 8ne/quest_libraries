@@ -6,7 +6,10 @@
 ![Preview DevMode](https://i.imgur.com/1Lvp5Ug.gif)
 
 ---
-**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/blob/master/DevMode/DevMode.aslx)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/DevMode/DevMode.aslx)**
+
+---
+**[You want to see all libraries of SoonGames? Just click here!](https://github.com/SoonGames/quest_libraries)**
 
 ---
 

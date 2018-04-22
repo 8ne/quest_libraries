@@ -6,7 +6,10 @@
 ![Preview StyleSheet](https://i.imgur.com/2JQmeEe.gif)
 
 ---
-**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/blob/master/StyleSheet/StyleSheet.zip?raw=true)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/blob/master/StyleSheet/StyleSheet.zip?raw=true)**
+
+---
+**[You want to see all libraries of SoonGames? Just click here!](https://github.com/SoonGames/quest_libraries)**
 
 ---
 

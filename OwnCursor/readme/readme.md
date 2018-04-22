@@ -5,7 +5,10 @@
 ![Preview OwnCursor](https://i.imgur.com/SGhfGvC.gif)
 
 ---
-**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/raw/master/OwnCursor/OwnCursor.js)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/OwnCursor/OwnCursor.js)**
+
+---
+**[You want to see all libraries of SoonGames? Just click here!](https://github.com/SoonGames/quest_libraries)**
 
 ---
 

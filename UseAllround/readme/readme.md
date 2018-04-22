@@ -6,7 +6,10 @@
 ![enter image description here](https://i.imgur.com/pWj4Fcv.gif)
 
 ---
-**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/raw/master/UseAllround/UseAllround.aslx)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/UseAllround/UseAllround.aslx)**
+
+---
+**[You want to see all libraries of SoonGames? Just click here!](https://github.com/SoonGames/quest_libraries)**
 
 ---
 

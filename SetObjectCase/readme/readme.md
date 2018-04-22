@@ -6,7 +6,10 @@
 ![Preview SetObjectCase](https://i.imgur.com/xfoQioV.gif)
 
 ---
-**[Click here with the right mouse button and select "Save as..."](https://github.com/SoonGames/quest_libraries/raw/master/SetObjectCase/SetObjectCase.aslx)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/SetObjectCase/SetObjectCase.aslx)**
+
+---
+**[You want to see all libraries of SoonGames? Just click here!](https://github.com/SoonGames/quest_libraries)**
 
 ---
 
