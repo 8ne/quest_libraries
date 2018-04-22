@@ -5,7 +5,7 @@
 #### Download the ObjectExt.aslx, integrate it as Library in Quest and add the 'InitObjectExt' function to the game.start-script.
 ---
 
-![Preview ObjectExt](https://i.imgur.com/RFR4RKc.png)
+![Preview ObjectExt](https://raw.githubusercontent.com/SoonGames/quest_libraries/master/ObjectExt/readme/Preview.PNG)
 
 ---
 **[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)**
@@ -18,5 +18,3 @@
 *Have fun with the library!*
 
 ![enter image description here](https://i.imgur.com/lNRf4L7.png)
-
----
