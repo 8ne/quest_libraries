@@ -6,7 +6,7 @@
   ****************************************************************************************************
   UseAllround - use the 'use' verb global for opening, switching and put on
   by SoonGames, 2017-2018
-  Version 2.2
+  Version 2.5
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -19,6 +19,10 @@
   Put on" can be combined with "Open" or "Switch" as one uses "Use with" and the other only "Use".
   ****************************************************************************************************
 
+  ****************************************************************************************************
+  Version 2.5
+  Automatic language setting.
+  Interface optically improved.
   ****************************************************************************************************
   Version 2.2
   Dress and undress added
@@ -37,6 +41,11 @@
 
 -->
 
+  <!-- Languages -->
+  <template name="EditorObjectUseAsAvailableLanguages">de</template>
+
+  <!-- Verbs -->
+  <!-- English -->
   <template name="UseAsOpen">open</template>
   <template name="UseAsClose">close</template>
   <template name="UseAsTurnOn">turn on</template>
@@ -45,92 +54,116 @@
   <template name="UseAsRemove">remove</template>
   <template name="UseAsPut">put</template>
   <template name="UseAsOn">on</template>
-  <template name="EditorObjectUseAsTabCaption">Use as</template>
-  <template name="EditorObjectUseAsCaption1">Use as with one object</template>
-  <template name="EditorObjectUseAsCaption3">Another verb</template>
-  <template name="EditorObjectUseAsCaption2">And / Or use as with two objects</template>
+
+  <!-- Deutsch -->
+  <template name="UseAsOpenDE">öffne</template>
+  <template name="UseAsCloseDE">schließe</template>
+  <template name="UseAsTurnOnDE">schalte an</template>
+  <template name="UseAsTurnOffDE">schalte aus</template>
+  <template name="UseAsWearDE">anziehen</template>
+  <template name="UseAsRemoveDE">ausziehen</template>
+  <template name="UseAsPutDE">lege</template>
+  <template name="UseAsOnDE">in</template>
+
+  <!-- Interface English -->
+  <template name="EditorObjectUseAs">Use as</template>
+  <template name="EditorObjectUseAsVerbs">Verbs</template>
+  <template name="EditorObjectUseAsWithOneObject">With one object</template>
+  <template name="EditorObjectUseAsAnotherVerb">Another verb</template>
+  <template name="EditorObjectUseAsAndOr">and / or</template>
+  <template name="EditorObjectUseAsWithTwoObjects">With combination object</template>
   <template name="EditorObjectUseAsNot">Without</template>
   <template name="EditorObjectUseAsOpen">Open / Close</template>
   <template name="EditorObjectUseAsSwitch">Turn On / Off</template>
   <template name="EditorObjectUseAsWear">Wear / Remove</template>
   <template name="EditorObjectUseAsOther">Another verb</template>
   <template name="EditorObjectUseAsPut">Put on</template>
-  
-<!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
-<!--
-  <template name="UseAsOpen">öffne</template>
-  <template name="UseAsClose">schließe</template>
-  <template name="UseAsTurnOn">schalte an</template>
-  <template name="UseAsTurnOff">schalte aus</template>
-  <template name="UseAsWear">anziehen</template>
-  <template name="UseAsRemove">ausziehen</template>
-  <template name="UseAsPut">lege</template>
-  <template name="UseAsOn">in</template>
-  <template name="EditorObjectUseAsTabCaption">Benutze als</template>
-  <template name="EditorObjectUseAsCaption1">Benutze als mit einem Objekt</template>
-  <template name="EditorObjectUseAsCaption3">Anderes Verb</template>
-  <template name="EditorObjectUseAsCaption2">Und / Oder Benutze als mit zwei Objekten</template>
-  <template name="EditorObjectUseAsNot">Ohne</template>
-  <template name="EditorObjectUseAsOpen">Öffnen / Schließen</template>
-  <template name="EditorObjectUseAsSwitch">Ein- / Ausschalten</template>
-  <template name="EditorObjectUseAsWear">Anziehen / Ausziehen</template>
-  <template name="EditorObjectUseAsOther">Anderes Verb</template>
-  <template name="EditorObjectUseAsPut">Lege in</template>
+
+  <!-- Interface Deutsch -->  
+  <template name="EditorObjectUseAsDE">Benutze als</template>
+  <template name="EditorObjectUseAsVerbsDE">Verben</template>
+  <template name="EditorObjectUseAsWithOneObjectDE">Mit einem Objekt</template>
+  <template name="EditorObjectUseAsAnotherVerbDE">Anderes Verb</template>
+  <template name="EditorObjectUseAsAndOrDE">und / oder</template>
+  <template name="EditorObjectUseAsWithTwoObjectsDE">Mit Kombinierobjekt</template>
+  <template name="EditorObjectUseAsNotDE">Ohne</template>
+  <template name="EditorObjectUseAsOpenDE">Öffnen / Schließen</template>
+  <template name="EditorObjectUseAsSwitchDE">Ein- / Ausschalten</template>
+  <template name="EditorObjectUseAsWearDE">Anziehen / Ausziehen</template>
+  <template name="EditorObjectUseAsOtherDE">Anderes Verb</template>
+  <template name="EditorObjectUseAsPutDE">Lege in</template>
 -->
 
+  <!-- Functions -->
+
   <function name="UseAllround" parameters="typ, object1, object2">
-    switch (LCase(typ)) {
-      case (LCase(Template("UseAsOpen"))) {
+    if (not InStr (Template("DevModeAvailableLanguages"), game.languageid) = 0) lang = UCase(game.languageid)
+    else lang = ""
+
+    switch (typ) {
+
+      // Open / Close
+      case ("open") {
         if (not object1.isopen) {
-          HandleSingleCommand (Template("UseAsOpen") + " " + GetDisplayAlias(object1))
+          HandleSingleCommand (Template("UseAsOpen" + lang) + " " + GetDisplayAlias(object1))
         }
         else {
-          HandleSingleCommand (Template("UseAsClose") + " " + GetDisplayAlias(object1))
+          HandleSingleCommand (Template("UseAsClose" + lang) + " " + GetDisplayAlias(object1))
         }
       }
-      case (LCase(Template("UseAsTurnOn"))) {
+
+      // Turn on / Turn off
+      case ("turn") {
         if (not IsSwitchedOn(object1)) {
-          HandleSingleCommand (Template("UseAsTurnOn") + " " + GetDisplayAlias(object1))
+          HandleSingleCommand (Template("UseAsTurnOn" + lang) + " " + GetDisplayAlias(object1))
         }
         else {
-          HandleSingleCommand (Template("UseAsTurnOff") + " " + GetDisplayAlias(object1))
+          HandleSingleCommand (Template("UseAsTurnOff" + lang) + " " + GetDisplayAlias(object1))
         }
       }
-      case (LCase(Template("UseAsWear"))) {
+
+      // Wear / Remove
+      case ("wear") {
         if (not object1.worn) {
-          HandleSingleCommand (Template("UseAsWear") + " " + GetDisplayAlias(object1))
+          HandleSingleCommand (Template("UseAsWear" + lang) + " " + GetDisplayAlias(object1))
         }
         else {
-          HandleSingleCommand (Template("UseAsRemove") + " " + GetDisplayAlias(object1))
+          HandleSingleCommand (Template("UseAsRemove" + lang) + " " + GetDisplayAlias(object1))
         }
       }
-      case (LCase(Template("UseAsPut"))) {
-        HandleSingleCommand (Template("UseAsPut") + " " + GetDisplayAlias(object2) + " " + Template("UseAsOn")  + " " + GetDisplayAlias(object1))
+
+      // Put
+      case ("put") {
+        HandleSingleCommand (Template("UseAsPut" + lang) + " " + GetDisplayAlias(object2) + " " + Template("UseAsOn" + lang)  + " " + GetDisplayAlias(object1))
       }
+      
+      // Another Verb
       default {
         HandleSingleCommand (typ + " " + GetDisplayAlias(object1))
       }
     }
   </function>
   
+  <!-- Types -->
+
   <type name="useasopen">
     <feature_usegive type="boolean">true</feature_usegive>
     <use type="script">
-      UseAllround (Template("UseAsOpen"), this, null)
+      UseAllround ("open", this, null)
     </use>
   </type>
   
   <type name="useasturn">
     <feature_usegive type="boolean">true</feature_usegive>
     <use type="script">
-      UseAllround (Template("UseAsTurnOn"), this, null)
+      UseAllround ("turn", this, null)
     </use>
   </type>
 
   <type name="useaswear">
     <feature_usegive type="boolean">true</feature_usegive>
     <use type="script">
-      UseAllround (Template("UseAsWear"), this, null)
+      UseAllround ("wear", this, null)
     </use>
   </type>
   
@@ -138,11 +171,11 @@
     <feature_usegive type="boolean">true</feature_usegive>
     <useon type="scriptdictionary"/>
     <useanything type="script">
-      UseAllround (Template("UseAsPut"), this, object)
+      UseAllround ("put", this, object)
     </useanything>
     <selfuseon type="scriptdictionary"/>
     <selfuseanything type="script">
-      UseAllround (Template("UseAsPut"), this, object)
+      UseAllround ("put", this, object)
     </selfuseanything>
   </type>
   
@@ -154,29 +187,103 @@
   </type>
   
   <!-- Interface -->
+
+  <!-- English -->
+
   <tab>
     <parent>_ObjectEditor</parent>
-    <caption>[EditorObjectUseAsTabCaption]</caption>
+    <caption>[EditorObjectUseAs]</caption>
     <mustnotinherit>editor_room; defaultplayer</mustnotinherit>
+    <onlydisplayif>(InStr (Template("EditorObjectUseAsAvailableLanguages"), game.languageid) = 0)</onlydisplayif>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAs]</caption>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsWithOneObject]</caption>
+    </control>
 
     <control>
       <controltype>dropdowntypes</controltype>
-      <caption>[EditorObjectUseAsCaption1]</caption>
+      <caption>[EditorObjectUseAsVerbs]</caption>
       <types>*=[EditorObjectUseAsNot]; useasopen=[EditorObjectUseAsOpen]; useasturn=[EditorObjectUseAsSwitch]; useaswear=[EditorObjectUseAsWear]; useasother=[EditorObjectUseAsOther]</types>
       <width>150</width>
     </control>
 
     <control>
       <controltype>textbox</controltype>
-      <caption>[EditorObjectUseAsCaption3]</caption>
+      <caption>[EditorObjectUseAsAnotherVerb]</caption>
       <attribute>useasotherverb</attribute>
       <mustinherit>useasother</mustinherit>
     </control>
 
     <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsAndOr]</caption>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsWithTwoObjects]</caption>
+    </control>
+
+    <control>
       <controltype>dropdowntypes</controltype>
-      <caption>[EditorObjectUseAsCaption2]</caption>
+      <caption>[EditorObjectUseAsVerbs]</caption>
       <types>*=[EditorObjectUseAsNot]; useasput=[EditorObjectUseAsPut]</types>
+      <width>150</width>
+    </control>
+  </tab>
+
+  <!-- Deutsch -->
+
+  <tab>
+    <parent>_ObjectEditor</parent>
+    <caption>[EditorObjectUseAsDE]</caption>
+    <mustnotinherit>editor_room; defaultplayer</mustnotinherit>
+    <onlydisplayif>game.languageid = "de"</onlydisplayif>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsDE]</caption>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsWithOneObjectDE]</caption>
+    </control>
+
+    <control>
+      <controltype>dropdowntypes</controltype>
+      <caption>[EditorObjectUseAsVerbsDE]</caption>
+      <types>*=[EditorObjectUseAsNotDE]; useasopen=[EditorObjectUseAsOpenDE]; useasturn=[EditorObjectUseAsSwitchDE]; useaswear=[EditorObjectUseAsWearDE]; useasother=[EditorObjectUseAsOtherDE]</types>
+      <width>150</width>
+    </control>
+
+    <control>
+      <controltype>textbox</controltype>
+      <caption>[EditorObjectUseAsAnotherVerbDE]</caption>
+      <attribute>useasotherverb</attribute>
+      <mustinherit>useasother</mustinherit>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsAndOrDE]</caption>
+    </control>
+
+    <control>
+      <controltype>title</controltype>
+      <caption>[EditorObjectUseAsWithTwoObjectsDE]</caption>
+    </control>
+
+    <control>
+      <controltype>dropdowntypes</controltype>
+      <caption>[EditorObjectUseAsVerbsDE]</caption>
+      <types>*=[EditorObjectUseAsNotDE]; useasput=[EditorObjectUseAsPutDE]</types>
       <width>150</width>
     </control>
   </tab>
