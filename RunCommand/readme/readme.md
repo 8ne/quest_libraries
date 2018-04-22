@@ -17,4 +17,4 @@
 
 *Have fun with the library!*
 
-![enter image description here](https://i.imgur.com/lNRf4L7.png)
+![enter image description here](https://raw.githubusercontent.com/SoonGames/quest_libraries/master/soongames.png)
