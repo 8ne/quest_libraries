@@ -6,7 +6,7 @@
 
  - [ObjectExt](https://github.com/SoonGames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)
 
- -  [OwnCursor](https://github.com/SoonGames/quest_libraries/raw/master/OwnCursor/OwnCursor.js)
+ - [OwnCursor](https://github.com/SoonGames/quest_libraries/raw/master/OwnCursor/OwnCursor.js)
 
  - [RunCommand](https://github.com/SoonGames/quest_libraries/raw/master/RunCommand/RunCommand.aslx)
 
