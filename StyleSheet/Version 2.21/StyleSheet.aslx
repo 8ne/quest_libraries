@@ -6,7 +6,7 @@
   ****************************************************************************************************
   StyleSheet - With this you can comfortably integrate style sheets via the Game-Tab.
   by SoonGames, 2018
-  Version 2.22
+  Version 2.21
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -19,11 +19,6 @@
   Either internal or external.
   ****************************************************************************************************
 
-  ****************************************************************************************************
-  Version 2.22
-  ATTENTION: Important update! Fix bug when publishing the game!
-  Both files (StyleSheet.aslx and StyleSheet.js) are now in the game directory.
-  The StyleSheet_lib folder is no longer required.
   ****************************************************************************************************
   Version 2.21
   Using the user interface no longer has any influence on extracting.
@@ -52,7 +47,7 @@
   
 -->
 
-  <javascript src="StyleSheet.js" />
+  <javascript src="StyleSheet_lib/StyleSheet.js" />
 
   <!-- Languages -->
   <!-- English -->
