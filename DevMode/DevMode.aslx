@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 0.65 Beta
+  Version 1.0
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -422,8 +422,7 @@
     else verbs = game.devmode_verbs
     foreach (object, AllObjects()) {
       if (HasAttribute(object, "displayverbs")) {
-        if (game.enablehyperlinks) object.displayverbs = ListCombine (object.displayverbs, verbs)
-        else object.displayverbs = verbs
+        object.displayverbs = ListCombine (object.displayverbs, verbs)
       }
       if (HasAttribute(object, "inventoryverbs")) {
         object.inventoryverbs = ListCombine (object.inventoryverbs, verbs)
