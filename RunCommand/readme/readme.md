@@ -1,4 +1,4 @@
-# RunCommand 1.0
+# RunCommand 1.2
 ---
 #### Executes commands as in the command prompt.
 ---

@@ -6,7 +6,7 @@
   ****************************************************************************************************
   RunCommand - Executes commands as in the command prompt
   by SoonGames, 2018
-  Version 1.02
+  Version 1.2
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -18,38 +18,64 @@
   Under Add Script / Add Scripts you will find a new item named "Run Command".
   ****************************************************************************************************
 
+  ****************************************************************************************************
+  Version 1.2
+  For easier internationalization, the commands are now only handed over in English.
+  Added a free text version
+  ****************************************************************************************************
+
 -->
 
   <!-- Languages -->
   <!-- English -->
-  <template name="EditorScriptsScriptsScriptsRunCommandAdd0">Run Command (without object)</template>
-  <template name="EditorScriptsScriptsScriptsRunCommandAdd1">Run Command (with one object)</template>
-  <template name="EditorScriptsScriptsScriptsRunCommandAdd2">Run Command (with two objects)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd">Run Command (freetext)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd0">Run Command (single)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd1">Run Command (1 object)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd2">Run Command (2 objects)</template>
   <template name="EditorScriptsScriptsRunCommandCommand">Run Command</template>
-  <template name="EditorScriptsScriptsRunCommandSimpleVerb">verb</template>
-  <template name="EditorScriptsScriptsRunCommandSimplePreposition">preposition</template>
-  <template name="EditorScriptsScriptsRunCommandVerbs0">look;inventory;wait;help;save;quit</template>
-  <template name="EditorScriptsScriptsRunCommandVerbs1">lookat;read;take;open;close;use;move;eat;drink;turn on;turn off;lock;unlock;wear;remove;put;talk to;tell;ask;give</template>
-  <template name="EditorScriptsScriptsRunCommandVerbs2">use;put;tell;ask;give</template>
-  <template name="EditorScriptsScriptsRunCommandPrePositions">on;in;from;to;with;about;to</template>
+  <template name="EditorScriptsScriptsRunCommandVerbs0">"look"=look;"inventory"=inventory;"wait"=wait;"help"=help;"save"=save;"quit"=quit</template>
+  <template name="EditorScriptsScriptsRunCommandVerbs1">"lookat"=lookat;"read"=read;"take"=take;"open"=open;"close"=close;"use"=use;"move"=move;"eat"=eat;"drink"=drink;"turn on"=turn on;"turn off"=turn off;"lock"=look;"unlock"=unlook;"wear"=wear;"remove"=remove;"put"=put;"talk to"=talk to;"tell"=tell;"ask"=ask;"give"=give</template>
+  <template name="EditorScriptsScriptsRunCommandVerbs2">"use"=use;"put"=put;"tell"=tell;"ask"=ask;"give"=give</template>
+  <template name="EditorScriptsScriptsRunCommandPrePositions">"on"=on;"in"=in;"from"=from;"to"=to;"with"=with;"about"=about;"to"=to</template>
 
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
   <!-- Deutsch -->
-  <!--
-  <template name="EditorScriptsScriptsScriptsRunCommandAdd0">Führe Kommando aus (ohne Objekt)</template>
-  <template name="EditorScriptsScriptsScriptsRunCommandAdd1">Führe Kommando aus (mit einem Objekt)</template>
-  <template name="EditorScriptsScriptsScriptsRunCommandAdd2">Führe Kommando aus (mit zwei Objekten)</template>
+  <!-- -->
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd">Kommando ausführen (Freitext)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd0">Kommando ausführen (Single)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd1">Kommando ausführen (1 Objekt)</template>
+  <template name="EditorScriptsScriptsScriptsRunCommandAdd2">Kommando ausführen (2 Objekte)</template>
   <template name="EditorScriptsScriptsRunCommandCommand">Führe Kommando aus</template>
-  <template name="EditorScriptsScriptsRunCommandSimpleVerb">Verb</template>
-  <template name="EditorScriptsScriptsRunCommandSimplePreposition">Präposition</template>
-  <template name="EditorScriptsScriptsRunCommandVerbs0">schau;inventar;warte;hilfe;save;quit</template>
-  <template name="EditorScriptsScriptsRunCommandVerbs1">untersuche;lese;nimm;öffne;schliesse;benutze;bewege;esse;trinke;schalte ein;schalte aus;schließe ab;schließe auf;anziehen;ausziehen;lege;rede mit;erzähle;frage;gib</template>
-  <template name="EditorScriptsScriptsRunCommandVerbs2">benutze;lege;erzähle;frage;gib</template>
-  <template name="EditorScriptsScriptsRunCommandPrePositions">an;in;von;mit;nach;zu</template>
-  -->
+  <template name="EditorScriptsScriptsRunCommandVerbs0">"look"=schau;"inventory"=inventar;"wait"=warte;"help"=hilfe;"save"=save;"quit"=quit</template>
+  <template name="EditorScriptsScriptsRunCommandVerbs1">"lookat"=untersuche;"read"=lese;"take"=nimm;"open"=öffne;"close"=schliesse;"use"=benutze;"move"=bewege;"eat"=esse;"drink"=trinke;"turn on"=schalte ein;"turn off"=schalte aus;"look"=schließe ab;"unlook"=schließe auf;"wear"=anziehen;"remove"=ausziehen;"put"=lege;"talk to"=rede mit;"tell"=erzähle;"ask"=frage;"give"=gib</template>
+  <template name="EditorScriptsScriptsRunCommandVerbs2">"use"=benutze;"put"=lege;"tell"=erzähle;"ask"=frage;"give"=gib</template>
+  <template name="EditorScriptsScriptsRunCommandPrePositions">"on"=an;"in"=in;"from"=von;"with"=mit;"about"=nach;"to"=zu</template>
+  <!-- -->
 
   
   <!-- Script-inscription -->
+
+  <!-- RunCommand -->
+  <editor>
+    <appliesto>(function)RunCommand</appliesto>
+    <display>RunCommand #0</display>
+    <category>[EditorScriptsScriptsScripts]</category>
+    <add>[EditorScriptsScriptsScriptsRunCommandAdd]</add>
+    <create>RunCommand ("")</create>
+    <onlydisplayif>GetString(game, "_editorstyle") = null</onlydisplayif>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorScriptsScriptsRunCommandCommand]</caption>
+    </control>
+
+    <control>
+      <controltype>expression</controltype>
+      <attribute>0</attribute>
+      <simple>message</simple>
+      <expand/>
+    </control>
+  </editor>
 
   <!-- RunCommand (without object) -->
   <editor>
@@ -66,12 +92,9 @@
     </control>
 
     <control>
-      <controltype>expression</controltype>
-      <simple>[EditorScriptsScriptsRunCommandSimpleVerb]</simple>
-      <simpleeditor>dropdown</simpleeditor>
+      <controltype>dropdown</controltype>
       <attribute>0</attribute>
-      <validvalues type="simplestringlist">[EditorScriptsScriptsRunCommandVerbs0]</validvalues>
-      <freetext/>
+      <validvalues type="simplestringdictionary">[EditorScriptsScriptsRunCommandVerbs0]</validvalues>
     </control>
 
   </editor>
@@ -91,12 +114,9 @@
     </control>
 
     <control>
-      <controltype>expression</controltype>
-      <simple>[EditorScriptsScriptsRunCommandSimpleVerb]</simple>
-      <simpleeditor>dropdown</simpleeditor>
+      <controltype>dropdown</controltype>
       <attribute>0</attribute>
-      <validvalues type="simplestringlist">[EditorScriptsScriptsRunCommandVerbs1]</validvalues>
-      <freetext/>
+      <validvalues type="simplestringdictionary">[EditorScriptsScriptsRunCommandVerbs1]</validvalues>
     </control>
 
     <control>
@@ -111,7 +131,7 @@
   <!-- RunCommand (with two objects) -->
   <editor>
     <appliesto>(function)RunCommand2</appliesto>
-    <display>RunCommand (with two objects) #0 #1 #2 #3</display>
+    <display>RunCommand (with two objects) #0 #1 #2</display>
     <category>[EditorScriptsScriptsScripts]</category>
     <add>[EditorScriptsScriptsScriptsRunCommandAdd2]</add>
     <create>RunCommand2 ("",,"",)</create>
@@ -123,12 +143,9 @@
     </control>
 
     <control>
-      <controltype>expression</controltype>
-      <simple>[EditorScriptsScriptsRunCommandSimpleVerb]</simple>
-      <simpleeditor>dropdown</simpleeditor>
+      <controltype>dropdown</controltype>
       <attribute>0</attribute>
-      <validvalues type="simplestringlist">[EditorScriptsScriptsRunCommandVerbs2]</validvalues>
-      <freetext/>
+      <validvalues type="simplestringdictionary">[EditorScriptsScriptsRunCommandVerbs2]</validvalues>
     </control>
 
     <control>
@@ -139,12 +156,9 @@
     </control>
 
     <control>
-      <controltype>expression</controltype>
-      <simple>[EditorScriptsScriptsRunCommandSimplePreposition]</simple>
-      <simpleeditor>dropdown</simpleeditor>
+      <controltype>dropdown</controltype>
       <attribute>2</attribute>
-      <validvalues type="simplestringlist">[EditorScriptsScriptsRunCommandPrePositions]</validvalues>
-      <freetext/>
+      <validvalues type="simplestringdictionary">[EditorScriptsScriptsRunCommandPrePositions]</validvalues>
     </control>
 
     <control>
@@ -158,16 +172,57 @@
 
   <!-- Functions -->
 
-  <function name="RunCommand0" parameters="verb">
+  <function name="StrToDict" parameters="str" type="stringdictionary">
+    strwq = Replace(ToString(str), "\"", "")
+    list = split(strwq, ";")
+    dict = NewStringDictionary ()
+    foreach (item, list) {
+      cont = split (item, "=")
+      key = cont[0]
+      val = cont[1]
+      dictionary add (dict, key, val)
+    }
+    return (dict)
+  </function>
+
+  <function name="LangAssign" parameters="i,ve,obj1,pr,obj2">
+    if (not game.languageid = "en") {
+      dict = StrToDict(ToString(Template("EditorScriptsScriptsRunCommandVerbs" + i)))
+      verb = StringDictionaryItem(dict, ve)
+      if (not pr = "") {
+        dict = StrToDict(Template("EditorScriptsScriptsRunCommandPrePositions"))
+        prepos = StringDictionaryItem(dict, pr)
+      }
+      else prepos = ""
+    }
+    else {
+      verb = ve
+      prepos = pr
+    }
+
+    if (TypeOf (obj1) = "object") object1 = GetDisplayAlias(obj1)
+    else object1 = ""
+    if (TypeOf (obj2) = "object") object2 = GetDisplayAlias(obj2)
+    else object2 = ""
+
+    command = verb + " " + object1 + " " + prepos + " " + object2
+    HandleSingleCommand (Trim(command))
+  </function>
+
+  <function name="RunCommand" parameters="verb">
     HandleSingleCommand (verb)
   </function>
 
+  <function name="RunCommand0" parameters="verb">
+    LangAssign (0, verb, "", "", "")
+  </function>
+
   <function name="RunCommand1" parameters="verb,object">
-    HandleSingleCommand(verb + " " + GetDisplayAlias(object))
+    LangAssign (1, verb, object, "", "")
   </function>
 
   <function name="RunCommand2" parameters="verb,object1,prepos,object2">
-    HandleSingleCommand(verb + " " + GetDisplayAlias(object1) + " " + prepos + " " + GetDisplayAlias(object2))
+    LangAssign (2, verb, object1, prepos, object2)
   </function>
   
 </library>
