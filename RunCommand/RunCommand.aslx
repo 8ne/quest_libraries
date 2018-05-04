@@ -40,7 +40,7 @@
 
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
   <!-- Deutsch -->
-  <!-- -->
+  <!--
   <template name="EditorScriptsScriptsScriptsRunCommandAdd">Kommando ausführen (Freitext)</template>
   <template name="EditorScriptsScriptsScriptsRunCommandAdd0">Kommando ausführen (Single)</template>
   <template name="EditorScriptsScriptsScriptsRunCommandAdd1">Kommando ausführen (1 Objekt)</template>
@@ -50,7 +50,7 @@
   <template name="EditorScriptsScriptsRunCommandVerbs1">"lookat"=untersuche;"read"=lese;"take"=nimm;"open"=öffne;"close"=schliesse;"use"=benutze;"move"=bewege;"eat"=esse;"drink"=trinke;"turn on"=schalte ein;"turn off"=schalte aus;"look"=schließe ab;"unlook"=schließe auf;"wear"=anziehen;"remove"=ausziehen;"put"=lege;"talk to"=rede mit;"tell"=erzähle;"ask"=frage;"give"=gib</template>
   <template name="EditorScriptsScriptsRunCommandVerbs2">"use"=benutze;"put"=lege;"tell"=erzähle;"ask"=frage;"give"=gib</template>
   <template name="EditorScriptsScriptsRunCommandPrePositions">"on"=an;"in"=in;"from"=von;"with"=mit;"about"=nach;"to"=zu</template>
-  <!-- -->
+  -->
 
   
   <!-- Script-inscription -->
