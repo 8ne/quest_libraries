@@ -356,7 +356,7 @@
   <template name="DefaultXyzzy">Überraschenderweise passiert gar nichts.</template>
   <template templatetype="command" name="help">^hilfe$|^\?$</template>
   <template templatetype="command" name="save">^save$|^speichern$</template>
-
+ 
   <template name="DevModeCommandPut">lege</template>
   <template name="DevModeCommandDrop">lege</template>
   <template name="DevModeCommandTake">nimm</template>
