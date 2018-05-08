@@ -356,7 +356,7 @@
   <template name="DefaultXyzzy">Überraschenderweise passiert gar nichts.</template>
   <template templatetype="command" name="help">^hilfe$|^\?$</template>
   <template templatetype="command" name="save">^save$|^speichern$</template>
-
+ 
  <template name="DefaultHelp"><![CDATA[<br/><u>Befehlsübersicht</u><br/><br/>
 <b>- Häufig vorkommende Befehle:</b> UNTERSUCHE..., NIMM..., LEGE..., ÖFFNE..., GIB... AN..., BENUTZE... MIT..., SPRICH MIT..., VERWENDE...<br/>
 <b>- Inventar:</b> getragene Gegenstände können über INV oder INVENTAR angezeigt werden.<br/>
