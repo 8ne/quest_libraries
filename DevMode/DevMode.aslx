@@ -4,11 +4,11 @@
 <!--
 
   ****************************************************************************************************
-  DevMode - Tool for better testing the game
+  CoreDevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.0
+  Version 1.1
   ****************************************************************************************************
-  Quest-Version: 5.7
+  Quest-Version: 5.8
   ****************************************************************************************************
   If you are viewing this on GitHub and want to download it, right click on the RAW button
   just above, and select "Save link as..."
@@ -19,117 +19,17 @@
   Inspired by Pixie's Cheating-Code. ;-)
   ****************************************************************************************************
 
+  ****************************************************************************************************
+  Version 1.1
+  The DevMode was integrated in Quest 5.8.
+  Language templates have been moved to Quest's language files.
+  IMPORTANT: These and future versions will only be compatible with Quest 5.8 and higher.
+  ****************************************************************************************************
+
 -->
 
   <!-- DevMode Options -->
   <dynamictemplate name="DevModeFontSyntax"><![CDATA["<font color=\"" + game.devmode_fontcolour + "\">" + text + "</font>"]]></dynamictemplate>
-
-  <!-- Languages -->
-  <template name="DevModeAvailableLanguages">de</template>
-
-  <!-- English -->
-  <!-- Command-Templates -->
-  <template name="DevModeCommandPut">put</template>
-  <template name="DevModeCommandDrop">drop</template>
-  <template name="DevModeCommandTake">take</template>
-  <template name="DevModeCommandTo">to</template>
-  <template name="DevModeCommandGo">go</template>
-  <template name="DevModeCommandOpen">open</template>
-  <template name="DevModeCommandClose">close</template>
-  <template name="DevModeCommandOn">on</template>
-  <template name="DevModeCommandOff">off</template>
-  <template name="DevModeCommandClr">clr</template>
-  <template name="DevModeCommandHelp">?</template>
-  <template name="DevModeCommandsInVerbs">#drop;#take;#to;#open;#close;#on;#off</template>
-  <template name="DevModePattern"><![CDATA[^(?<command2>put) (?<object1>.+) (in|on) (?<object2>.+)$|^(?<command1>drop|take|to|go|open|close|on|off) (?<object>.+)$|^(?<command0>clr|\?)$]]></template>
-  <template name="DevModeErrorWrongFormat">Unfortunately, this is the wrong format.</template>
-  <template name="DevModeErrorObjectNotRecognised">The object was not detected.</template>
-  <template name="DevModeErrorWrongTyp">That´s the wrong typ.</template>
-  <template name="DevModeErrorWrongKey">The key was not found.</template>
-  <dynamictemplate name="DevModeErrorCantFindObject">"The object with the name '" + text + "' cannot be found."</dynamictemplate>
-  <dynamictemplate name="DevModeErrorCantFindAttribute">"The attribute with the name '" + text + "' cannot be found."</dynamictemplate>
-  <template name="DevModeExecuteCommand">The command was executed.</template>
-  <template name="DevModeNotActive">The DevMode is not active!</template>
-  <template name="DevModeDescriptionCommands"><![CDATA[<b>Commands</b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on objekt<br/>#off objekt<br/>#to player<br/>#go raum<br/><br/><i>Unlike the commands in the game, they are executed directly and without detours via intercept scripts.</i><br/><br/><b>Expressions</b><br/>#object1.attribut=object2.attribut (attribute assignment of another object)<br/>#object.attribut=true/false (boolean)<br/>#?object.attribut (set true)<br/>#!object.attribut (set false)<br/>#object.attribut="value" (string)<br/>#object.attribut=15 (integer)<br/>#object.attribut=25.55 (double)<br/>#object.attribut=[item1;item2;item3] (list)<br/>#object.attribut[]=element (add element to list)<br/>#object.attribut=[] (create new list)<br/>#object.attribut={key1:item1;key2:item2;key3:item3} (dictionary)<br/>#object.attribut{key}=element (add or overwrite element to dictionary)<br/>#object.attribut={} (create new dictionary)<br/>#object.attribut (read attribute)<br/><br/><b>Extras</b><br/>#clr (clear screen)<br/>#? (help)<br/># (close game)]]></template>
-  <template name="DevModeDescriptionAttribute"><![CDATA[Enter the object with the corresponding attribute in "Key" (e. g. game.showtitle or player.look). The assignment is entered in "Value". It is possible to create Strings ("Hello World!"), Boolean (true or false), Integer (15), Double (25.55), Listen (["Hello";"World";"!"]) and Dictionarys ({H:"Hello";W:"World"}.)]]></template>
-
-  <!-- Interface-Templates -->
-  <template name="EditorGameDevMode">Developer-Mode</template>
-  <template name="EditorGameDevModeInformation">Information</template>
-  <template name="EditorGameDevModeInformationText"><![CDATA[If the script 'User Interface Initialization' is already in use under the tab 'Advanced Scripts', simply add the function 'setDevMode' or, if you don't need the script, set the attribute 'inituserinterface' to 'Null' in the tab 'Attributes'. Otherwise, there is no need for personal involvement.]]></template>
-  <template name="EditorGameDevModeInfoRelease">Important: Before releasing the game the developer mode must be deactivated!</template>
-  <template name="EditorGameDevModeInfoCommands">Enhanced commands are available in the current game. Enter '#?' to get more information.</template>
-  <template name="EditorGameDevModeOptions">Options</template>
-  <template name="EditorGameDevModeChangePov">Select another player</template>
-  <template name="EditorGameDevModeChangePovPos">Select another position of the player</template>
-  <template name="EditorGameDevModePov">Player</template>
-  <template name="EditorGameDevModePlace">Place</template>
-  <template name="EditorGameDevModeSetInitScript">Use an initialization script for the developer mode</template>
-  <template name="EditorGameDevModeInitScript">Initialization script for the developer mode</template>
-  <template name="EditorGameDevModeSetVerbs">Adding verbs of development mode to the verb list of objects</template>
-  <template name="EditorGameDevModeShowInfos">Display development mode output</template>
-  <template name="EditorGameDevModeOwnFontColour">Use your own font color for the developer mode output</template>
-  <template name="EditorGameDevModeFontColour">Font color for developer mode output</template>
-  <template name="EditorGameDevModeOn">Activ</template>
-  <template name="EditorGameDevModeOff">Inactiv</template>
-  <template name="EditorGameDevModeAttributes">Attributes</template>
-  <template name="EditorGameDevModeActive"><![CDATA[<b>DevMode: Activ</b>]]></template>
-  <template name="EditorGameDevModeChangedPov">DevMode: Change player object.</template>
-  <template name="EditorGameDevModeChangedPovPos">DevMode: Change player position.</template>
-  <template name="EditorGameDevModeChangedAttributes">DevMode: Set attributes.</template>
-  <template name="EditorGameDevModeStartScript">DevMode: Start initialization script.</template>
-
-  <!-- Deutsch -->
-  <!-- Command-Templates -->
-  <template name="DevModeCommandPutDE">lege</template>
-  <template name="DevModeCommandDropDE">lege</template>
-  <template name="DevModeCommandTakeDE">nimm</template>
-  <template name="DevModeCommandToDE">zu</template>
-  <template name="DevModeCommandGoDE">gehe</template>
-  <template name="DevModeCommandOpenDE">öffne</template>
-  <template name="DevModeCommandCloseDE">schliesse</template>
-  <template name="DevModeCommandOnDE">an</template>
-  <template name="DevModeCommandOffDE">aus</template>
-  <template name="DevModeCommandClrDE">clr</template>
-  <template name="DevModeCommandHelpDE">?</template>
-  <template name="DevModeCommandsInVerbsDE">#lege;#nimm;#zu;#öffne;#schliesse;#an;#aus</template>
-  <template name="DevModePatternDE"><![CDATA[^(?<command2>lege) (?<object1>.+) (in|auf) (?<object2>.+)$|^(?<command1>lege|nimm|zu|gehe|öffne|schliesse|an|aus) (?<object>.+)$|^(?<command0>clr|\?)$]]></template>
-  <template name="DevModeErrorWrongFormatDE">Das ist leider das falsche Format.</template>
-  <template name="DevModeErrorObjectNotRecognisedDE">Das Objekt wurde nicht erkannt.</template>
-  <template name="DevModeErrorWrongTypDE">Das ist der falsche Typ.</template>
-  <template name="DevModeErrorWrongKeyDE">Der Key wurde nicht gefunden.</template>
-  <dynamictemplate name="DevModeErrorCantFindObjectDE">"Das Objekt mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
-  <dynamictemplate name="DevModeErrorCantFindAttributeDE">"Das Attribut mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
-  <template name="DevModeExecuteCommandDE">Der Befehl wurde ausgeführt.</template>
-  <template name="DevModeNotActiveDE">Der DevMode ist nicht aktiv!</template>
-  <template name="DevModeDescriptionCommandsDE"><![CDATA[<b>kommandos</b><br/>#nimm object<br/>#lege object<br/>#lege object1 in object2<br/>#öffne object<br/>#schliesse object<br/>#an objekt<br/>#aus objekt<br/>#zu player<br/>#gehe raum<br/><br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b>Ausdrücke</b><br/>#object1.attribut=object2.attribut (Attributzuweisung eines anderen Objektes)<br/>#object.attribut=true/false (Boolean)<br/>#?object.attribut (Setze auf True)<br/>#!object.attribut (Setze auf False)<br/>#object.attribut="value" (String)<br/>#object.attribut=15 (Integer)<br/>#object.attribut=25.55 (Double)<br/>#object.attribut=[Item1;Item2;Item3] (Liste)<br/>#object.attribut[]=element (Element zur Liste hinzufügen)<br/>#object.attribut=[] (Eine neue Liste erstellen)<br/>#object.attribut={Key1:Item1;Key2:Item2;Key3:Item3} (Dictionary)<br/>#object.attribut{Key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribut={} (Neues Dictionary erstellen)<br/>#object.attribut (Attribute auslesen)<br/><br/><b>Extras</b><br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)]]></template>
-  <template name="DevModeDescriptionAttributeDE"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Listen (["Hallo";"Welt";"!"]) und Wörterbücher ({H:"Hallo";W:"Welt"} zu erstellen.)]]></template>
-
-  <!-- Interface-Templates -->
-  <template name="EditorGameDevModeDE">Entwicklermodus</template>
-  <template name="EditorGameDevModeInformationDE">Information</template>
-  <template name="EditorGameDevModeInformationTextDE"><![CDATA[Falls das Skript 'Initialisierung der Benutzeroberfläche' unter dem Tab 'Erweiterte Skripte' bereits in Verwendung ist einfach die Funktion 'setDevMode' hinzufügen oder, falls das Skript nicht benötigt wird, im Tab 'Attribute' das Attribut 'inituserinterface' auf 'Null' stellen. Anderenfalls bedarf es keines eigenen Zutuns.]]></template>
-  <template name="EditorGameDevModeInfoReleaseDE">Wichtig: Vor Veröffentlichung des Spiels muss der Entwicklermodus deaktiviert werden!</template>  
-  <template name="EditorGameDevModeInfoCommandsDE">Es stehen im laufenden Spiel erweiterte Kommandos zur Verfügung. Geben Sie '#?' ein um weitere Informationen zu erhalten.</template>
-  <template name="EditorGameDevModeOptionsDE">Optionen</template>
-  <template name="EditorGameDevModeChangePovDE">Einen anderen Spieler wählen</template>
-  <template name="EditorGameDevModePovDE">Spieler</template>
-  <template name="EditorGameDevModeChangePovPosDE">Eine andere Position des Spielers wählen</template>
-  <template name="EditorGameDevModePlaceDE">Ort</template>
-  <template name="EditorGameDevModeSetInitScriptDE">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
-  <template name="EditorGameDevModeInitScriptDE">Initialisierungsscript für den Entwicklermodus</template>
-  <template name="EditorGameDevModeSetVerbsDE">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>
-  <template name="EditorGameDevModeShowInfosDE">Ausgaben des Entwicklungsmodus anzeigen</template>  
-  <template name="EditorGameDevModeOwnFontColourDE">Eigene Schriftfarbe für die Ausgabe des Entwicklermodus verwenden</template>
-  <template name="EditorGameDevModeFontColourDE">Schriftfarbe für die Ausgaben des Entwicklermodus</template>
-  <template name="EditorGameDevModeOnDE">Aktiviert</template>
-  <template name="EditorGameDevModeOffDE">Deaktiviert</template>
-  <template name="EditorGameDevModeAttributesDE">Attributes</template>
-  <template name="EditorGameDevModeActiveDE"><![CDATA[<b>Entwicklermodus: Aktiviert</b>]]></template>
-  <template name="EditorGameDevModeChangedPovDE">Entwicklermodus: Ändere Spielerobjekt.</template>
-  <template name="EditorGameDevModeChangedPovPosDE">Entwicklermodus: Ändere Position des Spielers.</template>
-  <template name="EditorGameDevModeChangedAttributesDE">Entwicklermodus: Setze Attribute.</template>
-  <template name="EditorGameDevModeStartScriptDE">Entwicklermodus: Starte Initialisierungsscript.</template>
 
   <!-- Commands -->
   <command name="devmode_commands">
@@ -139,7 +39,7 @@
     <![CDATA[
       if (HasAttribute(game, "devmode_active")) {
         if (IsDefined("text")) {
-          regex = Template("DevModePattern" + game.devmode_language)
+          regex = Template("DevModePattern")
           if (IsRegexMatch (regex, text)) {
             res = populate (regex, text)
             com0 = ToString(DictionaryItem(res, "command0"))
@@ -149,41 +49,41 @@
             // Commands
             if (not com0 = "") { // without object
               switch (LCase(com0)) {
-                case (Template("DevModeCommandClr" + game.devmode_language)) { // clr
+                case (Template("DevModeCommandClr")) { // clr
                   ClearScreen
                 }
-                case (Template("DevModeCommandHelp" + game.devmode_language)) { // ?
-                  msgdm (Template("DevModeDescriptionCommands" + game.devmode_language))
+                case (Template("DevModeCommandHelp")) { // ?
+                  msgdm (Template("DevModeDescriptionCommands"))
                 }
               }
             }
             else if (not com1 = "") { // with one object
               objstr = ToString(DictionaryItem(res, "object"))
               obj = getObjectExt(objstr)
-              if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject" + game.devmode_language, objstr))
+              if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
               switch (LCase(com1)) {
-                case (Template("DevModeCommandDrop" + game.devmode_language)) { // drop
+                case (Template("DevModeCommandDrop")) { // drop
                   setWithoutChange (obj, "parent", game.pov.parent)
                 }
-                case (Template("DevModeCommandTake" + game.devmode_language)) { // take
+                case (Template("DevModeCommandTake")) { // take
                   setWithoutChange (obj, "parent", game.pov)
                 }
-                case (Template("DevModeCommandTo" + game.devmode_language)) { // to
+                case (Template("DevModeCommandTo")) { // to
                   setPov (obj)
                 }                
-                case (Template("DevModeCommandGo" + game.devmode_language)) { // go
+                case (Template("DevModeCommandGo")) { // go
                   setPovPos (obj)
                 }
-                case (Template("DevModeCommandOpen" + game.devmode_language)) { // open
+                case (Template("DevModeCommandOpen")) { // open
                   setWithoutChange (obj, "isopen", true)
                 }
-                case (Template("DevModeCommandClose" + game.devmode_language)) { // close
+                case (Template("DevModeCommandClose")) { // close
                   setWithoutChange (obj, "isopen", false)
                 }
-                case (Template("DevModeCommandOn" + game.devmode_language)) { // on
+                case (Template("DevModeCommandOn")) { // on
                   setWithoutChange (obj, "switchedon", true)
                 }
-                case (Template("DevModeCommandOff" + game.devmode_language)) { // off
+                case (Template("DevModeCommandOff")) { // off
                   setWithoutChange (obj, "switchedon", false)
                 }
               }
@@ -193,10 +93,10 @@
               obj2str = ToString(DictionaryItem(res, "object2"))
               obj1 = getObjectExt(obj1str)
               obj2 = getObjectExt(obj2str)
-              if (obj1 = null) error (DynamicTemplate("DevModeErrorCantFindObject" + game.devmode_language, obj1str))
-              if (obj2 = null) error (DynamicTemplate("DevModeErrorCantFindObject" + game.devmode_language, obj2str))
+              if (obj1 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj1str))
+              if (obj2 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj2str))
               switch (LCase(ToString(DictionaryItem(res, "command2")))) {
-                case (Template("DevModeCommandPut" + game.devmode_language)) { // put
+                case (Template("DevModeCommandPut")) { // put
                   setWithoutChange (obj1, "parent", obj2)
                 }
               }
@@ -213,18 +113,13 @@
         }
       }
       else {
-        msgdm (Template("DevModeNotActive" + game.devmode_language)) // The DevMode is not activ
+        msgdm (Template("DevModeNotActive")) // The DevMode is not activ
       }
     ]]>
     </script>
   </command>
 
   <!-- Functions -->
-
-  <function name="checkLang">
-    if (not InStr (Template("DevModeAvailableLanguages"), game.languageid) = 0) game.devmode_language = UCase(game.languageid)
-    else game.devmode_language = ""
-  </function>
 
   <function name="Expression" parameters="text">
     <![CDATA[
@@ -240,7 +135,7 @@
         if (not obj1str = "") {
 
           obj = getObjectExt(obj1str)
-          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject" + game.devmode_language, obj1str))
+          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj1str))
           attstr = ToString(DictionaryItem(res, "attribute1"))
           valstr = ToString(DictionaryItem(res, "value1"))
 
@@ -265,7 +160,7 @@
                   dictionary add (val, dict0, dict1)
                 }
                 else {
-                  error (Template("DevModeErrorWrongFormat" + game.devmode_language))
+                  error (Template("DevModeErrorWrongFormat"))
                 }
               }
             }
@@ -279,31 +174,31 @@
           // Attribute of another object
           else if (not InStr(valstr, ".") = 0) {
             list = Split(valstr, ".")
-            if (not ListCount(list) = 2) error (Template("DevModeErrorWrongFormat" + game.devmode_language))
+            if (not ListCount(list) = 2) error (Template("DevModeErrorWrongFormat"))
             valobjstr = ToString(list[0])
             valatt = ToString(list[1])
             valobj = getObjectExt(valobjstr)
-            if (valobj = null) error (DynamicTemplate("DevModeErrorCantFindObject" + game.devmode_language, valobjstr))
-            if (not HasAttribute (valobj, valatt)) error (DynamicTemplate("DevModeErrorCantFindAttribute" + game.devmode_language, valatt))
+            if (valobj = null) error (DynamicTemplate("DevModeErrorCantFindObject", valobjstr))
+            if (not HasAttribute (valobj, valatt)) error (DynamicTemplate("DevModeErrorCantFindAttribute", valatt))
             val = Eval(valstr)
           }
 
           // Wrong Format
           else {
-            error (Template("DevModeErrorWrongFormat" + game.devmode_language))
+            error (Template("DevModeErrorWrongFormat"))
           }
         }
 
         // Expression without value
         else if (not obj2str = "") {
           obj = getObjectExt(obj2str)
-          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject" + game.devmode_language, obj2str))
+          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj2str))
           tok = ToString(DictionaryItem(res, "token2"))
           attstr = ToString(DictionaryItem(res, "attribute2"))
         }
       }
       else {
-        error (Template("DevModeErrorWrongFormat" + game.devmode_language))
+        error (Template("DevModeErrorWrongFormat"))
       }
 
       // ATTRIBUTE
@@ -311,7 +206,7 @@
       // Listitem
       if (EndsWith(attstr, "[]")) {
         att = Replace (attstr, "[]", "")
-        if (not HasAttribute (obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute" + game.devmode_language, att))
+        if (not HasAttribute (obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute", att))
         con = GetAttribute (obj, att)
         if (obj2str = "") {
           if (not TypeOf(con) = "list" and not TypeOf(con) = "objectlist" and not TypeOf(con) = "stringlist") con = NewList ()
@@ -319,7 +214,7 @@
           set (obj, att, con)
         }
         else {
-          error (Template("DevModeErrorWrongTyp" + game.devmode_language))
+          error (Template("DevModeErrorWrongTyp"))
         }
       }
 
@@ -327,7 +222,7 @@
       else if (not Instr(attstr, "{") = 0 and EndsWith(attstr, "}")) {
         attkey = Split (attstr, "{")
         att = ToString (attkey[0])
-        if (not HasAttribute (obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute" + game.devmode_language, att))
+        if (not HasAttribute (obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute", att))
         key = Replace (ToString (attkey[1]), "}", "")
         con = GetAttribute (obj, att)
         if (obj2str = "") {
@@ -337,8 +232,8 @@
           set (obj, att, con)
         }
         else {
-          if (not TypeOf(con) = "dictionary" and not TypeOf(con) = "objectdictionary" and not TypeOf(con) = "stringdictionary") error (Template("DevModeErrorWrongTyp" + game.devmode_language))
-          if (not DictionaryContains(con, key)) error (Template("DevModeErrorWrongKey" + game.devmode_language))
+          if (not TypeOf(con) = "dictionary" and not TypeOf(con) = "objectdictionary" and not TypeOf(con) = "stringdictionary") error (Template("DevModeErrorWrongTyp"))
+          if (not DictionaryContains(con, key)) error (Template("DevModeErrorWrongKey"))
           msgdm ("=" + DictionaryItem(con, key))
         }
       }
@@ -354,7 +249,7 @@
           if (tok = "?") set (obj, att, true) // True
           else if (tok = "!") set (obj, att, false) // False
           else { // Read attribute
-            if (not HasAttribute(obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute" + game.devmode_language, att))
+            if (not HasAttribute(obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute", att))
             val = ToString(GetAttribute(obj, att))
             msgdm ("=" + val)
           }
@@ -377,7 +272,7 @@
     cha = "changed" + att
     bla => { }
     scr => { }
-    if (obj = null) error (Template("DevModeErrorObjectNotRecognised" + game.devmode_language))
+    if (obj = null) error (Template("DevModeErrorObjectNotRecognised"))
     if (HasAttribute (obj, cha)) {
       scr = GetAttribute (obj, cha)
       set (obj, cha, bla)
@@ -390,36 +285,34 @@
   </function>
 
   <function name="setPov" parameters="obj">
-    msgdm (Template("EditorGameDevModeChangedPov" + game.devmode_language))
+    msgdm (Template("DevModeChangedPov"))
     setWithoutChange (game, "pov", obj)
   </function>
 
   <function name="setPovPos" parameters="obj">
-    msgdm (Template("EditorGameDevModeChangedPovPos" + game.devmode_language))
+    msgdm (Template("DevModeChangedPovPos"))
     setWithoutChange (game.pov, "parent", obj)
   </function>
 
   <function name="setDevMode">
-    if (HasAttribute(game, "devmode_active")) {
-      checkLang
-      msgdm (Template("EditorGameDevModeActive" + game.devmode_language))
-      if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
-        foreach(key, game.devmode_attributes) Expression (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
-        msgdm (Template("EditorGameDevModeChangedAttributes" + game.devmode_language))
-      }
-      if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
-      if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
-      if (game.devmode_setverbs) setVerbs
-      if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
-        msgdm (Template("EditorGameDevModeStartScript" + game.devmode_language))
-        do (game, "devmode_initscript")
-      }
-    }
+	  if (HasAttribute(game, "devmode_active")) {
+		  msgdm (Template("DevModeActive"))
+		  if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
+			  foreach(key, game.devmode_attributes) Expression (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
+			  msgdm (Template("DevModeChangedAttributes"))
+		  }
+		  if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
+		  if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
+		  if (game.devmode_setverbs) setVerbs
+		  if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
+			  msgdm (Template("DevModeStartScript"))
+			  do (game, "devmode_initscript")
+		  }
+	  }
   </function>
 
   <function name="setVerbs">
-    if (game.devmode_language = "DE") verbs = game.devmode_verbs_de
-    else verbs = game.devmode_verbs
+    verbs = game.devmode_verbs
     foreach (object, AllObjects()) {
       if (HasAttribute(object, "displayverbs")) {
         object.displayverbs = ListCombine (object.displayverbs, verbs)
@@ -446,49 +339,30 @@
   <!-- Types -->
 
   <type name="devmode">
-    <devmode_verbs type="simplestringlist">[DevModeCommandsInVerbs]</devmode_verbs>
-    <devmode_verbs_de type="simplestringlist">[DevModeCommandsInVerbsDE]</devmode_verbs_de>
     <devmode_active type="boolean">true</devmode_active>
-    <devmode_attributes type="stringdictionary" />
-    <devmode_language type="string" />
     <devmode_changepov type="boolean">false</devmode_changepov>
     <devmode_changepovpos type="boolean">false</devmode_changepovpos>
+    <devmode_setinitscript type="boolean">false</devmode_setinitscript>
     <devmode_setverbs type="boolean">true</devmode_setverbs>
+    <devmode_verbs type="simplestringlist">[DevModeCommandsInVerbs]</devmode_verbs>
     <devmode_showinfos type="boolean">true</devmode_showinfos>
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
     <devmode_fontcolour type="string">Green</devmode_fontcolour>
-    <inituserinterface type="script">
-      setDevMode
-    </inituserinterface>
+    <devmode_attributes type="stringdictionary" />
  </type>
 
   <!-- Interface -->
 
-  <!-- English -->
-
   <tab>
     <parent>_GameEditor</parent>
     <caption>[EditorGameDevMode]</caption>
-    <onlydisplayif>(InStr (Template("DevModeAvailableLanguages"), game.languageid) = 0)</onlydisplayif>
+    <onlydisplayif>GetBoolean (game, "feature_devmode")</onlydisplayif>
 
     <control>
       <controltype>dropdowntypes</controltype>
       <caption>[EditorGameDevMode]</caption>
       <types>*=[EditorGameDevModeOff]; devmode=[EditorGameDevModeOn];</types>
       <width>150</width>
-    </control>
-
-    <control>
-      <controltype>title</controltype>
-      <caption>[EditorGameDevModeInformation]</caption>
-      <mustnotinherit>devmode</mustnotinherit>
-    </control>
-
-    <control>
-      <controltype>label</controltype>
-      <caption>[EditorGameDevModeInformationText]</caption>
-      <mustnotinherit>devmode</mustnotinherit>
-      <advanced/>
     </control>
 
     <control>
@@ -603,162 +477,7 @@
 
     <control>
       <controltype>label</controltype>
-      <caption>[DevModeDescriptionAttribute]</caption>
-      <mustinherit>devmode</mustinherit>
-      <advanced/>
-    </control>
-
-    <control>
-      <controltype>stringdictionary</controltype>
-      <keyprompt>[EditorObjectAttributesPleaseenter]</keyprompt>
-      <valueprompt>[EditorObjectAttributesPleaseenter2]</valueprompt>
-      <attribute>devmode_attributes</attribute>
-      <mustinherit>devmode</mustinherit>
-      <expand/>            
-    </control>
-
-  </tab>
-
-  <!-- Deutsch -->
-
-  <tab>
-    <parent>_GameEditor</parent>
-    <caption>[EditorGameDevModeDE]</caption>
-    <onlydisplayif>game.languageid = "de"</onlydisplayif>
-
-    <control>
-      <controltype>dropdowntypes</controltype>
-      <caption>[EditorGameDevModeDE]</caption>
-      <types>*=[EditorGameDevModeOffDE]; devmode=[EditorGameDevModeOnDE];</types>
-      <width>150</width>
-    </control>
-
-    <control>
-      <controltype>title</controltype>
-      <caption>[EditorGameDevModeInformationDE]</caption>
-      <mustnotinherit>devmode</mustnotinherit>
-    </control>
-
-    <control>
-      <controltype>label</controltype>
-      <caption>[EditorGameDevModeInformationTextDE]</caption>
-      <mustnotinherit>devmode</mustnotinherit>
-      <advanced/>
-    </control>
-
-    <control>
-      <controltype>title</controltype>
-      <caption>[EditorGameDevModeDE]</caption>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <controltype>label</controltype>
-      <caption>[EditorGameDevModeInfoReleaseDE]</caption>
-      <mustinherit>devmode</mustinherit>
-      <bold/>
-    </control>
-
-    <control>
-      <controltype>label</controltype>
-      <caption>[EditorGameDevModeInfoCommandsDE]</caption>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <controltype>title</controltype>
-      <caption>[EditorGameDevModeOptionsDE]</caption>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeChangePovDE]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_changepov</attribute>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <controltype>expression</controltype>
-      <simple>[EditorGameDevModePovDE]</simple>
-      <simpleeditor>objects</simpleeditor>
-      <attribute>devmode_pov</attribute>
-      <onlydisplayif>game.devmode_changepov</onlydisplayif>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeChangePovPosDE]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_changepovpos</attribute>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <controltype>expression</controltype>
-      <simple>[EditorGameDevModePlaceDE]</simple>
-      <simpleeditor>objects</simpleeditor>
-      <attribute>devmode_povpos</attribute>
-      <onlydisplayif>game.devmode_changepovpos</onlydisplayif>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeSetInitScriptDE]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_setinitscript</attribute>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeInitScriptDE]</caption>
-      <controltype>script</controltype>
-      <attribute>devmode_initscript</attribute>
-      <onlydisplayif>game.devmode_setinitscript</onlydisplayif>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeSetVerbsDE]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_setverbs</attribute>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeShowInfosDE]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_showinfos</attribute>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeOwnFontColourDE]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_ownfontcolour</attribute>
-      <onlydisplayif>game.devmode_showinfos</onlydisplayif>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <controltype>dropdown</controltype>
-      <caption>[EditorGameDevModeFontColourDE]</caption>
-      <attribute>devmode_fontcolour</attribute>
-      <validvalues type="simplestringlist">[HTMLColorNames]</validvalues>
-      <onlydisplayif>game.devmode_showinfos and game.devmode_ownfontcolour</onlydisplayif>
-      <mustinherit>devmode</mustinherit>
-      <freetext/>
-    </control>
-
-    <control>
-      <controltype>title</controltype>
-      <caption>[EditorGameDevModeAttributesDE]</caption>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <controltype>label</controltype>
-      <caption>[DevModeDescriptionAttributeDE]</caption>
+      <caption>[EditorGameDevModeDescriptionAttribute]</caption>
       <mustinherit>devmode</mustinherit>
       <advanced/>
     </control>
