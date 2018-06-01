@@ -6,7 +6,7 @@
   ****************************************************************************************************
   UseAllround - use the 'use' verb global for opening, switching and put on
   by SoonGames, 2017-2018
-  Version 2.5
+  Version 2.55
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -19,6 +19,9 @@
   Put on" can be combined with "Open" or "Switch" as one uses "Use with" and the other only "Use".
   ****************************************************************************************************
 
+  ****************************************************************************************************
+  Version 2.55
+  Bugfix with Language-Template
   ****************************************************************************************************
   Version 2.5
   Automatic language setting.
@@ -97,7 +100,7 @@
   <!-- Functions -->
 
   <function name="UseAllround" parameters="typ, object1, object2">
-    if (not InStr (Template("DevModeAvailableLanguages"), game.languageid) = 0) lang = UCase(game.languageid)
+    if (not InStr (Template("EditorObjectUseAsAvailableLanguages"), game.languageid) = 0) lang = UCase(game.languageid)
     else lang = ""
 
     switch (typ) {
