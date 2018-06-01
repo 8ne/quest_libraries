@@ -1,4 +1,4 @@
-# UseAllround 2.5
+# UseAllround 2.55
 ---
 #### With the following script it is possible to use the verb "Use" as "Open/Close","Switch" and "put on".
 ---
