@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.15
+  Version 1.16
   ****************************************************************************************************
   Quest-Version: 5.8
   ****************************************************************************************************
@@ -20,8 +20,9 @@
   ****************************************************************************************************
 
   ****************************************************************************************************
-  Version 1.15
+  Version 1.16
   Function independent of the integrated DevMode, for further development.
+  Error fixed when DevMode is switched off.
   ****************************************************************************************************
   Version 1.1
   The DevMode was integrated in Quest 5.8.
@@ -116,7 +117,7 @@
         }
       }
       else {
-        msgdm (Template("DevModeNotActive")) // The DevMode is not activ
+        error (Template("DevModeNotActive")) // The DevMode is not activ
       }
     ]]>
     </script>
