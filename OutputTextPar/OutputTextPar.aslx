@@ -25,17 +25,13 @@
   <template name="EditorScriptsOutputPrintamessagepar">Print a message (in paragraphs)</template>
   <template name="EditorScriptsOutputPrintpar">Print (in paragraphs)</template>
 
-
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
   <!-- Deutsch -->
-  <!-- -->
+  <!--
   <template name="EditorScriptsOutputPrintamessagepar">Text anzeigen (in Paragrafen)</template>
   <template name="EditorScriptsOutputPrintpar">Folgenden Text in Paragrafen anzeigen</template>
+  -->
 
-
-  <!-- -->
-
-  
   <!-- Script-inscription -->
 
   <!-- OutputTextPar -->
