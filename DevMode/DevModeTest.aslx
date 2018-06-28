@@ -1,5 +1,5 @@
-<!--Saved by Quest 5.7.6590.33353-->
-<asl version="550">
+<!--Saved by Quest 5.8.6747.20202-->
+<asl version="580">
   <include ref="English.aslx" />
   <include ref="Core.aslx" />
   <include ref="DevMode.aslx" />
@@ -11,8 +11,8 @@
     <feature_advancedscripts />
     <statusattributes type="stringdictionary" />
     <attr name="devmode_setinitscript" type="boolean">false</attr>
-    <devmode_changepovpos />
-    <devmode_changepov />
+    <attr name="devmode_changepovpos" type="boolean">false</attr>
+    <attr name="devmode_changepov" type="boolean">false</attr>
     <deactivatecommandlinks type="boolean">false</deactivatecommandlinks>
     <enablehyperlinks />
     <devmode_setverbs />
@@ -22,6 +22,10 @@
         <value>false</value>
       </item>
     </devmode_attributes>
+    <attr name="devmode_pov">player2</attr>
+    <attr name="devmode_povpos">room2</attr>
+    <devmode_showdebugtable />
+    <devmode_showinfos />
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
     </attr>
@@ -30,9 +34,10 @@
     <unresolvedcommandhandler type="script">
     </unresolvedcommandhandler>
     <start type="script">
+      setDevMode
     </start>
-    <attr name="devmode_pov">player2</attr>
-    <attr name="devmode_povpos">room2</attr>
+    <devmode_active />
+    <attr name="feature_devmode" type="boolean">false</attr>
   </game>
   <object name="room1">
     <inherit name="editor_room" />

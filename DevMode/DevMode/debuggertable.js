@@ -1,23 +1,24 @@
-$('head').html(
-    '<link href="tabulator-master/dist/css/tabulator.min.css" rel="stylesheet" />' +
-    '<link href="tabulator-master/dist/css/bootstrap/tabulator_bootstrap4.min.css" rel="stylesheet" />' +
-    '<script type="text/javascript" src="tabulator-master/dist/js/tabulator.min.js"></script>'
-);
+function initDebugTable() {
+  
+    $('title').before(
+        '<link rel="Stylesheet" type="text/css" href="quest://local/DevMode/tabulator.min.css">'
+    );
 
-// Eine Ausblendung der Tabelle ermöglichen (mittels Anfasser).
-$('body').html(
-    '<div id="debuggertable">' +
-    '<div id="debuggertable_names"></div>' +
-    '<div id="debuggertable_attr"></div>' +
-    '</div>'
-);
-
-$(document).ready(function () {
+    // Eine Ausblendung der Tabelle ermöglichen (mittels Anfasser).
+    $('body').append(
+        '<div id="debuggertable">' +
+        '<div id="debuggertable_names"></div>' +
+        '<div id="debuggertable_attr"></div>' +
+        '</div>'
+    );  
 
     $('#debuggertable').css({
         "height": "100vh",
         "width": "100vw",
         "background": "white",
+        "font-family": "Lucida Console"
+    });
+    $('#debuggertable input').css({
         "font-family": "Lucida Console"
     });
     $('#debuggertable_names').css({
@@ -93,21 +94,21 @@ $(document).ready(function () {
             // Evtl. ein Rückgängig einbauen, wenn Fehler von Quest gegeben wird.
         }
     });
+  
+}
 
 
-    function tableupdate(table, datastr) {
-        var data = JSON.parse(datastr);
-        $("#debuggertable_" + table).tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
-        $("#debuggertable_" + table).tabulator("setData", data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
-    }
+function tableupdate(table, datastr) {
+    var data = JSON.parse(datastr);
+    $("#debuggertable_" + table).tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
+    $("#debuggertable_" + table).tabulator("setData", data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
+}
 
 
     // Namen werden geladen (Über Devmode) // Frage, ob id verwendet werden muss, oder weggelassen werden kann.
     // zu DevMode schicken und der schickt den JSON-String direkt zu tableupdate.
-    tableupdate('names', '[{"name":"kiste"},{"name":"game"},{"name":"tisch"}]');
+//    tableupdate('names', '[{"name":"kiste"},{"name":"game"},{"name":"tisch"}]');
 
-
-})
 
 
 

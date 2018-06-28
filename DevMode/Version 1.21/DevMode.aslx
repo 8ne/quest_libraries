@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.25
+  Version 1.21
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -19,9 +19,6 @@
   Inspired by Pixie's Cheating-Code. ;-)
   ****************************************************************************************************
 
-  ****************************************************************************************************
-  Version 1.25
-  Editable debugger table added
   ****************************************************************************************************
   Version 1.21
   Added Messages on success.
@@ -38,10 +35,6 @@
   ****************************************************************************************************
 
 -->
-  
-  <!-- Include debugger table -->
-  <javascript src="DevMode/debuggertable.js" />
-  <javascript src="DevMode/tabulator.min.js" />
 
   <!-- Languages -->
   <!-- English -->
@@ -86,7 +79,6 @@
   <template name="EditorGameDevModePlace">Location</template>
   <template name="EditorGameDevModeSetInitScript">Use an initialization script for DevMode</template>
   <template name="EditorGameDevModeInitScript">Initialization script for DevMode</template>
-  <template name="EditorGameDevModeShowDebugTable">Show Debuggertable</template>
   <template name="EditorGameDevModeSetVerbs">Add DevMode verbs to the verb list of objects</template>
   <template name="EditorGameDevModeShowInfos">Display DevMode output</template>
   <template name="EditorGameDevModeOwnFontColour">Use your own font color for DevMode output</template>
@@ -141,7 +133,6 @@
   <template name="EditorGameDevModePlace">Ort</template>
   <template name="EditorGameDevModeSetInitScript">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
   <template name="EditorGameDevModeInitScript">Initialisierungsscript für den Entwicklermodus</template>
-  <template name="EditorGameDevModeShowDebugTable">Zeige Debuggertabelle</template>
   <template name="EditorGameDevModeSetVerbs">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>
   <template name="EditorGameDevModeShowInfos">Ausgaben des Entwicklungsmodus anzeigen</template>  
   <template name="EditorGameDevModeOwnFontColour">Eigene Schriftfarbe für die Ausgabe des Entwicklermodus verwenden</template>
@@ -449,7 +440,6 @@
 		  if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
 		  if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
 		  if (game.devmode_setverbs) setVerbs
-      if (game.devmode_showdebugtable) JS.initDebugTable ()
 		  if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
 			  msgdm (Template("DevModeStartScript"))
 			  do (game, "devmode_initscript")
@@ -482,7 +472,7 @@
     }
     return (obj)
   </function>
-
+  
   <!-- Types -->
 
   <type name="devmode">
@@ -493,7 +483,6 @@
     <devmode_setverbs type="boolean">true</devmode_setverbs>
     <devmode_verbs type="simplestringlist">[DevModeCommandsInVerbs]</devmode_verbs>
     <devmode_showinfos type="boolean">true</devmode_showinfos>
-    <devmode_showdebugtable type="boolean">true</devmode_showdebugtable>
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
     <devmode_fontcolour type="string">Green</devmode_fontcolour>
     <devmode_attributes type="stringdictionary" />
@@ -526,7 +515,7 @@
       <bold/>
     </control>
 
-    <control>    
+    <control>
       <controltype>label</controltype>
       <caption>[EditorGameDevModeInfoCommands]</caption>
       <mustinherit>devmode</mustinherit>
@@ -596,13 +585,6 @@
       <caption>[EditorGameDevModeShowInfos]</caption>
       <controltype>checkbox</controltype>
       <attribute>devmode_showinfos</attribute>
-      <mustinherit>devmode</mustinherit>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeShowDebugTable]</caption>
-      <controltype>checkbox</controltype>
-      <attribute>devmode_showdebugtable</attribute>
       <mustinherit>devmode</mustinherit>
     </control>
 
