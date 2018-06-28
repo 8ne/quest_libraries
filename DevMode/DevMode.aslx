@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.20
+  Version 1.21
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -20,7 +20,7 @@
   ****************************************************************************************************
 
   ****************************************************************************************************
-  Version 1.20
+  Version 1.21
   Added Messages on success.
   Added Togglecommand.
   languages integrated again. Compatible with Quest 5.7 and higher.
@@ -66,10 +66,32 @@
   <template name="DevModeStartScript">Initialization script started.</template>
   <template name="DevModeSetVerbs">Verbs assigned.</template>
   <template name="DevModeComExecute">Command executed: </template>
+    
+  <template name="EditorObjectWearableAdjVerbs">Adapting the inventory verbs to the states</template>
+  <template name="EditorGameEnableDevMode">Show DevMode options</template>
+  <template name="EditorGameDevMode">DevMode</template>
+  <template name="EditorGameDevModeInfoRelease">Important: Before releasing the game DevMode must be deactivated!</template>
+  <template name="EditorGameDevModeInfoCommands">Enhanced commands are available in the current game. Enter '#?' to get more information.</template>
+  <template name="EditorGameDevModeOptions">Options</template>
+  <template name="EditorGameDevModeChangePov">Select another player</template>
+  <template name="EditorGameDevModeChangePovPos">Select another starting location for the player</template>
+  <template name="EditorGameDevModePov">Player</template>
+  <template name="EditorGameDevModePlace">Location</template>
+  <template name="EditorGameDevModeSetInitScript">Use an initialization script for DevMode</template>
+  <template name="EditorGameDevModeInitScript">Initialization script for DevMode</template>
+  <template name="EditorGameDevModeSetVerbs">Add DevMode verbs to the verb list of objects</template>
+  <template name="EditorGameDevModeShowInfos">Display DevMode output</template>
+  <template name="EditorGameDevModeOwnFontColour">Use your own font color for DevMode output</template>
+  <template name="EditorGameDevModeFontColour">Font color for DevMode output</template>
+  <template name="EditorGameDevModeOn">Active</template>
+  <template name="EditorGameDevModeOff">Inactive</template>
+  <template name="EditorGameDevModeAttributes">Attributes</template>
+  <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[Enter the object with the corresponding attribute in "Key" (e. g. game.showtitle or player.look). The assignment is entered in "Value". It is possible to create Strings ("Hello World!"), Boolean (true or false), Integer (15), Double (25.55), Listen (["Hello";"World";"!"]) and Dictionarys ({H:"Hello";W:"World"}.)]]></template>
+    
 
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
   <!-- Deutsch -->
-  <!-- 
+  <!--
   <template name="DevModeCommandPut">lege</template>
   <template name="DevModeCommandDrop">lege</template>
   <template name="DevModeCommandTake">nimm</template>
@@ -98,6 +120,27 @@
   <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
   <template name="DevModeSetVerbs">Verben zugeordnet.</template>
   <template name="DevModeComExecute">Kommando ausgeführt: </template>
+
+  <template name="EditorObjectWearableAdjVerbs">Die Inventarverben den Zuständen anpassen</template>
+  <template name="EditorGameEnableDevMode">Entwicklermodus (Hinzufügen von erweiterten Befehlen zum Testen des Spiels)</template>
+  <template name="EditorGameDevMode">Entwicklermodus</template>
+  <template name="EditorGameDevModeInfoRelease">Wichtig: Vor Veröffentlichung des Spiels muss der Entwicklermodus deaktiviert werden!</template>  
+  <template name="EditorGameDevModeInfoCommands">Es stehen im laufenden Spiel erweiterte Kommandos zur Verfügung. Geben Sie '#?' ein um weitere Informationen zu erhalten.</template>
+  <template name="EditorGameDevModeOptions">Optionen</template>
+  <template name="EditorGameDevModeChangePov">Einen anderen Spieler wählen</template>
+  <template name="EditorGameDevModePov">Spieler</template>
+  <template name="EditorGameDevModeChangePovPos">Eine andere Position des Spielers wählen</template>
+  <template name="EditorGameDevModePlace">Ort</template>
+  <template name="EditorGameDevModeSetInitScript">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
+  <template name="EditorGameDevModeInitScript">Initialisierungsscript für den Entwicklermodus</template>
+  <template name="EditorGameDevModeSetVerbs">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>
+  <template name="EditorGameDevModeShowInfos">Ausgaben des Entwicklungsmodus anzeigen</template>  
+  <template name="EditorGameDevModeOwnFontColour">Eigene Schriftfarbe für die Ausgabe des Entwicklermodus verwenden</template>
+  <template name="EditorGameDevModeFontColour">Schriftfarbe für die Ausgaben des Entwicklermodus</template>
+  <template name="EditorGameDevModeOn">Aktiviert</template>
+  <template name="EditorGameDevModeOff">Deaktiviert</template>
+  <template name="EditorGameDevModeAttributes">Attributes</template>
+  <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Listen (["Hallo";"Welt";"!"]) und Wörterbücher ({H:"Hallo";W:"Welt"} zu erstellen.)]]></template>
   -->
 
   <!-- DevMode Options -->
