@@ -1,0 +1,26 @@
+<!--Saved by Quest 5.8.6747.20202-->
+<asl version="580">
+  <include ref="Deutsch.aslx" />
+  <include ref="Core.aslx" />
+  <include ref="StyleSheet.aslx" />
+  <game name="StyleSheet-Test">
+    <inherit name="cssextern" />
+    <gameid>7585e3f0-d080-4f58-acde-4dc92d7df1b1</gameid>
+    <version>1.0</version>
+    <firstpublished>2018</firstpublished>
+    <cssextractfromhtml />
+    <cssimportant type="boolean">false</cssimportant>
+    <cssextractowncode type="boolean">false</cssextractowncode>
+    <csscode><![CDATA[#gamePanel {<br/>    display: none;<br/>}<br/><br/>#gamePanelSpacer {<br/>    height: 0px;<br/>}<br/><br/>#divOutput {<br/>    min-height: 105px;<br/>}]]></csscode>
+    <cssfile>stylesheet.css</cssfile>
+    <cssextracttempids type="boolean">false</cssextracttempids>
+  </game>
+  <object name="room">
+    <inherit name="editor_room" />
+    <isroom />
+    <object name="player">
+      <inherit name="editor_object" />
+      <inherit name="editor_player" />
+    </object>
+  </object>
+</asl>

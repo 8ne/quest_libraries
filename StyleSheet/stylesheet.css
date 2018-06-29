@@ -1,0 +1,14 @@
+div#gameBorder {
+    width: 1050px;
+}
+#gamePanel {
+    display: none;
+}
+
+#gamePanelSpacer {
+    height: 0px;
+}
+
+#divOutput {
+    min-height: 105px;
+}

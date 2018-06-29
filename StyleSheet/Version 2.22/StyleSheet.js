@@ -35,7 +35,7 @@ function cssExtractCurrent(tempsels, succmes, errmes) {
 /* Extract CSS from HTML */
 
 function cssExtractFromHTML(tempsels) {
-    return extractCSS.extract(document.body.innerHTML, { extractIds: true, extractClasses: false, extractStyle: true, extractAnonStyle: true }, tempsels);
+    return extractCSS.extract(document.innerHTML, { extractIds: true, extractClasses: false, extractStyle: true, extractAnonStyle: true }, (tempsels));
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
@@ -130,7 +130,7 @@ function cssToArray(css) {
         var closepos = css.indexOf('}');
         var selector = css.slice(0, openpos).trim();
         var properties = css.substring(openpos + 1, closepos).trim();
-        if (!(selector in css_arr)) css_arr[selector] = [];
+        css_arr[selector] = [];
         css = css.substring(closepos + 1);
         while (properties.match(/\:.*\;/)) {
             var openpos = properties.indexOf(':');
@@ -142,6 +142,30 @@ function cssToArray(css) {
         }
     }
     return css_arr;
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+
+
+/* Load stylesheet */
+
+function addStyleSheetExt(cssfile, imp) {
+    var css = readFile(cssfile);
+    addStyleSheet(css, imp);
+}
+
+/* ---------------------------------------------------------------------------------------------------- */
+
+
+
+/* Read File */
+
+function readFile(file) {
+    var rawFile = new XMLHttpRequest();
+    rawFile.open("GET", file, false);
+    rawFile.send(null);
+    return rawFile.responseText;
 }
 
 /* ---------------------------------------------------------------------------------------------------- */
