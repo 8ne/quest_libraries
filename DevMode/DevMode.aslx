@@ -40,8 +40,8 @@
 -->
   
   <!-- Include debugger table -->
-  <javascript src="DevMode/debuggertable.js" />
   <javascript src="DevMode/tabulator.min.js" />
+  <javascript src="DevMode/debuggertable.js" />
 
   <!-- Languages -->
   <!-- English -->
@@ -73,7 +73,7 @@
   <template name="DevModeStartScript">Initialization script started.</template>
   <template name="DevModeSetVerbs">Verbs assigned.</template>
   <template name="DevModeComExecute">Command executed: </template>
-    
+
   <template name="EditorObjectWearableAdjVerbs">Adapting the inventory verbs to the states</template>
   <template name="EditorGameEnableDevMode">Show DevMode options</template>
   <template name="EditorGameDevMode">DevMode</template>
@@ -449,7 +449,7 @@
 		  if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
 		  if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
 		  if (game.devmode_setverbs) setVerbs
-      if (game.devmode_showdebugtable) JS.initDebugTable ()
+      if (game.devmode_showdebugtable) JS.initDebugTable (GetFileData("DevMode/tabulator.min.css"))
 		  if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
 			  msgdm (Template("DevModeStartScript"))
 			  do (game, "devmode_initscript")

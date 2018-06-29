@@ -1,8 +1,7 @@
-function initDebugTable() {
-  
-    $('title').before(
-        '<link rel="Stylesheet" type="text/css" href="quest://local/DevMode/tabulator.min.css">'
-    );
+function initDebugTable(css) {
+
+    // StyleSheet für Tabelle laden.
+    $('<style />').text(css).appendTo($('head'));
 
     // Eine Ausblendung der Tabelle ermöglichen (mittels Anfasser).
     $('body').append(
@@ -10,17 +9,19 @@ function initDebugTable() {
         '<div id="debuggertable_names"></div>' +
         '<div id="debuggertable_attr"></div>' +
         '</div>'
-    );  
+    );
 
     $('#debuggertable').css({
-        "height": "100vh",
-        "width": "100vw",
+        "height": "auto",
+        "width": "400px",
         "background": "white",
         "font-family": "Lucida Console"
     });
+
     $('#debuggertable input').css({
         "font-family": "Lucida Console"
     });
+
     $('#debuggertable_names').css({
         "box-sizing": "border-box",
         "float": "left",
@@ -28,12 +29,21 @@ function initDebugTable() {
         "width": "33%",
         "margin-right": "5px"
     });
+    
     $('#debuggertable_attr').css({
         "box-sizing": "border-box",
         "float": "left",
         "height": "100%",
         "width": "66%"
     });
+
+    $( "#debuggertable" ).dialog({
+        buttons: {
+          "Close": function() {
+            $( this ).dialog( "close" );
+          }
+        }
+      });
 
     // Name-Table
     $("#debuggertable_names").tabulator({
