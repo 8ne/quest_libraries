@@ -1,4 +1,4 @@
-<!--Saved by Quest 5.8.6747.20202-->
+<!--Saved by Quest 5.8.6752.28129-->
 <asl version="580">
   <include ref="English.aslx" />
   <include ref="Core.aslx" />
@@ -26,6 +26,9 @@
     <attr name="devmode_povpos">room2</attr>
     <devmode_showdebugtable />
     <devmode_showinfos />
+    <attr name="feature_devmode" type="boolean">false</attr>
+    <attr name="devmode_fontcolour">Green</attr>
+    <devmode_ownfontcolour />
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
     </attr>
@@ -36,8 +39,6 @@
     <start type="script">
       setDevMode
     </start>
-    <devmode_active />
-    <attr name="feature_devmode" type="boolean">false</attr>
   </game>
   <object name="room1">
     <inherit name="editor_room" />

@@ -152,9 +152,6 @@
   <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Listen (["Hallo";"Welt";"!"]) und Wörterbücher ({H:"Hallo";W:"Welt"} zu erstellen.)]]></template>
   -->
 
-  <!-- DevMode Options -->
-  <dynamictemplate name="DevModeFontSyntax"><![CDATA["<font color=\"" + game.devmode_fontcolour + "\">" + text + "</font>"]]></dynamictemplate>
-
   <!-- Commands -->
   <command name="devmode_commands">
     <pattern type="string"></pattern>
@@ -162,85 +159,90 @@
     <script>
     <![CDATA[
       if (HasAttribute(game, "devmode_active")) {
-        if (IsDefined("text")) {
-          regex = Template("DevModePattern")
-          if (IsRegexMatch (regex, text)) {
-            res = populate (regex, text)
-            com0 = ToString(DictionaryItem(res, "command0"))
-            com1 = ToString(DictionaryItem(res, "command1"))
-            com2 = ToString(DictionaryItem(res, "command2"))
+        if (game.devmode_active) {
+          if (IsDefined("text")) {
+            regex = Template("DevModePattern")
+            if (IsRegexMatch (regex, text)) {
+              res = populate (regex, text)
+              com0 = ToString(DictionaryItem(res, "command0"))
+              com1 = ToString(DictionaryItem(res, "command1"))
+              com2 = ToString(DictionaryItem(res, "command2"))
 
-            // Commands
-            if (not com0 = "") { // without object
-              switch (LCase(com0)) {
-                case (Template("DevModeCommandClr")) { // clr
-                  ClearScreen
+              // Commands
+              if (not com0 = "") { // without object
+                switch (LCase(com0)) {
+                  case (Template("DevModeCommandClr")) { // clr
+                    ClearScreen
+                  }
+                  case (Template("DevModeCommandHelp")) { // ?
+                    msgdm (Template("DevModeDescriptionCommands"))
+                  }
                 }
-                case (Template("DevModeCommandHelp")) { // ?
-                  msgdm (Template("DevModeDescriptionCommands"))
+              }
+              else if (not com1 = "") { // with one object
+                objstr = ToString(DictionaryItem(res, "object"))
+                obj = getObjectExt(objstr)
+                if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
+                switch (LCase(com1)) {
+                  case (Template("DevModeCommandDrop")) { // drop
+                    setWithoutChange (obj, "parent", game.pov.parent)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
+                  case (Template("DevModeCommandTake")) { // take
+                    setWithoutChange (obj, "parent", game.pov)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
+                  case (Template("DevModeCommandTo")) { // to
+                    setPov (obj)
+                  }                
+                  case (Template("DevModeCommandGo")) { // go
+                    setPovPos (obj)
+                  }
+                  case (Template("DevModeCommandOpen")) { // open
+                    setWithoutChange (obj, "isopen", true)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
+                  case (Template("DevModeCommandClose")) { // close
+                    setWithoutChange (obj, "isopen", false)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
+                  case (Template("DevModeCommandOn")) { // on
+                    setWithoutChange (obj, "switchedon", true)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
+                  case (Template("DevModeCommandOff")) { // off
+                    setWithoutChange (obj, "switchedon", false)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
+                }
+              }
+              else if (not com2 = "") { // with two objects
+                obj1str = ToString(DictionaryItem(res, "object1"))
+                obj2str = ToString(DictionaryItem(res, "object2"))
+                obj1 = getObjectExt(obj1str)
+                obj2 = getObjectExt(obj2str)
+                if (obj1 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj1str))
+                if (obj2 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj2str))
+                switch (LCase(ToString(DictionaryItem(res, "command2")))) {
+                  case (Template("DevModeCommandPut")) { // put
+                    setWithoutChange (obj1, "parent", obj2)
+                    msgdm (Template("DevModeComExecute") + text)
+                  }
                 }
               }
             }
-            else if (not com1 = "") { // with one object
-              objstr = ToString(DictionaryItem(res, "object"))
-              obj = getObjectExt(objstr)
-              if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
-              switch (LCase(com1)) {
-                case (Template("DevModeCommandDrop")) { // drop
-                  setWithoutChange (obj, "parent", game.pov.parent)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-                case (Template("DevModeCommandTake")) { // take
-                  setWithoutChange (obj, "parent", game.pov)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-                case (Template("DevModeCommandTo")) { // to
-                  setPov (obj)
-                }                
-                case (Template("DevModeCommandGo")) { // go
-                  setPovPos (obj)
-                }
-                case (Template("DevModeCommandOpen")) { // open
-                  setWithoutChange (obj, "isopen", true)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-                case (Template("DevModeCommandClose")) { // close
-                  setWithoutChange (obj, "isopen", false)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-                case (Template("DevModeCommandOn")) { // on
-                  setWithoutChange (obj, "switchedon", true)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-                case (Template("DevModeCommandOff")) { // off
-                  setWithoutChange (obj, "switchedon", false)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-              }
-            }
-            else if (not com2 = "") { // with two objects
-              obj1str = ToString(DictionaryItem(res, "object1"))
-              obj2str = ToString(DictionaryItem(res, "object2"))
-              obj1 = getObjectExt(obj1str)
-              obj2 = getObjectExt(obj2str)
-              if (obj1 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj1str))
-              if (obj2 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj2str))
-              switch (LCase(ToString(DictionaryItem(res, "command2")))) {
-                case (Template("DevModeCommandPut")) { // put
-                  setWithoutChange (obj1, "parent", obj2)
-                  msgdm (Template("DevModeComExecute") + text)
-                }
-              }
+
+            // Expressions
+            else {
+              Expression (text)
             }
           }
-
-          // Expressions
           else {
-            Expression (text)
+            request (Quit, "") // Exit game
           }
         }
         else {
-          request (Quit, "") // Exit game
+          error (Template("DevModeNotActive")) // The DevMode is not activ
         }
       }
       else {
@@ -442,18 +444,20 @@
 
   <function name="setDevMode">
 	  if (HasAttribute(game, "devmode_active")) {
-		  msgdm (Template("DevModeActive"))
-		  if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
-			  foreach(key, game.devmode_attributes) Expression (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
-		  }
-		  if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
-		  if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
-		  if (game.devmode_setverbs) setVerbs
-      if (game.devmode_showdebugtable) JS.initDebugTable (GetFileData("DevMode/tabulator.min.css"))
-		  if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
-			  msgdm (Template("DevModeStartScript"))
-			  do (game, "devmode_initscript")
-		  }
+      if (game.devmode_active) {
+        msgdm (Template("DevModeActive"))
+        if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
+          foreach(key, game.devmode_attributes) Expression (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
+        }
+        if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
+        if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
+        if (game.devmode_setverbs) setVerbs
+        if (game.devmode_showdebugtable) JS.initDebugTable (GetFileData("DevMode/tabulator.min.css"))
+        if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
+          msgdm (Template("DevModeStartScript"))
+          do (game, "devmode_initscript")
+        }
+      }
 	  }
   </function>
 
@@ -593,16 +597,16 @@
     </control>
 
     <control>
-      <caption>[EditorGameDevModeShowInfos]</caption>
+      <caption>[EditorGameDevModeShowDebugTable]</caption>
       <controltype>checkbox</controltype>
-      <attribute>devmode_showinfos</attribute>
+      <attribute>devmode_showdebugtable</attribute>
       <mustinherit>devmode</mustinherit>
     </control>
 
     <control>
-      <caption>[EditorGameDevModeShowDebugTable]</caption>
+      <caption>[EditorGameDevModeShowInfos]</caption>
       <controltype>checkbox</controltype>
-      <attribute>devmode_showdebugtable</attribute>
+      <attribute>devmode_showinfos</attribute>
       <mustinherit>devmode</mustinherit>
     </control>
 
