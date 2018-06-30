@@ -12,39 +12,40 @@ function initDebugTable(css) {
     );
 
     $('#debuggertable').css({
-        "height": "auto",
-        "width": "400px",
-        "background": "white",
-        "font-family": "Lucida Console"
-    });
-
-    $('#debuggertable input').css({
-        "font-family": "Lucida Console"
+        "position": "fixed",
+        "top": "0px",
+        "right": "0px",
+        "height": "100%",
+        "width": "30%",
+        "padding-left": "10px",
+        "background": "grey",
+        "z-index": "1000"
     });
 
     $('#debuggertable_names').css({
         "box-sizing": "border-box",
-        "float": "left",
+        "float": "right",
         "height": "100%",
-        "width": "33%",
-        "margin-right": "5px"
+        "width": "33.3%",
     });
     
     $('#debuggertable_attr').css({
         "box-sizing": "border-box",
-        "float": "left",
+        "float": "right",
         "height": "100%",
-        "width": "66%"
+        "width": "66.6%"
     });
 
-    $( "#debuggertable" ).dialog({
-        buttons: {
-          "Close": function() {
-            $( this ).dialog( "close" );
-          }
-        }
-      });
-
+    var tblshow = true;
+    $('#debuggertable').on('click', function () {
+      if (tblshow) tok = "-";
+      else tok = "+";
+      $('#debuggertable').animate(
+        { right: tok + '=' + $('#debuggertable').width() + 'px' }, 200
+      );
+      tblshow = !tblshow;
+    });
+    
     // Name-Table
     $("#debuggertable_names").tabulator({
         selectable: 1,
