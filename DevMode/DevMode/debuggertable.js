@@ -1,5 +1,5 @@
-function initDebugTable(css) {
-
+function initDebugTable(css, datastr) {
+    console.log(datastr);
     // StyleSheet für Tabelle laden.
     $('<style />').text(css).appendTo($('head'));
 
@@ -112,9 +112,15 @@ function initDebugTable(css) {
             // Evtl. ein Rückgängig einbauen, wenn Fehler von Quest gegeben wird.
         }
     });
-  
-}
 
+    try {
+        tableupdate('names', datastr);
+    }
+    catch (err) {
+        alert ("Beim Einlesen der Daten ist folgender Fehler aufgetreten: " + err);
+    }
+
+}
 
 function tableupdate(table, datastr) {
     var data = JSON.parse(datastr);
