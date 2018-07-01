@@ -13,6 +13,7 @@ function initDebugTable(css) {
 
     $('#debuggertable').css({
         "position": "fixed",
+        "display": "flex",
         "top": "0px",
         "right": "0px",
         "height": "100%",
@@ -37,19 +38,25 @@ function initDebugTable(css) {
     });
 
     var tblshow = true;
+    toggletable (0);
+
     $('#debuggertable').on('click', function () {
-      if (tblshow) tok = "-";
-      else tok = "+";
-      $('#debuggertable').animate(
-        { right: tok + '=' + $('#debuggertable').width() + 'px' }, 200
-      );
-      tblshow = !tblshow;
+        toggletable (200);
     });
+
+    function toggletable (duration) {
+        if (tblshow) tok = "-";
+        else tok = "+";
+        $('#debuggertable').animate(
+            { right: tok + '=' + $('#debuggertable').width() + 'px' }, duration
+        );    
+        tblshow = !tblshow;
+    }
     
     // Name-Table
     $("#debuggertable_names").tabulator({
         selectable: 1,
-        layout: "fitColumns", // passt sich perfekt dem übergeordneten Container an
+        layout: "fitColumns",
         initialSort: [{
             column: "name",
             dir: "asc"
@@ -71,7 +78,7 @@ function initDebugTable(css) {
 
     // Attribute-Table
     $("#debuggertable_attr").tabulator({
-        layout: "fitColumns", // passt sich perfekt dem übergeordneten Container an.
+        layout: "fitColumns",
         initialSort: [{
                 column: "attribute",
                 dir: "asc"
