@@ -18,13 +18,13 @@ function initDebugTable(css, datastr) {
     $('#devmode_sidebar').css({
         "font-family": "Microsoft Sans Serif",
         "height": "100%",
-        "width": "30%",
+        "width": "500px",
         "top": "0px",
         "right": "0px",
         "display": "flex",
         "position": "fixed",
         "z-index": "1000"
-    })
+    });
 
     $('.devmode_labels').css({
         "box-sizing": "border-box",
@@ -35,13 +35,14 @@ function initDebugTable(css, datastr) {
         "background-color": "ghostwhite",
         "background-repeat": "no-repeat, repeat",
         "background-position": "center",
-        "box-shadow": "0px 5px 10px silver",
+        "box-shadow": "none",
+        "transition": "box-shadow 0.5s",
         "z-index": "0"
-    })
+    });
 
     $('#debugtable_label').css({
         "background-image": "url('quest://res/DevMode/debugtable.png')"
-    })
+    });
 
     $('#debugtable').css({
         "box-sizing": "border-box",
@@ -49,7 +50,8 @@ function initDebugTable(css, datastr) {
         "height": "100%",
         "width": "100%",
         "border": "none",
-        "box-shadow": "0px 5px 10px silver",
+        "box-shadow": "none",
+        "transition": "box-shadow 0.5s",
         "background-color": "ghostwhite"
     });
 
@@ -74,21 +76,49 @@ function initDebugTable(css, datastr) {
 
     // Hidden DevMode-Sidebar
     var devmode_sidebar_show = true;
+    var devmode_sidebar_width_without_label = ($('#devmode_sidebar').width() - $('.devmode_labels').width());
     toggletable (0);
 
 
+    // Appearance of the box shadow on mouseover
+    $(".devmode_labels").hover(function() {
+        $(this).css("box-shadow","0px 0px 25px silver")
+    }).mouseout(function() {
+        if (!devmode_sidebar_show) $(this).css("box-shadow","none")
+    });
+
+
     // When clicking on the label of the sidebar it will be displayed.
-    $('.devmode_labels').on('click', function () {
+    $('.devmode_labels').on('click', function() {
         toggletable (200);
     });
 
 
+    // DevMode-Sidebar fly in or out
     function toggletable (duration) {
-        if (devmode_sidebar_show) tok = "-";
-        else tok = "+";
-        $('#devmode_sidebar').animate( { right: tok + '=' + ($('#devmode_sidebar').width() - $('.devmode_labels').width()) + 'px' }, duration );    
         devmode_sidebar_show = !devmode_sidebar_show;
+
+        if (devmode_sidebar_show) {
+            var tok = "+";
+            var boxshadowval = "0px 0px 25px silver";
+        }
+        else {
+            var tok = "-";
+            var boxshadowval = "none";
+        }
+        $('#devmode_sidebar').animate({ right: tok + '=' + devmode_sidebar_width_without_label }, duration ); 
+        $('#debugtable').css("box-shadow", boxshadowval)
     }
+
+
+    $(window).resize(function() {
+        if (devmode_sidebar_show) {
+            $('#devmode_sidebar').css({ right: '0px' });
+        }
+        else {
+            $('#devmode_sidebar').css({ right: '-' + devmode_sidebar_width_without_label });
+        }
+    });
     
 
     // Debugtable - Names
