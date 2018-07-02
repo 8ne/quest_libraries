@@ -5,56 +5,86 @@ function initDebugTable(css, datastr) {
 
     // Eine Ausblendung der Tabelle ermöglichen (mittels Anfasser).
     $('body').append(
-        '<div id="debuggertable">' +
-        '<div id="debuggertable_names"></div>' +
-        '<div id="debuggertable_attr"></div>' +
+        '<div id="devmode_sidebar">' +
+        '<div id="debugtable_label" class="devmode_labels"></div>' +
+        '<div id="debugtable">' +
+        '<div id="debugtable_names"></div>' +
+        '<div id="debugtable_attr"></div>' +
+        '</div>' +
         '</div>'
     );
 
-    $('#debuggertable').css({
-        "position": "fixed",
-        "display": "flex",
-        "top": "0px",
-        "right": "0px",
+    $('#devmode_sidebar').css({
         "height": "100%",
         "width": "30%",
-        "padding-left": "10px",
-        "background": "grey",
+        "top": "0px",
+        "right": "0px",
+        "display": "flex",
+        "position": "fixed",
         "z-index": "1000"
+    })
+
+    $('.devmode_labels').css({
+        "box-sizing": "border-box",
+        "text-align": "center",
+        "border-bottom-left-radius": "10px",
+        "height": "50px",
+        "width": "50px",
+        "background-color": "ghostwhite",
+        "background-repeat": "no-repeat, repeat",
+        "background-position": "center"
+    })
+
+    $('#debugtable_label').css({
+        "background-image": "url('quest://res/DevMode/debugtable.png')"
+    })
+
+    $('#debugtable').css({
+        "box-sizing": "border-box",
+        "display": "flex",
+        "height": "100%",
+        "width": "100%",
+        "background-color": "ghostwhite",
     });
 
-    $('#debuggertable_names').css({
+    $('#debugtable_names').css({
         "box-sizing": "border-box",
         "float": "right",
         "height": "100%",
         "width": "33.3%",
+        "background-color": "ghostwhite"
     });
     
-    $('#debuggertable_attr').css({
+    $('#debugtable_attr').css({
         "box-sizing": "border-box",
         "float": "right",
         "height": "100%",
-        "width": "66.6%"
+        "width": "66.6%",
+        "background-color": "ghostwhite"
     });
+
+    $('#debugtable_names .tabulator-header').css({
+        "background-color": "ghostwhite"
+    })
 
     var tblshow = true;
     toggletable (0);
 
-    $('#debuggertable').on('click', function () {
+    $('.devmode_labels').on('click', function () {
         toggletable (200);
     });
 
     function toggletable (duration) {
         if (tblshow) tok = "-";
         else tok = "+";
-        $('#debuggertable').animate(
-            { right: tok + '=' + $('#debuggertable').width() + 'px' }, duration
+        $('#devmode_sidebar').animate(
+            { right: tok + '=' + ($('#devmode_sidebar').width() - $('.devmode_labels').width()) + 'px' }, duration
         );    
         tblshow = !tblshow;
     }
     
     // Name-Table
-    $("#debuggertable_names").tabulator({
+    $("#debugtable_names").tabulator({
         selectable: 1,
         layout: "fitColumns",
         initialSort: [{
@@ -77,7 +107,7 @@ function initDebugTable(css, datastr) {
     });
 
     // Attribute-Table
-    $("#debuggertable_attr").tabulator({
+    $("#debugtable_attr").tabulator({
         layout: "fitColumns",
         initialSort: [{
                 column: "attribute",
@@ -124,8 +154,8 @@ function initDebugTable(css, datastr) {
 
 function tableupdate(table, datastr) {
     var data = JSON.parse(datastr);
-    $("#debuggertable_" + table).tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
-    $("#debuggertable_" + table).tabulator("setData", data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
+    $("#debugtable_" + table).tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
+    $("#debugtable_" + table).tabulator("setData", data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
 }
 
 
@@ -146,14 +176,14 @@ function tableupdate(table, datastr) {
 
 
 // Befüllen der Namenstabelle beim start (Über DevMode rüber schicken)
-var debuggertable_names_data = [
+var debugtable_names_data = [
     {id:1, name:"kiste"}, // Frage, ob id verwendet werden muss, oder weggelassen werden kann.
     {id:2, name:"game"},
     {id:3, name:"tisch"}
 ];
 
 // Tabellendaten in die Tabelle laden
-$("#debuggertable_names").tabulator("setData", debuggertable_names_data);
+$("#debugtable_names").tabulator("setData", debugtable_names_data);
 
 
 
@@ -161,7 +191,7 @@ $("#debuggertable_names").tabulator("setData", debuggertable_names_data);
 
 // Initialisierung der Tabelle
 // Value ist Editierbar, Sortierbar, Titelfiter
-$("#debuggertable_attval").tabulator({
+$("#debugtable_attval").tabulator({
     height:"100%",
     width:"50%",
     // layout:"fitColumns", // passt sich perfekt dem übergeordneten Container an.
@@ -192,21 +222,21 @@ $("#debuggertable_attval").tabulator({
 //];
 
 // Tabellendaten in die Tabelle laden.
-// $("#debuggertable_attval").tabulator("setData", tabledata); // Prüfen, ob es nötig ist die Tabelle vorher mit setData zu befüllen oder ob es ausreicht immer updateOrAddData zu verwenden.
+// $("#debugtable_attval").tabulator("setData", tabledata); // Prüfen, ob es nötig ist die Tabelle vorher mit setData zu befüllen oder ob es ausreicht immer updateOrAddData zu verwenden.
 
 
 
 function tableupdate (name) {
-    $("#debuggertable_attval").tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
+    $("#debugtable_attval").tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
 
     // Aktualisieren der Attval-Tabelle (Bei Klick auf einen Namen in der Namenstabelle werden die Attribute plus Values Angezeigt und aktualisiert / Über DevMode rüber schicken)
-    var debuggertable_attval_data = [
+    var debugtable_attval_data = [
         {id:1, attribute:"isopen", value:"false"},
         {id:2, attribute:"level", value:"4"},
         {id:3, attribute:"alias", value:"Tischlein"}
     ]; // Die Variable wird im DevMode.aslx generiert. Hierzu wird die Variable Name hingeschickt und alle Attribute und Values des Objektes mit dem Namen zurück im JSON-Format.
 
-    $("#debuggertable_attval").tabulator("updateOrAddData", debuggertable_attval_data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
+    $("#debugtable_attval").tabulator("updateOrAddData", debugtable_attval_data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
 }
 
 
@@ -214,7 +244,7 @@ function tableupdate (name) {
 
 
 // Falls alle Daten aus der Tabelle gewünscht werden.
-// var data = $("#debuggertable").tabulator("getData");
+// var data = $("#debugtable").tabulator("getData");
 
 
 */
