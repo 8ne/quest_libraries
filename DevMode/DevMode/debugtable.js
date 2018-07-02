@@ -1,9 +1,9 @@
 function initDebugTable(css, datastr) {
     console.log(datastr);
-    // StyleSheet für Tabelle laden.
+    // Set original Stylesheet
     $('<style />').text(css).appendTo($('head'));
 
-    // Eine Ausblendung der Tabelle ermöglichen (mittels Anfasser).
+    // Create DevMode-Sidebar
     $('body').append(
         '<div id="devmode_sidebar">' +
         '<div id="debugtable_label" class="devmode_labels"></div>' +
@@ -14,7 +14,9 @@ function initDebugTable(css, datastr) {
         '</div>'
     );
 
+    // Custom Stylesheet
     $('#devmode_sidebar').css({
+        "font-family": "Microsoft Sans Serif",
         "height": "100%",
         "width": "30%",
         "top": "0px",
@@ -32,7 +34,9 @@ function initDebugTable(css, datastr) {
         "width": "50px",
         "background-color": "ghostwhite",
         "background-repeat": "no-repeat, repeat",
-        "background-position": "center"
+        "background-position": "center",
+        "box-shadow": "0px 5px 10px silver",
+        "z-index": "0"
     })
 
     $('#debugtable_label').css({
@@ -44,11 +48,14 @@ function initDebugTable(css, datastr) {
         "display": "flex",
         "height": "100%",
         "width": "100%",
-        "background-color": "ghostwhite",
+        "border": "none",
+        "box-shadow": "0px 5px 10px silver",
+        "background-color": "ghostwhite"
     });
 
     $('#debugtable_names').css({
         "box-sizing": "border-box",
+        "border": "none",
         "float": "right",
         "height": "100%",
         "width": "33.3%",
@@ -57,33 +64,34 @@ function initDebugTable(css, datastr) {
     
     $('#debugtable_attr').css({
         "box-sizing": "border-box",
+        "border": "none",
         "float": "right",
         "height": "100%",
         "width": "66.6%",
         "background-color": "ghostwhite"
     });
 
-    $('#debugtable_names .tabulator-header').css({
-        "background-color": "ghostwhite"
-    })
 
-    var tblshow = true;
+    // Hidden DevMode-Sidebar
+    var devmode_sidebar_show = true;
     toggletable (0);
 
+
+    // When clicking on the label of the sidebar it will be displayed.
     $('.devmode_labels').on('click', function () {
         toggletable (200);
     });
 
+
     function toggletable (duration) {
-        if (tblshow) tok = "-";
+        if (devmode_sidebar_show) tok = "-";
         else tok = "+";
-        $('#devmode_sidebar').animate(
-            { right: tok + '=' + ($('#devmode_sidebar').width() - $('.devmode_labels').width()) + 'px' }, duration
-        );    
-        tblshow = !tblshow;
+        $('#devmode_sidebar').animate( { right: tok + '=' + ($('#devmode_sidebar').width() - $('.devmode_labels').width()) + 'px' }, duration );    
+        devmode_sidebar_show = !devmode_sidebar_show;
     }
     
-    // Name-Table
+
+    // Debugtable - Names
     $("#debugtable_names").tabulator({
         selectable: 1,
         layout: "fitColumns",
@@ -106,8 +114,10 @@ function initDebugTable(css, datastr) {
         }
     });
 
-    // Attribute-Table
+
+    // Debugtable - Attributes
     $("#debugtable_attr").tabulator({
+        selectable: 1,
         layout: "fitColumns",
         initialSort: [{
                 column: "attribute",
@@ -143,6 +153,20 @@ function initDebugTable(css, datastr) {
         }
     });
 
+
+    // Custom Stylesheet, after Tablecreating
+    $('.tabulator .tabulator-header .tabulator-col').css({
+        "border-bottom": "0px",
+        "background-color": "ghostwhite"
+    })
+
+    $('.tabulator-selected').css({
+        "color": "white",
+        "background-color": "ghostwhite"
+    })
+
+
+    // Debugtable - Read Names
     try {
         tableupdate('names', datastr);
     }
@@ -152,11 +176,15 @@ function initDebugTable(css, datastr) {
 
 }
 
+// Debugtable update
 function tableupdate(table, datastr) {
     var data = JSON.parse(datastr);
     $("#debugtable_" + table).tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
     $("#debugtable_" + table).tabulator("setData", data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
 }
+
+
+
 
 
     // Namen werden geladen (Über Devmode) // Frage, ob id verwendet werden muss, oder weggelassen werden kann.
