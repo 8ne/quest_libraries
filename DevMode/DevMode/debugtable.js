@@ -1,5 +1,5 @@
-function initDebugTable(css, datastr) {
-    console.log(datastr);
+function initDebugTable(css) {
+
     // Set original Stylesheet
     $('<style />').text(css).appendTo($('head'));
 
@@ -120,6 +120,8 @@ function initDebugTable(css, datastr) {
         }
     });
     
+    // The selected name
+    selectedname = "";
 
     // Debugtable - Names
     $("#debugtable_names").tabulator({
@@ -137,10 +139,10 @@ function initDebugTable(css, datastr) {
             headerFilterPlaceholder: "Name",
             resizable: false
         }],
-        rowClick: function (e, row) {
+        rowClick: function (e, row) { // For name selectiony
             row.select();
-            tableupdate('attr', '[{"attribute":"isopen","value":"true"},{"attribute":"level","value":"23"},{"attribute":"alias","value":"XXX"}]');
-            // row.getData().name zu DevMode schicken und der schickt den JSON-String direkt zu tableupdate.
+            selectedname = row.getData().name
+            ASLEvent("getTableDataAttr", selectedname);
         }
     });
 
@@ -176,10 +178,12 @@ function initDebugTable(css, datastr) {
                 resizable: false
             }
         ],
-        dataEdited: function (data) { // Wenn Daten vom Benutzer geändert werden.
-            console.log(data);
-            // Zurück zu DevMode.aslx schicken und Attribute setzen.
-            // Evtl. ein Rückgängig einbauen, wenn Fehler von Quest gegeben wird.
+        cellEdited: function (cell) { // When you change the attributes
+            console.log("ATT: " + cell.getRow().getData().attribute);
+            console.log("VAL: " + cell.getRow().getData().value);
+            ASLEvent("setAttrFromTable", selectedname + "," + cell.getRow().getData().attribute + "," + cell.getRow().getData().value);
+            // command = "#" + selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value + "\r\n";
+            // $('#txtCommand').val(command);
         }
     });
 
@@ -195,114 +199,16 @@ function initDebugTable(css, datastr) {
         "background-color": "ghostwhite"
     })
 
-
     // Debugtable - Read Names
-    try {
-        tableupdate('names', datastr);
-    }
-    catch (err) {
-        alert ("Beim Einlesen der Daten ist folgender Fehler aufgetreten: " + err);
-    }
+    ASLEvent("getTableDataNames", "");
 
 }
+
 
 // Debugtable update
-function tableupdate(table, datastr) {
+function setTableData(table, datastr) {
     var data = JSON.parse(datastr);
-    $("#debugtable_" + table).tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
-    $("#debugtable_" + table).tabulator("setData", data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
+    $("#debugtable_" + table).tabulator("clearData");
+    $("#debugtable_" + table).tabulator("setData", data);
+    $("#debugtable_" + table).tabulator("redraw", true);
 }
-
-
-
-
-
-    // Namen werden geladen (Über Devmode) // Frage, ob id verwendet werden muss, oder weggelassen werden kann.
-    // zu DevMode schicken und der schickt den JSON-String direkt zu tableupdate.
-//    tableupdate('names', '[{"name":"kiste"},{"name":"game"},{"name":"tisch"}]');
-
-
-
-
-/*
-
-
-
-
-
-
-
-
-// Befüllen der Namenstabelle beim start (Über DevMode rüber schicken)
-var debugtable_names_data = [
-    {id:1, name:"kiste"}, // Frage, ob id verwendet werden muss, oder weggelassen werden kann.
-    {id:2, name:"game"},
-    {id:3, name:"tisch"}
-];
-
-// Tabellendaten in die Tabelle laden
-$("#debugtable_names").tabulator("setData", debugtable_names_data);
-
-
-
-
-
-// Initialisierung der Tabelle
-// Value ist Editierbar, Sortierbar, Titelfiter
-$("#debugtable_attval").tabulator({
-    height:"100%",
-    width:"50%",
-    // layout:"fitColumns", // passt sich perfekt dem übergeordneten Container an.
-    initialSort:[
-        {column:"attribute", dir:"asc"},
-        {column:"value", dir:"asc"}
-    ],    
-    columns:[
-        {title:"Attribute", field:"attribute", sorter:"string", headerFilter:"input"},
-        {title:"Value", field:"value", sorter:"string", editor:"input", headerFilter:"input"}
-    ],
-    dataEdited:function(data){ // Wenn Daten vom Benutzer geändert werden.
-        // Zurück zu DevMode.aslx schicken und Attribute setzen.
-        // Evtl. ein Rückgängig einbauen, wenn Fehler von Quest gegeben wird.
-    }
-});
-
-
-
-
-
-
-//// Befüllen der Attval-Tabelle beim start (Über DevMode rüber schicken)
-//var tabledata = [
-//    {id:1, attribute:"isopen", value:"true"},
-//    {id:2, attribute:"level", value:"3"},
-//    {id:3, attribute:"alias", value:"XXX"}
-//];
-
-// Tabellendaten in die Tabelle laden.
-// $("#debugtable_attval").tabulator("setData", tabledata); // Prüfen, ob es nötig ist die Tabelle vorher mit setData zu befüllen oder ob es ausreicht immer updateOrAddData zu verwenden.
-
-
-
-function tableupdate (name) {
-    $("#debugtable_attval").tabulator("clearData"); // Daten, zuvor löschen, damit nichts übrig bleibt von den alten Daten.
-
-    // Aktualisieren der Attval-Tabelle (Bei Klick auf einen Namen in der Namenstabelle werden die Attribute plus Values Angezeigt und aktualisiert / Über DevMode rüber schicken)
-    var debugtable_attval_data = [
-        {id:1, attribute:"isopen", value:"false"},
-        {id:2, attribute:"level", value:"4"},
-        {id:3, attribute:"alias", value:"Tischlein"}
-    ]; // Die Variable wird im DevMode.aslx generiert. Hierzu wird die Variable Name hingeschickt und alle Attribute und Values des Objektes mit dem Namen zurück im JSON-Format.
-
-    $("#debugtable_attval").tabulator("updateOrAddData", debugtable_attval_data); // Prüfe, ob alte Daten auch entfernt werden mit updateOrAddData. Falls ja kann clearData werggelassen werden.
-}
-
-
-
-
-
-// Falls alle Daten aus der Tabelle gewünscht werden.
-// var data = $("#debugtable").tabulator("getData");
-
-
-*/
