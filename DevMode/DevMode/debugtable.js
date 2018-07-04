@@ -16,7 +16,6 @@ function initDebugTable(css) {
 
     // Custom Stylesheet
     $('#devmode_sidebar').css({
-        "font-family": "Microsoft Sans Serif",
         "height": "100%",
         "width": "500px",
         "top": "0px",
@@ -57,32 +56,32 @@ function initDebugTable(css) {
 
     $('#debugtable_names').css({
         "box-sizing": "border-box",
-        "border": "none",
         "float": "right",
         "height": "100%",
         "width": "33.3%",
-        "background-color": "ghostwhite"
     });
     
     $('#debugtable_attr').css({
         "box-sizing": "border-box",
-        "border": "none",
         "float": "right",
         "height": "100%",
         "width": "66.6%",
-        "background-color": "ghostwhite"
     });
 
 
-    // Hidden DevMode-Sidebar
+    // Declare variables
     var devmode_sidebar_show = true;
     var devmode_sidebar_width_without_label = ($('#devmode_sidebar').width() - $('.devmode_labels').width());
+    var devmode_sidebar_boxshadow = "0px 0px 25px grey";
+    
+
+    // Hidden DevMode-Sidebar
     toggletable (0);
 
 
     // Appearance of the box shadow on mouseover
     $(".devmode_labels").hover(function() {
-        $(this).css("box-shadow","0px 0px 25px silver")
+        $(this).css("box-shadow", devmode_sidebar_boxshadow)
     }).mouseout(function() {
         if (!devmode_sidebar_show) $(this).css("box-shadow","none")
     });
@@ -100,13 +99,13 @@ function initDebugTable(css) {
 
         if (devmode_sidebar_show) {
             var tok = "+";
-            var boxshadowval = "0px 0px 25px silver";
+            var boxshadowval = devmode_sidebar_boxshadow;
         }
         else {
             var tok = "-";
             var boxshadowval = "none";
         }
-        $('#devmode_sidebar').animate({ right: tok + '=' + devmode_sidebar_width_without_label }, duration ); 
+        $('#devmode_sidebar').animate({ right: tok + '=' + devmode_sidebar_width_without_label }, duration, "easeOutExpo" );
         $('#debugtable').css("box-shadow", boxshadowval)
     }
 
@@ -136,7 +135,7 @@ function initDebugTable(css) {
             field: "name",
             sorter: "string",
             headerFilter: "input",
-            headerFilterPlaceholder: "Name",
+            headerFilterPlaceholder: "Filter by...",
             resizable: false
         }],
         rowClick: function (e, row) { // For name selectiony
@@ -149,7 +148,6 @@ function initDebugTable(css) {
 
     // Debugtable - Attributes
     $("#debugtable_attr").tabulator({
-        selectable: 1,
         layout: "fitColumns",
         initialSort: [{
                 column: "attribute",
@@ -165,7 +163,7 @@ function initDebugTable(css) {
                 field: "attribute",
                 sorter: "string",
                 headerFilter: "input",
-                headerFilterPlaceholder: "Attribute",
+                headerFilterPlaceholder: "Filter by...",
                 resizable: false
             },
             {
@@ -174,7 +172,7 @@ function initDebugTable(css) {
                 sorter: "string",
                 editor: "input",
                 headerFilter: "input",
-                headerFilterPlaceholder: "Value",
+                headerFilterPlaceholder: "Filter by...",
                 resizable: false
             }
         ],
@@ -187,17 +185,6 @@ function initDebugTable(css) {
         }
     });
 
-
-    // Custom Stylesheet, after Tablecreating
-    $('.tabulator .tabulator-header .tabulator-col').css({
-        "border-bottom": "0px",
-        "background-color": "ghostwhite"
-    })
-
-    $('.tabulator-selected').css({
-        "color": "white",
-        "background-color": "ghostwhite"
-    })
 
     // Debugtable - Read Names
     ASLEvent("getTableDataNames", "");
