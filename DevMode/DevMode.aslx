@@ -234,7 +234,7 @@
 
             // Expressions
             else {
-              Expression (text)
+              ParseToQuestCode (text)
             }
           }
           else {
@@ -254,8 +254,9 @@
 
   <!-- Functions -->
 
-  <function name="Expression" parameters="text">
+  <function name="ParseToQuestCode" parameters="text">
     <![CDATA[
+      text = Replace(text, "\"", "\\\"")
       regex = "^(?<object1>.+)\\.((?<attribute1>.+)=(?<value1>.+))?$|^(?<token2>\\?|\\!|\\~)?(?<object2>.+)\\.(?<attribute2>.+)$"
       if (IsRegexMatch (regex, text)) {
         res = populate (regex, text)
@@ -406,6 +407,11 @@
     ]]>
   </function>
 
+  <function name="ParseToDevCode" parameters="val" type="string">
+    val = Replace(val, "\"", "\\\"")
+    return (val)
+  </function>
+
   <function name="msgdm" parameters="str">
     <![CDATA[
       if (game.devmode_showinfos) {
@@ -447,7 +453,7 @@
       if (game.devmode_active) {
         msgdm (Template("DevModeActive"))
         if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
-          foreach(key, game.devmode_attributes) Expression (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
+          foreach(key, game.devmode_attributes) ParseToQuestCode (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
         }
         if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
         if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
@@ -475,20 +481,11 @@
     data = NewStringList ()
     obj = GetObject (name)
     foreach (attr, GetAttributeNames (obj, true)) {
-      if (HasScript(obj, attr)) val = "Script"
-      else val = ToString(GetAttribute (obj, attr))
+      val = ParseToDevCode (ToString(GetAttribute (obj, attr)))
       list add (data, "{\"attribute\":\"" + attr + "\",\"value\":\"" + val + "\"}")
     }
     datastr = "[" + Join (data, ",") + "]"
     JS.setTableData("attr", datastr)
-  </function>
-
-  <function name="setAttrFromTable" parameters="datastr">
-    data = split(datastr, ",")
-    name = data[0]
-    attr = data[1]
-    val  = data[2]
-    set(getObject(name), attr, val)
   </function>
 
   <function name="setVerbs">

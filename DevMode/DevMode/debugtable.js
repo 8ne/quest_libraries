@@ -5,17 +5,17 @@ function initDebugTable(css) {
 
     // Create DevMode-Sidebar
     $('body').append(
-        '<div id="devmode_sidebar">' +
-        '<div id="debugtable_label" class="devmode_labels"></div>' +
-        '<div id="debugtable">' +
-        '<div id="debugtable_names"></div>' +
-        '<div id="debugtable_attr"></div>' +
-        '</div>' +
+        '<div class="devmode_sidebar">' +
+            '<div class="devmode_sidebar_labels" id="devmode_sidebar_labels_debugtable"></div>' +
+            '<div class="devmode_sidebar_container">' +
+                '<div id="debugtable_names"></div>' +
+                '<div id="debugtable_attr"></div>' +
+            '</div>' +
         '</div>'
     );
 
     // Custom Stylesheet
-    $('#devmode_sidebar').css({
+    $('.devmode_sidebar').css({
         "height": "100%",
         "width": "500px",
         "top": "0px",
@@ -25,7 +25,7 @@ function initDebugTable(css) {
         "z-index": "1000"
     });
 
-    $('.devmode_labels').css({
+    $('.devmode_sidebar_labels').css({
         "box-sizing": "border-box",
         "text-align": "center",
         "border-bottom-left-radius": "10px",
@@ -39,11 +39,11 @@ function initDebugTable(css) {
         "z-index": "0"
     });
 
-    $('#debugtable_label').css({
+    $('#devmode_sidebar_labels_debugtable').css({
         "background-image": "url('quest://res/DevMode/debugtable.png')"
     });
 
-    $('#debugtable').css({
+    $('.devmode_sidebar_container').css({
         "box-sizing": "border-box",
         "display": "flex",
         "height": "100%",
@@ -71,16 +71,27 @@ function initDebugTable(css) {
 
     // Declare variables
     var devmode_sidebar_show = true;
-    var devmode_sidebar_width_without_label = ($('#devmode_sidebar').width() - $('.devmode_labels').width());
     var devmode_sidebar_boxshadow = "0px 0px 25px grey";
     
+
+    // Resizing the sidebar
+    $('.devmode_sidebar').resizable({
+        handles:'w',
+        resize: function (event,ui) {
+            ui.position.left = ($(window).width() - $(this).width());
+        },
+        stop: function (event,ui) {
+            $(this).css({ left: "initial" });
+        }
+    });
+
 
     // Hidden DevMode-Sidebar
     toggletable (0);
 
 
     // Appearance of the box shadow on mouseover
-    $(".devmode_labels").hover(function() {
+    $(".devmode_sidebar_labels").hover(function() {
         $(this).css("box-shadow", devmode_sidebar_boxshadow)
     }).mouseout(function() {
         if (!devmode_sidebar_show) $(this).css("box-shadow","none")
@@ -88,7 +99,7 @@ function initDebugTable(css) {
 
 
     // When clicking on the label of the sidebar it will be displayed.
-    $('.devmode_labels').on('click', function() {
+    $('.devmode_sidebar_labels').on('click', function() {
         toggletable (200);
     });
 
@@ -96,26 +107,29 @@ function initDebugTable(css) {
     // DevMode-Sidebar fly in or out
     function toggletable (duration) {
         devmode_sidebar_show = !devmode_sidebar_show;
-
         if (devmode_sidebar_show) {
             var tok = "+";
             var boxshadowval = devmode_sidebar_boxshadow;
+            $('.devmode_sidebar').resizable("enable");
+            
         }
         else {
             var tok = "-";
             var boxshadowval = "none";
+            $('.devmode_sidebar').resizable("disable");
         }
-        $('#devmode_sidebar').animate({ right: tok + '=' + devmode_sidebar_width_without_label }, duration, "easeOutExpo" );
-        $('#debugtable').css("box-shadow", boxshadowval)
+        $('.devmode_sidebar').animate({ right: tok + '=' + $('.devmode_sidebar_container').width() }, duration, "easeOutExpo" );
+        $('.devmode_sidebar_container').css('box-shadow', boxshadowval);
     }
 
 
+    // If the window is resized, the sidebar should remain at the right margin
     $(window).resize(function() {
         if (devmode_sidebar_show) {
-            $('#devmode_sidebar').css({ right: '0px' });
+            $('.devmode_sidebar').css({ right: '0px' });
         }
         else {
-            $('#devmode_sidebar').css({ right: '-' + devmode_sidebar_width_without_label });
+            $('.devmode_sidebar').css({ right: '-' + $('.devmode_sidebar_container').width() });
         }
     });
     
@@ -179,7 +193,7 @@ function initDebugTable(css) {
         cellEdited: function (cell) { // When you change the attributes
             console.log("ATT: " + cell.getRow().getData().attribute);
             console.log("VAL: " + cell.getRow().getData().value);
-            ASLEvent("setAttrFromTable", selectedname + "," + cell.getRow().getData().attribute + "," + cell.getRow().getData().value);
+            ASLEvent("ParseToQuestCode", selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value);
             // command = "#" + selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value + "\r\n";
             // $('#txtCommand').val(command);
         }
