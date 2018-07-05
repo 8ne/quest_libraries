@@ -20,7 +20,7 @@ function initDebugTable(css) {
         "box-sizing": "border-box",
         "text-align": "center",
         "border-bottom-left-radius": "10px",
-        "position": "absolute",
+        "position": "fixed",
         "top": "0px",
         "right": "500px",
         "height": "50px",

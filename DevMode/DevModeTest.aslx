@@ -16,12 +16,7 @@
     <deactivatecommandlinks type="boolean">false</deactivatecommandlinks>
     <enablehyperlinks />
     <devmode_setverbs />
-    <devmode_attributes type="stringdictionary">
-      <item>
-        <key>game.showtitle</key>
-        <value>false</value>
-      </item>
-    </devmode_attributes>
+    <devmode_attributes type="stringdictionary" />
     <attr name="devmode_pov">player2</attr>
     <attr name="devmode_povpos">room2</attr>
     <devmode_showdebugtable />
