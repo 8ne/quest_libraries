@@ -21,7 +21,11 @@
 
   ****************************************************************************************************
   Version 1.25
-  Editable debug table added
+  Editable debug table added.
+  The code to be executed in DevMode slightly changed.
+  It is now closer to JSON. Comma separators are now used instead of semicolons.
+  The code language was named FlyScript (referring to the name 'on the fly').
+  The commands are now only available in English. This is more uniform in the overall context.
   ****************************************************************************************************
   Version 1.21
   Added Messages on success.
@@ -38,7 +42,7 @@
   ****************************************************************************************************
 
   ****************************************************************************************************
-  DevMode-Commands
+  DevMode-Object-Commands
   ****************************************************************************************************
   Unlike the commands in the game, they are executed directly and without detours via intercept scripts.
   ****************************************************************************************************
@@ -52,7 +56,13 @@
   #to player
   #go room
   ****************************************************************************************************
-  DevMode-Assignments (Oriented to JSON)
+  DevMode-Single-Commands
+  ****************************************************************************************************
+  #clr (clear screen)
+  #? (help)
+  # (close game)
+  ****************************************************************************************************
+  DevMode-Object-Attributes
   ****************************************************************************************************
   #object1.attribute=object2.attribute (attribute assignment of another object)
   #object.attribute=true/false (boolean)
@@ -70,13 +80,9 @@
   #object.attribute={} (create new dictionary)
   #object.attribute (read attribute)
   ****************************************************************************************************
-  <code> (These are scripts that cannot be changed, but can only be read)
+  DevMode-Readonly
   ****************************************************************************************************
-  DevMode-Extras
-  ****************************************************************************************************
-  #clr (clear screen)
-  #? (help)
-  # (close game)
+  <script> (These are scripts that cannot be changed, but can only be read)
   ****************************************************************************************************
 
 -->
@@ -87,20 +93,6 @@
 
   <!-- Languages -->
   <!-- English -->
-  <template name="DevModeCommandPut">put</template>
-  <template name="DevModeCommandDrop">drop</template>
-  <template name="DevModeCommandTake">take</template>
-  <template name="DevModeCommandTo">to</template>
-  <template name="DevModeCommandGo">go</template>
-  <template name="DevModeCommandOpen">open</template>
-  <template name="DevModeCommandClose">close</template>
-  <template name="DevModeCommandOn">on</template>
-  <template name="DevModeCommandOff">off</template>
-  <template name="DevModeCommandClr">clr</template>
-  <template name="DevModeCommandHelp">?</template>
-  <template name="DevModeCommandsInVerbs">#drop;#take;#to;#open;#close;#on;#off</template>
-  <template name="DevModeRegExCommands"><![CDATA[^(?<command2>put) (?<object1>.+) (in|on) (?<object2>.+)$|^(?<command1>drop|take|to|go|open|close|on|off) (?<object>.+)$|^(?<command0>clr|\?)$]]></template>
-  <template name="DevModeRegExAssignments"><![CDATA[^(?<object1>.+)\\.((?<attribute1>.+)=(?<value1>.+))?$|^(?<token2>\\?|\\!|\\~)?(?<object2>.+)\\.(?<attribute2>.+)$]]></template>
   <template name="DevModeErrorWrongFormat">That's the wrong format.</template>
   <template name="DevModeErrorObjectNotRecognised">The object was not found.</template>
   <template name="DevModeErrorWrongTyp">That's the wrong type.</template>
@@ -191,70 +183,70 @@
       if (HasAttribute(game, "devmode_active")) {
         if (game.devmode_active) {
           if (IsDefined("text")) {
-            regex = Template("DevModeRegExCommands")
+            regex = "^(?<command2>put) (?<object1>.+) (in|on) (?<object2>.+)$|^(?<command1>drop|take|to|go|open|close|on|off) (?<object>.+)$|^(?<command0>clr|\\?)$"
             if (IsRegexMatch (regex, text)) {
-              res = populate (regex, text)
-              com0 = ToString(DictionaryItem(res, "command0"))
-              com1 = ToString(DictionaryItem(res, "command1"))
-              com2 = ToString(DictionaryItem(res, "command2"))
+              result = populate (regex, text)
+              com0 = ToString(DictionaryItem(result, "command0"))
+              com1 = ToString(DictionaryItem(result, "command1"))
+              com2 = ToString(DictionaryItem(result, "command2"))
 
               // Commands
               if (not com0 = "") { // without object
                 switch (LCase(com0)) {
-                  case (Template("DevModeCommandClr")) { // clr
+                  case ("clr") {
                     ClearScreen
                   }
-                  case (Template("DevModeCommandHelp")) { // ?
+                  case ("?") {
                     msgdm (Template("DevModeDescriptionCommands"))
                   }
                 }
               }
               else if (not com1 = "") { // with one object
-                objstr = ToString(DictionaryItem(res, "object"))
+                objstr = ToString(DictionaryItem(result, "object"))
                 obj = getObjectExt(objstr)
                 if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
                 switch (LCase(com1)) {
-                  case (Template("DevModeCommandDrop")) { // drop
+                  case ("drop") {
                     setWithoutChange (obj, "parent", game.pov.parent)
                     msgdm (Template("DevModeComExecute") + text)
                   }
-                  case (Template("DevModeCommandTake")) { // take
+                  case ("take") {
                     setWithoutChange (obj, "parent", game.pov)
                     msgdm (Template("DevModeComExecute") + text)
                   }
-                  case (Template("DevModeCommandTo")) { // to
+                  case ("to") {
                     setPov (obj)
                   }                
-                  case (Template("DevModeCommandGo")) { // go
+                  case ("go") {
                     setPovPos (obj)
                   }
-                  case (Template("DevModeCommandOpen")) { // open
+                  case ("open") {
                     setWithoutChange (obj, "isopen", true)
                     msgdm (Template("DevModeComExecute") + text)
                   }
-                  case (Template("DevModeCommandClose")) { // close
+                  case ("close") {
                     setWithoutChange (obj, "isopen", false)
                     msgdm (Template("DevModeComExecute") + text)
                   }
-                  case (Template("DevModeCommandOn")) { // on
+                  case ("on") {
                     setWithoutChange (obj, "switchedon", true)
                     msgdm (Template("DevModeComExecute") + text)
                   }
-                  case (Template("DevModeCommandOff")) { // off
+                  case ("off") {
                     setWithoutChange (obj, "switchedon", false)
                     msgdm (Template("DevModeComExecute") + text)
                   }
                 }
               }
               else if (not com2 = "") { // with two objects
-                obj1str = ToString(DictionaryItem(res, "object1"))
-                obj2str = ToString(DictionaryItem(res, "object2"))
+                obj1str = ToString(DictionaryItem(result, "object1"))
+                obj2str = ToString(DictionaryItem(result, "object2"))
                 obj1 = getObjectExt(obj1str)
                 obj2 = getObjectExt(obj2str)
                 if (obj1 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj1str))
                 if (obj2 = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj2str))
-                switch (LCase(ToString(DictionaryItem(res, "command2")))) {
-                  case (Template("DevModeCommandPut")) { // put
+                switch (LCase(ToString(DictionaryItem(result, "command2")))) {
+                  case ("put") {
                     setWithoutChange (obj1, "parent", obj2)
                     msgdm (Template("DevModeComExecute") + text)
                   }
@@ -286,153 +278,171 @@
 
   <function name="ParseToQuestCode" parameters="text">
     <![CDATA[
-      regex = Template("DevModeRegExAssignments")
+      // RegEx available in https://regex101.com/r/Hj0cvK/1
+      regex = "^(?<booltoken>\\?|\\!|\\~)?(?<object>.+?)\\.(?<attribute>.+?)(?:(?<attitemtoken>\\[|\\{)(?<attitem>.*?)(?:\\]|\\}))?(?:\\s*?\\=\\s*?(?:(?<valitemtoken>\\\"|\\[|\\{)?(?<value>.*?)(?:\\\"|\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+      
+      // Start match
       if (IsRegexMatch (regex, text)) {
-        res = populate (regex, text)
-        obj1str = ToString(DictionaryItem(res, "object1"))
-        obj2str = ToString(DictionaryItem(res, "object2"))
+        result = populate (regex, text)
 
-        // VALUE
+        // Object
+        if ("object" in result) {
+          objstr = ToString(DictionaryItem(result, "object"))
+          obj = getObjectExt(objstr)
+          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
 
-        // Expression with value
-        if (not obj1str = "") {
-
-          obj = getObjectExt(obj1str)
-          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj1str))
-          attstr = ToString(DictionaryItem(res, "attribute1"))
-          valstr = ToString(DictionaryItem(res, "value1"))
-
-          // List
-          if (StartsWith(valstr, "[") and EndsWith(valstr, "]")) {
-            val = NewList ()
-            if (not valstr = "[]") {
-              val = Split(Mid(valstr, 2, LengthOf(valstr) - 2), ",")
-            }
+          // Attribute
+          if ("attribute" in result)  {
+            attstr = ToString(DictionaryItem(result, "attribute"))
+            att = attstr
+            curval = GetAttribute(obj, att)
+            if (curval = null) error (DynamicTemplate("DevModeErrorCantFindAttribute", attstr))
+            curvalstr = ToString(curval)
           }
+        }
 
-          // Dictionary
-          else if (StartsWith(valstr, "{") and EndsWith(valstr, "}")) {
-            val = NewDictionary ()
-            if (not valstr = "{}") {
-              list = Split(Mid(valstr, 2, LengthOf(valstr) - 2), ",")
-              foreach (lkey, list) {
-                if (not Instr(lkey, ":") = 0) {
-                  dict = Split(lkey, ":")
-                  dict0 = ToString(dict[0])
-                  dict1 = ToString(dict[1])
-                  dictionary add (val, dict0, dict1)
-                }
-                else {
-                  error (Template("DevModeErrorWrongFormat"))
+        // Attitem
+        if ("attitemtoken" in result) {
+          attitemtoken = ToString(DictionaryItem(result, "attitemtoken"))
+          if ("attitem" in result) {
+            attitem = ToString(DictionaryItem(result, "attitem"))
+          }
+        }
+
+        // Booltoken
+        if ("booltoken" in result) {
+          booltoken = ToString(DictionaryItem(result, "booltoken"))
+          if (booltoken = "?") bool = true
+          else if (booltoken = "!") bool = false
+          else if (booltoken = "~") {
+            bool = not GetBoolean (obj, att)
+            if (bool = null) error (Template("DevModeErrorWrongFormat"))
+          }
+        }
+
+        else {
+          // Value
+          if ("value" in result) {
+            valstr = ToString(DictionaryItem(result, "value"))
+          }
+          if ("valitemtoken" in result) {
+            valitemtoken = ToString(DictionaryItem(result, "valitemtoken"))
+
+            // Value-String
+            if (valitemtoken = "\"") {
+              val = valstr
+            }
+
+            // Value-List
+            else if (valitemtoken = "[") {
+              val = NewList ()
+              if (not valstr = null or not valstr = "") {
+                val = Split(valstr, ",")
+              }
+            }
+
+            // Value-Dictionary
+            else if (valitemtoken = "{") {
+              val = NewDictionary ()
+              if (not valstr = null or not valstr = "") {
+                list = Split(valstr, ",")
+                foreach (lkey, list) {
+                  if (not Instr(lkey, ":") = 0) {
+                    dict = Split(lkey, ":")
+                    dict0 = ToString(dict[0])
+                    dict1 = ToString(dict[1])
+                    dictionary add (val, dict0, dict1)
+                  }
+                  else {
+                    error (Template("DevModeErrorWrongFormat"))
+                  }
                 }
               }
             }
           }
 
-          // Other
-          else if (StartsWith(valstr, "\"") and EndsWith(valstr,  "\"") or not getObjectExt(valstr) = null or LCase(valstr) = "true" or LCase(valstr) = "false" or (Isint(valstr) or IsDouble(valstr)) or LCase(valstr) = "null") {
-            val = Eval(valstr)
-          }
-
-          // Attribute of another object
-          else if (not InStr(valstr, ".") = 0) {
-            list = Split(valstr, ".")
-            if (not ListCount(list) = 2) error (Template("DevModeErrorWrongFormat"))
-            valobjstr = ToString(list[0])
-            valatt = ToString(list[1])
+          // Valobject
+          else if ("valobject" in result) {
+            valobjstr = ToString(DictionaryItem(result, "valobject"))
             valobj = getObjectExt(valobjstr)
             if (valobj = null) error (DynamicTemplate("DevModeErrorCantFindObject", valobjstr))
-            if (not HasAttribute (valobj, valatt)) error (DynamicTemplate("DevModeErrorCantFindAttribute", valatt))
+
+            // Valattribute
+            if ("valattribute" in result)  {
+              valattstr = ToString(DictionaryItem(result, "valattribute"))
+              valatt = valattstr
+              val = GetAttribute(valobj, valatt)
+              if (val = null) error (DynamicTemplate("DevModeErrorCantFindAttribute", valattstr))
+            }
+          }
+
+          // Another
+          else {
             val = Eval(valstr)
           }
-
-          // Wrong Format
-          else {
-            error (Template("DevModeErrorWrongFormat"))
-          }
-        }
-
-        // Expression without value
-        else if (not obj2str = "") {
-          obj = getObjectExt(obj2str)
-          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", obj2str))
-          tok = ToString(DictionaryItem(res, "token2"))
-          attstr = ToString(DictionaryItem(res, "attribute2"))
         }
       }
+      // Unsuccessful match
       else {
         error (Template("DevModeErrorWrongFormat"))
       }
 
-      // ATTRIBUTE
-
-      // Listitem
-      if (EndsWith(attstr, "[]")) {
-        att = Replace (attstr, "[]", "")
-        if (not HasAttribute (obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute", att))
-        con = GetAttribute (obj, att)
-        if (obj2str = "") {
-          if (not TypeOf(con) = "list" and not TypeOf(con) = "objectlist" and not TypeOf(con) = "stringlist") con = NewList ()
-          list add (con, val)
-          set (obj, att, con)
-          msgdm (Template("DevModeComExecute") + text)
+      // Attribute-List
+      if (attitemtoken = "[") {
+        curvaltypcheck = (TypeOf(curval) = "list" and TypeOf(curval) = "objectlist" and TypeOf(curval) = "stringlist")
+        if (val = null) {
+          if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
+          if (not attitem in curval) error (Template("DevModeErrorWrongKey"))
+          curval = ListItem(curval, attitem)
         }
         else {
-          error (Template("DevModeErrorWrongTyp"))
+          if (not curvaltypcheck) curval = NewList ()
+          if (not attitem = null or not attitem = "") {
+            if (attitem in curval) list remove (curval, attitem)
+            list add (curval, val)
+            val = NewList ()
+            val = curval
+          }
         }
       }
 
-      // Dictionaryitem
-      else if (not Instr(attstr, "{") = 0 and EndsWith(attstr, "}")) {
-        attkey = Split (attstr, "{")
-        att = ToString (attkey[0])
-        if (not HasAttribute (obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute", att))
-        key = Replace (ToString (attkey[1]), "}", "")
-        con = GetAttribute (obj, att)
-        if (obj2str = "") {
-          if (not TypeOf(con) = "dictionary" and not TypeOf(con) = "objectdictionary" and not TypeOf(con) = "stringdictionary") con = NewDictionary ()
-          if (DictionaryContains(con, key)) dictionary remove (con, key)
-          dictionary add (con, key, val)
-          set (obj, att, con)
-          msgdm (Template("DevModeComExecute") + text)
+      // Attribute-Dictionary
+      else if (attitemtoken = "{") {
+        curvaltypcheck = (TypeOf(curval) = "dictionary" and TypeOf(curval) = "objectdictionary" and TypeOf(curval) = "stringdictionary")
+        if (val = null) {
+          if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
+          if (not attitem in curval) error (Template("DevModeErrorWrongKey"))
+          curval = DictionaryItem(curval, attitem)
         }
         else {
-          if (not TypeOf(con) = "dictionary" and not TypeOf(con) = "objectdictionary" and not TypeOf(con) = "stringdictionary") error (Template("DevModeErrorWrongTyp"))
-          if (not DictionaryContains(con, key)) error (Template("DevModeErrorWrongKey"))
-          msgdm (text + "=" + DictionaryItem(con, key))
+          if (not curvaltypcheck) curval = NewDictionary ()
+          if (not attitem = null or not attitem = "") {
+            if (attitem in curval) dictionary remove (curval, attitem)
+            dictionary add (curval, val)
+            val = NewDictionary ()
+            val = curval
+          }
         }
       }
 
-      // Other
+
+      // Set boolean
+      if (not bool = null) {
+        set (obj, att, bool)
+        msgdm (objstr + "." + attstr + "=" + ToString(bool))
+      }
+
+      // Set value
+      else if (not val = null) {
+        set (obj, att, val)
+        msgdm (Template("DevModeComExecute") + objstr + "." + attstr + "=" + ToString(val))
+      }
+
+      // Get value
       else {
-        if (obj2str = "") {
-          att = attstr
-          set (obj, att, val)
-          msgdm (Template("DevModeComExecute") + text)
-        }
-        else {
-          att = attstr
-          if (tok = "?") {
-            set (obj, att, true) // True
-            msgdm (Template("DevModeComExecute") + ToString(obj.name) + "." + ToString(att) + "=True")
-          }
-          else if (tok = "!") {
-            set (obj, att, false) // False
-            msgdm (Template("DevModeComExecute") + ToString(obj.name) + "." + ToString(att) + "=False")
-          }
-          else if (tok = "~") {
-            if (GetBoolean (obj, att)) bool = false // Toggle
-            else bool = true
-            set (obj, att, bool)
-            msgdm (Template("DevModeComExecute") + ToString(obj.name) + "." + ToString(att) + "=" + ToString(bool))
-          }          
-          else { // Read attribute
-            if (not HasAttribute(obj, att)) error (DynamicTemplate("DevModeErrorCantFindAttribute", att))
-            val = ToString(GetAttribute(obj, att))
-            msgdm (text + "=" + val)
-          }
-        }
+        msgdm (objstr + "." + attstr + "=" + ToString(curval))
       }
+
     ]]>
   </function>
 
@@ -597,7 +607,7 @@
     <devmode_changepovpos type="boolean">false</devmode_changepovpos>
     <devmode_setinitscript type="boolean">false</devmode_setinitscript>
     <devmode_setverbs type="boolean">true</devmode_setverbs>
-    <devmode_verbs type="simplestringlist">[DevModeCommandsInVerbs]</devmode_verbs>
+    <devmode_verbs type="simplestringlist">#drop;#take;#to;#open;#close;#on;#off</devmode_verbs>
     <devmode_showinfos type="boolean">true</devmode_showinfos>
     <devmode_showdebugtable type="boolean">true</devmode_showdebugtable>
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
