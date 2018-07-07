@@ -278,107 +278,87 @@
 
   <function name="ParseToQuestCode" parameters="text">
     <![CDATA[
-      // RegEx available in https://regex101.com/r/Hj0cvK/1
-      regex = "^(?<booltoken>\\?|\\!|\\~)?(?<object>.+?)\\.(?<attribute>.+?)(?:(?<attitemtoken>\\[|\\{)(?<attitem>.*?)(?:\\]|\\}))?(?:\\s*?\\=\\s*?(?:(?<valitemtoken>\\\"|\\[|\\{)?(?<value>.*?)(?:\\\"|\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+
+      // RegEx available in https://regex101.com/r/naVUu1/1
+      regex = "^(?<booltoken>(?:\\?|\\!|\\~)?)(?<object>.+?)\\.(?<attribute>.+?)(?:(?<attitemtoken>\\[|\\{)(?<attributeitem>.*?)(?:\\]|\\}))?(?:\\s*?\\=\\s*?(?:(?<valitemtoken>(?:\\\"|\\[|\\{)?)(?<value>.*?)(?:\\\"|\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
       
       // Start match
       if (IsRegexMatch (regex, text)) {
         result = populate (regex, text)
+        Log (ToString(result))
+
 
         // Object
-        if ("object" in result) {
-          objstr = ToString(DictionaryItem(result, "object"))
-          obj = getObjectExt(objstr)
-          if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
+        if (result["object"] <> "") {
+          object = getObjectExt(result["object"])
+          if (object = null) error (DynamicTemplate("DevModeErrorCantFindObject"), result["object"])
 
           // Attribute
-          if ("attribute" in result)  {
-            attstr = ToString(DictionaryItem(result, "attribute"))
-            att = attstr
-            curval = GetAttribute(obj, att)
-            if (curval = null) error (DynamicTemplate("DevModeErrorCantFindAttribute", attstr))
-            curvalstr = ToString(curval)
+          if (result["attribute"] <> "")  {
+            attribute = result["attribute"]
+            current_value = GetAttribute(object, attribute)
+            if (current_value = null) error (DynamicTemplate("DevModeErrorCantFindAttribute"), result["attribute"])
           }
         }
 
-        // Attitem
-        if ("attitemtoken" in result) {
-          attitemtoken = ToString(DictionaryItem(result, "attitemtoken"))
-          if ("attitem" in result) {
-            attitem = ToString(DictionaryItem(result, "attitem"))
-          }
-        }
 
         // Booltoken
-        if ("booltoken" in result) {
-          booltoken = ToString(DictionaryItem(result, "booltoken"))
-          if (booltoken = "?") bool = true
-          else if (booltoken = "!") bool = false
-          else if (booltoken = "~") {
-            bool = not GetBoolean (obj, att)
-            if (bool = null) error (Template("DevModeErrorWrongFormat"))
-          }
+        if (result["booltoken"] = "?") bool = true
+        else if (result["booltoken"] = "!") bool = false
+        else if (result["booltoken"] = "~") {
+          bool = not GetBoolean (obj, att)
+          if (bool = null) error (Template("DevModeErrorWrongFormat"))
         }
-
         else {
+
           // Value
-          if ("value" in result) {
-            valstr = ToString(DictionaryItem(result, "value"))
+
+          // Value-String
+          if (result["valitemtoken"] = "\"") {
+            value = result["value"]
           }
-          if ("valitemtoken" in result) {
-            valitemtoken = ToString(DictionaryItem(result, "valitemtoken"))
 
-            // Value-String
-            if (valitemtoken = "\"") {
-              val = valstr
-            }
+          // Value-List
+          else if (result["valitemtoken"] = "[") {
+            value = NewList ()
+            if (result["value"] <> "") value = Split(result["value"], ",")
+          }
 
-            // Value-List
-            else if (valitemtoken = "[") {
-              val = NewList ()
-              if (not valstr = null or not valstr = "") {
-                val = Split(valstr, ",")
-              }
-            }
-
-            // Value-Dictionary
-            else if (valitemtoken = "{") {
-              val = NewDictionary ()
-              if (not valstr = null or not valstr = "") {
-                list = Split(valstr, ",")
-                foreach (lkey, list) {
-                  if (not Instr(lkey, ":") = 0) {
-                    dict = Split(lkey, ":")
-                    dict0 = ToString(dict[0])
-                    dict1 = ToString(dict[1])
-                    dictionary add (val, dict0, dict1)
-                  }
-                  else {
-                    error (Template("DevModeErrorWrongFormat"))
-                  }
+          // Value-Dictionary
+          else if (valitemtoken = "{") {
+            value = NewDictionary ()
+            if (result["value"] <> "") {
+              list = Split(result["value"], ",")
+              foreach (lkey, list) {
+                if (not Instr(lkey, ":") = 0) {
+                  dict = Split(lkey, ":")
+                  dict0 = ToString(dict[0])
+                  dict1 = ToString(dict[1])
+                  dictionary add (value, dict0, dict1)
+                }
+                else {
+                  error (Template("DevModeErrorWrongFormat"))
                 }
               }
             }
           }
 
           // Valobject
-          else if ("valobject" in result) {
-            valobjstr = ToString(DictionaryItem(result, "valobject"))
-            valobj = getObjectExt(valobjstr)
-            if (valobj = null) error (DynamicTemplate("DevModeErrorCantFindObject", valobjstr))
+          else if (result["valobject"] <> "") {
+            valobject = getObjectExt(result["valobject"])
+            if (valobject = null) error (DynamicTemplate("DevModeErrorCantFindObject"), result["valobject"])
 
             // Valattribute
-            if ("valattribute" in result)  {
-              valattstr = ToString(DictionaryItem(result, "valattribute"))
-              valatt = valattstr
-              val = GetAttribute(valobj, valatt)
-              if (val = null) error (DynamicTemplate("DevModeErrorCantFindAttribute", valattstr))
+            if (result["valattribute"] <> "")  {
+              valattribute = result["valattribute"]
+              value = GetAttribute(valobject, valattribute)
+              if (value = null) error (DynamicTemplate("DevModeErrorCantFindAttribute"), result["valattribute"])
             }
           }
 
           // Another
           else {
-            val = Eval(valstr)
+            value = Eval(result["value"])
           }
         }
       }
@@ -387,60 +367,64 @@
         error (Template("DevModeErrorWrongFormat"))
       }
 
+
       // Attribute-List
-      if (attitemtoken = "[") {
-        curvaltypcheck = (TypeOf(curval) = "list" and TypeOf(curval) = "objectlist" and TypeOf(curval) = "stringlist")
+      if (result["attitemtoken"] = "[") {
+        curvaltypcheck = (IsDefined(current_value) and (TypeOf(current_value) = "list" or TypeOf(current_value) = "objectlist" or TypeOf(current_value) = "stringlist"))
         if (val = null) {
           if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
-          if (not attitem in curval) error (Template("DevModeErrorWrongKey"))
-          curval = ListItem(curval, attitem)
+          else if (result["attributeitem"] = "") error (Template("DevModeErrorNoItem"))
+          else if (not result["attributeitem"] in current_value) error (Template("DevModeErrorWrongKey"))
+          else current_value = ListItem(current_value, attributeitem)
         }
         else {
-          if (not curvaltypcheck) curval = NewList ()
-          if (not attitem = null or not attitem = "") {
-            if (attitem in curval) list remove (curval, attitem)
-            list add (curval, val)
-            val = NewList ()
-            val = curval
+          if (not curvaltypcheck) current_value = NewList ()
+          if (result["attributeitem"] <> "") {
+            if (attributeitem in current_value) list remove (current_value, attributeitem)
+            list add (current_value, value)
+            value = NewList ()
+            value = current_value
           }
         }
       }
+
 
       // Attribute-Dictionary
-      else if (attitemtoken = "{") {
-        curvaltypcheck = (TypeOf(curval) = "dictionary" and TypeOf(curval) = "objectdictionary" and TypeOf(curval) = "stringdictionary")
+      else if (result["attitemtoken"] = "{") {
+        curvaltypcheck = (IsDefined(current_value) and (TypeOf(current_value) = "dictionary" or TypeOf(current_value) = "objectdictionary" or TypeOf(current_value) = "stringdictionary"))
         if (val = null) {
           if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
-          if (not attitem in curval) error (Template("DevModeErrorWrongKey"))
-          curval = DictionaryItem(curval, attitem)
+          else if (result["attributeitem"] = "") error (Template("DevModeErrorNoItem"))
+          else if (not result["attributeitem"] in current_value) error (Template("DevModeErrorWrongKey"))
+          else current_value = ListItem(current_value, attributeitem)
         }
         else {
-          if (not curvaltypcheck) curval = NewDictionary ()
-          if (not attitem = null or not attitem = "") {
-            if (attitem in curval) dictionary remove (curval, attitem)
-            dictionary add (curval, val)
-            val = NewDictionary ()
-            val = curval
+          if (not curvaltypcheck) current_value = NewDictionary ()
+          if (result["attributeitem"] <> "") {
+            if (attributeitem in current_value) dictionary remove (current_value, attributeitem)
+            dictionary add (current_value, value)
+            value = NewDictionary ()
+            value = current_value
           }
         }
       }
-
+      
 
       // Set boolean
-      if (not bool = null) {
+      if (bool <> null) {
         set (obj, att, bool)
-        msgdm (objstr + "." + attstr + "=" + ToString(bool))
+        msgdm (object.name + "." + attribute + "=" + ToString(bool))
       }
 
       // Set value
-      else if (not val = null) {
+      else if (val <> null) {
         set (obj, att, val)
-        msgdm (Template("DevModeComExecute") + objstr + "." + attstr + "=" + ToString(val))
+        msgdm (Template("DevModeComExecute") + object.name + "." + attribute + "=" + ToString(value))
       }
 
       // Get value
       else {
-        msgdm (objstr + "." + attstr + "=" + ToString(curval))
+        msgdm (object.name + "." + attribute + "=" + ToString(current_value))
       }
 
     ]]>
