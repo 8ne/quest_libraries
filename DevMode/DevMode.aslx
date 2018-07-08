@@ -97,8 +97,6 @@
   <template name="DevModeErrorObjectNotRecognised">The object was not found.</template>
   <template name="DevModeErrorWrongTyp">That's the wrong type.</template>
   <template name="DevModeErrorWrongKey">The key was not found.</template>
-  <dynamictemplate name="DevModeErrorCantFindObject">"The object with the name '" + text + "' cannot be found."</dynamictemplate>
-  <dynamictemplate name="DevModeErrorCantFindAttribute">"The attribute with the name '" + text + "' cannot be found."</dynamictemplate>
   <template name="DevModeExecuteCommand">The command was executed.</template>
   <template name="DevModeNotActive">DevMode is not active!</template>
   <template name="DevModeDescriptionCommands"><![CDATA[<b>Commands</b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Unlike the commands in the game, they are executed directly and without detours via intercept scripts.</i><br/><br/><b>Assignments (Oriented to JSON)</b><br/>#object1.attribute=object2.attribute (attribute assignment of another object)<br/>#object.attribute=true/false (boolean)<br/>#?object.attribute (set true)<br/>#!object.attribute (set false)<br/>#~object.attribute (toggle)<br/>#object.attribute="value" (string)<br/>#object.attribute=15 (integer)<br/>#object.attribute=25.55 (double)<br/>#object.attribute=[item1,item2,item3] (list)<br/>#object.attribute[]=element (add element to list)<br/>#object.attribute=[] (create new list)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (dictionary)<br/>#object.attribute{key}=element (add or overwrite element to dictionary)<br/>#object.attribute={} (create new dictionary)<br/>#object.attribute (read attribute)<br/><br/><b>Extras</b><br/>#clr (clear screen)<br/>#? (help)<br/># (close game)]]></template>
@@ -108,6 +106,11 @@
   <template name="DevModeStartScript">Initialization script started.</template>
   <template name="DevModeSetVerbs">Verbs assigned.</template>
   <template name="DevModeComExecute">Command executed: </template>
+  <template name="DevModeComSetAttribute">Set Attribute: </template>
+  <template name="DevModeComGetAttribute">Get Attribute: </template>
+  
+  <dynamictemplate name="DevModeErrorCantFindObject">"The object with the name '" + text + "' cannot be found."</dynamictemplate>
+  <dynamictemplate name="DevModeErrorCantFindAttribute">"The attribute with the name '" + text + "' cannot be found."</dynamictemplate>
 
   <template name="EditorObjectWearableAdjVerbs">Adapting the inventory verbs to the states</template>
   <template name="EditorGameEnableDevMode">Show DevMode options</template>
@@ -139,8 +142,6 @@
   <template name="DevModeErrorObjectNotRecognised">Das Objekt wurde nicht erkannt.</template>
   <template name="DevModeErrorWrongTyp">Das ist der falsche Typ.</template>
   <template name="DevModeErrorWrongKey">Der Key wurde nicht gefunden.</template>
-  <dynamictemplate name="DevModeErrorCantFindObject">"Das Objekt mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
-  <dynamictemplate name="DevModeErrorCantFindAttribute">"Das Attribut mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
   <template name="DevModeExecuteCommand">Der Befehl wurde ausgeführt.</template>
   <template name="DevModeNotActive">Der DevMode ist nicht aktiv!</template>
   <template name="DevModeDescriptionCommands"><![CDATA[<b>Kommandos</b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b>Zuweisungen (Orientiert an JSON)</b><br/>#object1.attribut=object2.attribut (Attributzuweisung eines anderen Objektes)<br/>#object.attribut=true/false (Boolean)<br/>#?object.attribut (Setze auf True)<br/>#!object.attribut (Setze auf False)<br/>#~object.attribut (Toggeln)<br/>#object.attribut="value" (String)<br/>#object.attribut=15 (Integer)<br/>#object.attribut=25.55 (Double)<br/>#object.attribut=[Item1,Item2,Item3] (Liste)<br/>#object.attribut[]=element (Element zur Liste hinzufügen)<br/>#object.attribut=[] (Eine neue Liste erstellen)<br/>#object.attribut={Key1:Item1,Key2:Item2,Key3:Item3} (Dictionary)<br/>#object.attribut{Key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribut={} (Neues Dictionary erstellen)<br/>#object.attribut (Attribute auslesen)<br/><br/><b>Extras</b><br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)]]></template>
@@ -150,6 +151,10 @@
   <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
   <template name="DevModeSetVerbs">Verben zugeordnet.</template>
   <template name="DevModeComExecute">Kommando ausgeführt: </template>
+  <template name="DevModeComSetAttribute">Attribut gesetzt: </template>
+  <template name="DevModeComGetAttribute">Attribut abgefragt: </template>
+  <dynamictemplate name="DevModeErrorCantFindObject">"Das Objekt mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
+  <dynamictemplate name="DevModeErrorCantFindAttribute">"Das Attribut mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
 
   <template name="EditorObjectWearableAdjVerbs">Die Inventarverben den Zuständen anpassen</template>
   <template name="EditorGameEnableDevMode">Entwicklermodus (Hinzufügen von erweiterten Befehlen zum Testen des Spiels)</template>
@@ -256,7 +261,7 @@
 
             // Expressions
             else {
-              ParseToQuestCode (Replace(text, "\"", "\\\""))
+              ParseToQuestCode (text)
             }
           }
           else {
@@ -280,7 +285,7 @@
     <![CDATA[
 
       // RegEx available in https://regex101.com/r/naVUu1/1
-      regex = "^(?<booltoken>(?:\\?|\\!|\\~)?)(?<object>.+?)\\.(?<attribute>.+?)(?:(?<attitemtoken>\\[|\\{)(?<attributeitem>.*?)(?:\\]|\\}))?(?:\\s*?\\=\\s*?(?:(?<valitemtoken>(?:\\\"|\\[|\\{)?)(?<value>.*?)(?:\\\"|\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+      regex = "^(?<object>.+?)\\.(?<attribute>.+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:(?<istoken>\\=)(?<booltoken>(?:\\?|\\!|\\~)?)(?:(?<valitemtoken>\\\"?|\\[?|\\{?)(?<value>.*?)\\\"?|\\]?|\\}?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
       
       // Start match
       if (IsRegexMatch (regex, text)) {
@@ -289,142 +294,125 @@
 
 
         // Object
-        if (result["object"] <> "") {
-          object = getObjectExt(result["object"])
-          if (object = null) error (DynamicTemplate("DevModeErrorCantFindObject"), result["object"])
+        object = getObjectExt(result["object"])
+        if (TypeOf(object) = "null") error (DynamicTemplate("DevModeErrorCantFindObject", result["object"]))
 
-          // Attribute
-          if (result["attribute"] <> "")  {
-            attribute = result["attribute"]
-            current_value = GetAttribute(object, attribute)
-            if (current_value = null) error (DynamicTemplate("DevModeErrorCantFindAttribute"), result["attribute"])
-          }
-        }
+        // Attribute
+        attribute = result["attribute"]
+        current_value = GetAttribute(object, attribute)
+        if (TypeOf(current_value) = "null") error (DynamicTemplate("DevModeErrorCantFindAttribute", result["attribute"]))
 
+        // Value
+        value = result["value"]
 
-        // Booltoken
-        if (result["booltoken"] = "?") bool = true
-        else if (result["booltoken"] = "!") bool = false
-        else if (result["booltoken"] = "~") {
-          bool = not GetBoolean (obj, att)
-          if (bool = null) error (Template("DevModeErrorWrongFormat"))
-        }
-        else {
+        if (result["istoken"] = "=") {
 
-          // Value
+          // Booltoken
 
-          // Value-String
-          if (result["valitemtoken"] = "\"") {
-            value = result["value"]
-          }
+          if (result["booltoken"] = "?") value = true
+          else if (result["booltoken"] = "!") value = false
+          else if (result["booltoken"] = "~") value = not GetBoolean (object, attribute)
+          else {
 
-          // Value-List
-          else if (result["valitemtoken"] = "[") {
-            value = NewList ()
-            if (result["value"] <> "") value = Split(result["value"], ",")
-          }
+            // Value-List
+            if (result["valitemtoken"] = "[") {
+              value = NewList ()
+              if (result["value"] <> "") value = Split(result["value"], ",")
+            }
 
-          // Value-Dictionary
-          else if (valitemtoken = "{") {
-            value = NewDictionary ()
-            if (result["value"] <> "") {
-              list = Split(result["value"], ",")
-              foreach (lkey, list) {
-                if (not Instr(lkey, ":") = 0) {
-                  dict = Split(lkey, ":")
-                  dict0 = ToString(dict[0])
-                  dict1 = ToString(dict[1])
-                  dictionary add (value, dict0, dict1)
-                }
-                else {
-                  error (Template("DevModeErrorWrongFormat"))
+            // Value-Dictionary
+            else if (result["valitemtoken"] = "{") {
+              value = NewDictionary ()
+              if (result["value"] <> "") {
+                list = Split(result["value"], ",")
+                foreach (lkey, list) {
+                  if (not Instr(lkey, ":") = 0) {
+                    dict = Split(lkey, ":")
+                    dict0 = ToString(dict[0])
+                    dict1 = ToString(dict[1])
+                    dictionary add (value, dict0, dict1)
+                  }
+                  else {
+                    error (Template("DevModeErrorWrongFormat"))
+                  }
                 }
               }
             }
-          }
 
-          // Valobject
-          else if (result["valobject"] <> "") {
-            valobject = getObjectExt(result["valobject"])
-            if (valobject = null) error (DynamicTemplate("DevModeErrorCantFindObject"), result["valobject"])
+            // Valobject
+            else if (result["valobject"] <> "") {
+              valobject = getObjectExt(result["valobject"])
+              if (TypeOf(valobject) = "null") error (DynamicTemplate("DevModeErrorCantFindObject", result["valobject"]))
 
-            // Valattribute
-            if (result["valattribute"] <> "")  {
-              valattribute = result["valattribute"]
-              value = GetAttribute(valobject, valattribute)
-              if (value = null) error (DynamicTemplate("DevModeErrorCantFindAttribute"), result["valattribute"])
+              // Valattribute
+              if (result["valattribute"] <> "")  {
+                valattribute = result["valattribute"]
+                value = GetAttribute(valobject, valattribute)
+                if (TypeOf(value) = "null") error (DynamicTemplate("DevModeErrorCantFindAttribute", result["valattribute"]))
+              }
+            }
+
+            // Another
+            else if (result["value"] <> "" and result["valitemtoken"] <> "\"") {
+              Log (result["value"])
+              value = Eval(result["value"])
             }
           }
+        }
 
-          // Another
+        // Attribute-List
+        if (result["itemtoken"] = "[") {
+          curvaltypcheck = ((TypeOf(current_value) <> "null") and (TypeOf(current_value) = "list" or TypeOf(current_value) = "objectlist" or TypeOf(current_value) = "stringlist"))
+          if (TypeOf(value) = "null") {
+            if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
+            else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
+            else current_value = ListItem(current_value, item)
+          }
           else {
-            value = Eval(result["value"])
+            if (not curvaltypcheck) current_value = NewList ()
+            if (result["item"] <> "") {
+              if (item in current_value) list remove (current_value, item)
+              list add (current_value, value)
+              value = NewList ()
+              value = current_value
+            }
           }
         }
+
+        // Attribute-Dictionary
+        else if (result["itemtoken"] = "{") {
+          curvaltypcheck = ((TypeOf(current_value) <> "null") and (TypeOf(current_value) = "dictionary" or TypeOf(current_value) = "objectdictionary" or TypeOf(current_value) = "stringdictionary"))
+          if (TypeOf(value) = "null") {
+            if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
+            else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
+            else current_value = ListItem(current_value, item)
+          }
+          else {
+            if (not curvaltypcheck) current_value = NewDictionary ()
+            if (result["item"] <> "") {
+              if (item in current_value) dictionary remove (current_value, item)
+              dictionary add (current_value, value)
+              value = NewDictionary ()
+              value = current_value
+            }
+          }
+        }
+        
+        // Set value
+        if (result["istoken"] = "=") {
+          set (object, attribute, value)
+          msgdm (Template("DevModeComSetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(value))
+        }
+
+        // Get value
+        else {
+          msgdm (Template("DevModeComGetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(current_value))
+        }
       }
+
       // Unsuccessful match
       else {
         error (Template("DevModeErrorWrongFormat"))
-      }
-
-
-      // Attribute-List
-      if (result["attitemtoken"] = "[") {
-        curvaltypcheck = (IsDefined(current_value) and (TypeOf(current_value) = "list" or TypeOf(current_value) = "objectlist" or TypeOf(current_value) = "stringlist"))
-        if (val = null) {
-          if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
-          else if (result["attributeitem"] = "") error (Template("DevModeErrorNoItem"))
-          else if (not result["attributeitem"] in current_value) error (Template("DevModeErrorWrongKey"))
-          else current_value = ListItem(current_value, attributeitem)
-        }
-        else {
-          if (not curvaltypcheck) current_value = NewList ()
-          if (result["attributeitem"] <> "") {
-            if (attributeitem in current_value) list remove (current_value, attributeitem)
-            list add (current_value, value)
-            value = NewList ()
-            value = current_value
-          }
-        }
-      }
-
-
-      // Attribute-Dictionary
-      else if (result["attitemtoken"] = "{") {
-        curvaltypcheck = (IsDefined(current_value) and (TypeOf(current_value) = "dictionary" or TypeOf(current_value) = "objectdictionary" or TypeOf(current_value) = "stringdictionary"))
-        if (val = null) {
-          if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
-          else if (result["attributeitem"] = "") error (Template("DevModeErrorNoItem"))
-          else if (not result["attributeitem"] in current_value) error (Template("DevModeErrorWrongKey"))
-          else current_value = ListItem(current_value, attributeitem)
-        }
-        else {
-          if (not curvaltypcheck) current_value = NewDictionary ()
-          if (result["attributeitem"] <> "") {
-            if (attributeitem in current_value) dictionary remove (current_value, attributeitem)
-            dictionary add (current_value, value)
-            value = NewDictionary ()
-            value = current_value
-          }
-        }
-      }
-      
-
-      // Set boolean
-      if (bool <> null) {
-        set (obj, att, bool)
-        msgdm (object.name + "." + attribute + "=" + ToString(bool))
-      }
-
-      // Set value
-      else if (val <> null) {
-        set (obj, att, val)
-        msgdm (Template("DevModeComExecute") + object.name + "." + attribute + "=" + ToString(value))
-      }
-
-      // Get value
-      else {
-        msgdm (object.name + "." + attribute + "=" + ToString(current_value))
       }
 
     ]]>
