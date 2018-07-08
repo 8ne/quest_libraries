@@ -66,9 +66,9 @@
   ****************************************************************************************************
   #object1.attribute=object2.attribute (attribute assignment of another object)
   #object.attribute=true/false (boolean)
-  #?object.attribute (set true)
-  #!object.attribute (set false)
-  #~object.attribute (toggle)
+  #object.attribute=? (set true)
+  #object.attribute=! (set false)
+  #object.attribute=~ (toggle)
   #object.attribute="value" (string)
   #object.attribute=15 (integer)
   #object.attribute=25.55 (double)
@@ -108,7 +108,6 @@
   <template name="DevModeComExecute">Command executed: </template>
   <template name="DevModeComSetAttribute">Set Attribute: </template>
   <template name="DevModeComGetAttribute">Get Attribute: </template>
-  
   <dynamictemplate name="DevModeErrorCantFindObject">"The object with the name '" + text + "' cannot be found."</dynamictemplate>
   <dynamictemplate name="DevModeErrorCantFindAttribute">"The attribute with the name '" + text + "' cannot be found."</dynamictemplate>
 
@@ -283,16 +282,25 @@
 
   <function name="ParseToQuestCode" parameters="text">
     <![CDATA[
-
-      // RegEx available in https://regex101.com/r/naVUu1/1
-      regex = "^(?<object>.+?)\\.(?<attribute>.+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:(?<istoken>\\=)(?<booltoken>(?:\\?|\\!|\\~)?)(?:(?<valitemtoken>\\\"?|\\[?|\\{?)(?<value>.*?)\\\"?|\\]?|\\}?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+      // ----------------------------------------------------------------------------------------------------
+      // REGEX
+      // the regular expression to check the user input.
+      // RegEx available in https://regex101.com/r/naVUu1/5
+      // ----------------------------------------------------------------------------------------------------
+      regex = "^(?<object>.+?)\\.(?<attribute>.+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:(?<istoken>\\=)(?:(?<valitemtoken>\\[?|\\{?)(?<value>.*?)\\]?|\\}?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
       
-      // Start match
+      // ----------------------------------------------------------------------------------------------------
+      // SUCCESS MATCH
+      // If the user's entry is error-free, it is validated further.
+      // ----------------------------------------------------------------------------------------------------
       if (IsRegexMatch (regex, text)) {
         result = populate (regex, text)
         Log (ToString(result))
 
-
+        // ----------------------------------------------------------------------------------------------------
+        // ASSIGN RESULT
+        // Assign the result of the match to the appropriate object and attribute.
+        // ----------------------------------------------------------------------------------------------------
         // Object
         object = getObjectExt(result["object"])
         if (TypeOf(object) = "null") error (DynamicTemplate("DevModeErrorCantFindObject", result["object"]))
@@ -305,71 +313,88 @@
         // Value
         value = result["value"]
 
+        // ----------------------------------------------------------------------------------------------------
+        // SET VALUE
+        // If an actual equals sign has been set, the input is treated as an assignment.
+        // ----------------------------------------------------------------------------------------------------
         if (result["istoken"] = "=") {
 
-          // Booltoken
+          // ----------------------------------------------------------------------------------------------------
+          // BOOLEAN-TOKENS
+          // Short notation for Boolean states
+          // ----------------------------------------------------------------------------------------------------
+          if (result["value"] = "?") {
+            value = true
+          }
+          else if (result["value"] = "!") {
+            value = false
+          }
+          else if (result["value"] = "~") {
+            value = not GetBoolean (object, attribute)
+          }
 
-          if (result["booltoken"] = "?") value = true
-          else if (result["booltoken"] = "!") value = false
-          else if (result["booltoken"] = "~") value = not GetBoolean (object, attribute)
-          else {
+          // ----------------------------------------------------------------------------------------------------
+          // VALUE-LIST
+          // Creating a new list
+          // ----------------------------------------------------------------------------------------------------
+          else if (result["valitemtoken"] = "[") {
+            value = NewList ()
+            if (result["value"] <> "") value = Eval(Split(result["value"], ","))
+          }
 
-            // Value-List
-            if (result["valitemtoken"] = "[") {
-              value = NewList ()
-              if (result["value"] <> "") value = Split(result["value"], ",")
-            }
-
-            // Value-Dictionary
-            else if (result["valitemtoken"] = "{") {
-              value = NewDictionary ()
-              if (result["value"] <> "") {
-                list = Split(result["value"], ",")
-                foreach (lkey, list) {
-                  if (not Instr(lkey, ":") = 0) {
-                    dict = Split(lkey, ":")
-                    dict0 = ToString(dict[0])
-                    dict1 = ToString(dict[1])
-                    dictionary add (value, dict0, dict1)
-                  }
-                  else {
-                    error (Template("DevModeErrorWrongFormat"))
-                  }
+          // ----------------------------------------------------------------------------------------------------
+          // VALUE-DICTIONARY
+          // Creating a new dictionary
+          // ----------------------------------------------------------------------------------------------------
+          else if (result["valitemtoken"] = "{") {
+            value = NewDictionary ()
+            if (result["value"] <> "") {
+              list = Eval(Split(result["value"], ","))
+              foreach (lkey, list) {
+                if (not Instr(lkey, ":") = 0) {
+                  dict = Split(lkey, ":")
+                  dict0 = ToString(dict[0])
+                  dict1 = ToString(dict[1])
+                  dictionary add (value, dict0, dict1)
+                }
+                else {
+                  error (Template("DevModeErrorWrongFormat"))
                 }
               }
             }
+          }
 
-            // Valobject
-            else if (result["valobject"] <> "") {
-              valobject = getObjectExt(result["valobject"])
-              if (TypeOf(valobject) = "null") error (DynamicTemplate("DevModeErrorCantFindObject", result["valobject"]))
+          // ----------------------------------------------------------------------------------------------------
+          // VALUE-OBJECT AND VALUE-ATTRIBUTE
+          // Assigning an attribute from another object
+          // ----------------------------------------------------------------------------------------------------
+          else if (result["valobject"] <> "") {
+            valobject = getObjectExt(result["valobject"])
+            if (TypeOf(valobject) = "null") error (DynamicTemplate("DevModeErrorCantFindObject", result["valobject"]))
 
-              // Valattribute
-              if (result["valattribute"] <> "")  {
-                valattribute = result["valattribute"]
-                value = GetAttribute(valobject, valattribute)
-                if (TypeOf(value) = "null") error (DynamicTemplate("DevModeErrorCantFindAttribute", result["valattribute"]))
-              }
-            }
-
-            // Another
-            else if (result["value"] <> "" and result["valitemtoken"] <> "\"") {
-              Log (result["value"])
-              value = Eval(result["value"])
+            // Valattribute
+            if (result["valattribute"] <> "")  {
+              valattribute = result["valattribute"]
+              value = GetAttribute(valobject, valattribute)
+              if (TypeOf(value) = "null") error (DynamicTemplate("DevModeErrorCantFindAttribute", result["valattribute"]))
             }
           }
-        }
 
-        // Attribute-List
-        if (result["itemtoken"] = "[") {
-          curvaltypcheck = ((TypeOf(current_value) <> "null") and (TypeOf(current_value) = "list" or TypeOf(current_value) = "objectlist" or TypeOf(current_value) = "stringlist"))
-          if (TypeOf(value) = "null") {
-            if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
-            else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
-            else current_value = ListItem(current_value, item)
-          }
+          // ----------------------------------------------------------------------------------------------------
+          // VALUE EVALUATION
+          // Value is evaluated
+          // ----------------------------------------------------------------------------------------------------
           else {
-            if (not curvaltypcheck) current_value = NewList ()
+            Log (result["value"])
+            value = Eval(result["value"])
+          }
+
+          // ----------------------------------------------------------------------------------------------------
+          // ATTRIBUTE-LIST
+          // Add a new item to a list or overwrite an existing one
+          // ----------------------------------------------------------------------------------------------------
+          if (result["itemtoken"] = "[") {
+            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "list" or TypeOf(current_value) <> "objectlist" or TypeOf(current_value) <> "stringlist"))) current_value = NewList ()
             if (result["item"] <> "") {
               if (item in current_value) list remove (current_value, item)
               list add (current_value, value)
@@ -377,18 +402,13 @@
               value = current_value
             }
           }
-        }
 
-        // Attribute-Dictionary
-        else if (result["itemtoken"] = "{") {
-          curvaltypcheck = ((TypeOf(current_value) <> "null") and (TypeOf(current_value) = "dictionary" or TypeOf(current_value) = "objectdictionary" or TypeOf(current_value) = "stringdictionary"))
-          if (TypeOf(value) = "null") {
-            if (not curvaltypcheck) error (Template("DevModeErrorWrongTyp"))
-            else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
-            else current_value = ListItem(current_value, item)
-          }
-          else {
-            if (not curvaltypcheck) current_value = NewDictionary ()
+          // ----------------------------------------------------------------------------------------------------
+          // ATTRIBUTE-DICTIONARY
+          // Add a new item to a dictionary or overwrite an existing one
+          // ----------------------------------------------------------------------------------------------------
+          else if (result["itemtoken"] = "{") {
+            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "list" or TypeOf(current_value) <> "objectlist" or TypeOf(current_value) <> "stringlist"))) current_value = NewDictionary ()
             if (result["item"] <> "") {
               if (item in current_value) dictionary remove (current_value, item)
               dictionary add (current_value, value)
@@ -396,25 +416,57 @@
               value = current_value
             }
           }
-        }
-        
-        // Set value
-        if (result["istoken"] = "=") {
+
+          // ----------------------------------------------------------------------------------------------------
+          // VALUE-ASSIGNMENT
+          // The value is assigned to the attribute and a corresponding output appears
+          // ----------------------------------------------------------------------------------------------------
           set (object, attribute, value)
           msgdm (Template("DevModeComSetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(value))
+
         }
 
-        // Get value
+        // ----------------------------------------------------------------------------------------------------
+        // GET VALUE
+        // If no equal sign has been set, the result is treated as readout.
+        // ----------------------------------------------------------------------------------------------------
         else {
+
+          // ----------------------------------------------------------------------------------------------------
+          // ATTRIBUTE-LIST
+          // If the attribute is a list and the specified item is in it, the content is read out.
+          // ----------------------------------------------------------------------------------------------------
+          if (result["itemtoken"] = "[") {
+            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "list" or TypeOf(current_value) <> "objectlist" or TypeOf(current_value) <> "stringlist"))) error (Template("DevModeErrorWrongTyp"))
+            else if (not item in current_value) error (Template("DevModeErrorWrongKey"))
+            else current_value = ListItem(current_value, item)
+          }
+
+          // ----------------------------------------------------------------------------------------------------
+          // ATTRIBUTE-DICTIONARY
+          // If the attribute is a dictionary and the specified item is in it, the content is read out.
+          // ----------------------------------------------------------------------------------------------------
+          if (result["itemtoken"] = "{") {
+            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "dictionary" or TypeOf(current_value) <> "objectdictionary" or TypeOf(current_value) <> "stringdictionary"))) error (Template("DevModeErrorWrongTyp"))
+            else if (not item in current_value) error (Template("DevModeErrorWrongKey"))
+            else current_value = DictionaryItem(current_value, item)
+          }
+
+          // ----------------------------------------------------------------------------------------------------
+          // VALUE-READING
+          // The value of the attribute is read out
+          // ----------------------------------------------------------------------------------------------------
           msgdm (Template("DevModeComGetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(current_value))
+
         }
       }
-
-      // Unsuccessful match
+      // ----------------------------------------------------------------------------------------------------
+      // FAIL MATCH
+      // An error message is displayed if the user's entry is incorrect.
+      // ----------------------------------------------------------------------------------------------------
       else {
         error (Template("DevModeErrorWrongFormat"))
       }
-
     ]]>
   </function>
 
