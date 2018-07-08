@@ -285,9 +285,9 @@
       // ----------------------------------------------------------------------------------------------------
       // REGEX
       // the regular expression to check the user input.
-      // RegEx available in https://regex101.com/r/naVUu1/5
+      // RegEx available in https://regex101.com/r/9hkAAu/7
       // ----------------------------------------------------------------------------------------------------
-      regex = "^(?<object>.+?)\\.(?<attribute>.+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:(?<istoken>\\=)(?:(?<valitemtoken>\\[?|\\{?)(?<value>.*?)\\]?|\\}?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+      regex = "^(?<object>.+?)\\.(?<attribute>.+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:(?<istoken>\\=)(?:(?<valitemtoken>(?:\\[|\\{)?)(?<value>.*?)(?:\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
       
       // ----------------------------------------------------------------------------------------------------
       // SUCCESS MATCH
@@ -308,7 +308,7 @@
         // Attribute
         attribute = result["attribute"]
         current_value = GetAttribute(object, attribute)
-        if (TypeOf(current_value) = "null") error (DynamicTemplate("DevModeErrorCantFindAttribute", result["attribute"]))
+        if (TypeOf(current_value) = "null" and result["istoken"] <> "=") error (DynamicTemplate("DevModeErrorCantFindAttribute", result["attribute"]))
 
         // Value
         value = result["value"]
@@ -339,7 +339,10 @@
           // ----------------------------------------------------------------------------------------------------
           else if (result["valitemtoken"] = "[") {
             value = NewList ()
-            if (result["value"] <> "") value = Eval(Split(result["value"], ","))
+            if (result["value"] <> "") {
+              list = Split(result["value"], ",")
+              foreach (item, list) list add (value, item)
+            }
           }
 
           // ----------------------------------------------------------------------------------------------------
@@ -349,13 +352,13 @@
           else if (result["valitemtoken"] = "{") {
             value = NewDictionary ()
             if (result["value"] <> "") {
-              list = Eval(Split(result["value"], ","))
-              foreach (lkey, list) {
-                if (not Instr(lkey, ":") = 0) {
-                  dict = Split(lkey, ":")
-                  dict0 = ToString(dict[0])
-                  dict1 = ToString(dict[1])
-                  dictionary add (value, dict0, dict1)
+              list = Split(result["value"], ",")
+              foreach (assign, list) {
+                if (not Instr(assign, ":") = 0) {
+                  dic = Split(assign, ":")
+                  dickey = dic[0]
+                  dicvalue = dic[1]
+                  dictionary add (value, dickey, dicvalue)
                 }
                 else {
                   error (Template("DevModeErrorWrongFormat"))
@@ -390,13 +393,13 @@
           }
 
           // ----------------------------------------------------------------------------------------------------
-          // ATTRIBUTE-LIST
+          // VALUE-LIST
           // Add a new item to a list or overwrite an existing one
           // ----------------------------------------------------------------------------------------------------
           if (result["itemtoken"] = "[") {
-            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "list" or TypeOf(current_value) <> "objectlist" or TypeOf(current_value) <> "stringlist"))) current_value = NewList ()
+            if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") current_value = NewList ()
             if (result["item"] <> "") {
-              if (item in current_value) list remove (current_value, item)
+              if (result["item"] in current_value) list remove (current_value, result["item"])
               list add (current_value, value)
               value = NewList ()
               value = current_value
@@ -404,13 +407,13 @@
           }
 
           // ----------------------------------------------------------------------------------------------------
-          // ATTRIBUTE-DICTIONARY
+          // VALUE-DICTIONARY
           // Add a new item to a dictionary or overwrite an existing one
           // ----------------------------------------------------------------------------------------------------
           else if (result["itemtoken"] = "{") {
-            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "list" or TypeOf(current_value) <> "objectlist" or TypeOf(current_value) <> "stringlist"))) current_value = NewDictionary ()
+            if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") current_value = NewDictionary ()
             if (result["item"] <> "") {
-              if (item in current_value) dictionary remove (current_value, item)
+              if (result["item"] in current_value) dictionary remove (current_value, result["item"])
               dictionary add (current_value, value)
               value = NewDictionary ()
               value = current_value
@@ -437,9 +440,10 @@
           // If the attribute is a list and the specified item is in it, the content is read out.
           // ----------------------------------------------------------------------------------------------------
           if (result["itemtoken"] = "[") {
-            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "list" or TypeOf(current_value) <> "objectlist" or TypeOf(current_value) <> "stringlist"))) error (Template("DevModeErrorWrongTyp"))
-            else if (not item in current_value) error (Template("DevModeErrorWrongKey"))
-            else current_value = ListItem(current_value, item)
+            if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") error (Template("DevModeErrorWrongTyp"))
+            else if (not IsNumeric(result["item"])) error (Template("DevModeErrorWrongTyp"))
+            else if (ToInt(result["item"]) > ListCount(current_value)-1) error (Template("DevModeErrorWrongKey"))
+            else current_value = ListItem(current_value, ToInt(result["item"]))
           }
 
           // ----------------------------------------------------------------------------------------------------
@@ -447,9 +451,9 @@
           // If the attribute is a dictionary and the specified item is in it, the content is read out.
           // ----------------------------------------------------------------------------------------------------
           if (result["itemtoken"] = "{") {
-            if ((TypeOf(current_value) <> "null" or (TypeOf(current_value) <> "dictionary" or TypeOf(current_value) <> "objectdictionary" or TypeOf(current_value) <> "stringdictionary"))) error (Template("DevModeErrorWrongTyp"))
-            else if (not item in current_value) error (Template("DevModeErrorWrongKey"))
-            else current_value = DictionaryItem(current_value, item)
+            if (TypeOf(current_value) <> "dictionary" and TypeOf(current_value) <> "objectdictionary" and TypeOf(current_value) <> "stringdictionary") error (Template("DevModeErrorWrongTyp"))
+            else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
+            else current_value = DictionaryItem(current_value, result["item"])
           }
 
           // ----------------------------------------------------------------------------------------------------
@@ -482,6 +486,11 @@
         case ("script") {
           parsetext = "<" + Replace(ToString(text), "Script: ", "") + ">"
         }
+        case ("list") {
+          arr = NewStringList()
+          foreach (item, text) list add (arr, item)
+          parsetext = "[" + Join (arr, ",") + "]"
+        }
         case ("stringlist") {
           arr = NewStringList()
           foreach (str, text) list add (arr, "\"" + str + "\"")
@@ -491,6 +500,11 @@
           arr = NewStringList()
           foreach (obj, text) list add (arr, obj.name)
           parsetext = "[" + Join (arr, ",") + "]"
+        }
+        case ("dictionary") {
+          arr = NewStringList()
+          foreach (key, text) list add (arr, key + ":" + DictionaryItem(text, key))
+          parsetext = "{" + Join (arr, ",") + "}"
         }
         case ("stringdictionary") {
           arr = NewStringList()
