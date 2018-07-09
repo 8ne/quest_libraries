@@ -75,7 +75,7 @@
   #object.attribute=[item1,item2,item3] (list)
   #object.attribute[]=element (add element to list)
   #object.attribute=[] (create new list)
-  #object.attribute={key1:item1,key2:item2,key3:item3} (dictionary)
+  #object.attribute={"key1":item1,"key2":item2,"key3":item3} (dictionary)
   #object.attribute{key}=element (add or overwrite element to dictionary)
   #object.attribute={} (create new dictionary)
   #object.attribute (read attribute)
@@ -203,7 +203,7 @@
                     ClearScreen
                   }
                   case ("?") {
-                    msgdm (Template("DevModeDescriptionCommands"))
+                    DevModeOutput (Template("DevModeDescriptionCommands"))
                   }
                 }
               }
@@ -214,35 +214,35 @@
                 switch (LCase(com1)) {
                   case ("drop") {
                     setWithoutChange (obj, "parent", game.pov.parent)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("take") {
                     setWithoutChange (obj, "parent", game.pov)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("to") {
                     setWithoutChange (game, "pov", obj)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }                
                   case ("go") {
                     setWithoutChange (game.pov, "parent", obj)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("open") {
                     setWithoutChange (obj, "isopen", true)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("close") {
                     setWithoutChange (obj, "isopen", false)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("on") {
                     setWithoutChange (obj, "switchedon", true)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("off") {
                     setWithoutChange (obj, "switchedon", false)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                 }
               }
@@ -256,7 +256,7 @@
                 switch (LCase(ToString(DictionaryItem(result, "command2")))) {
                   case ("put") {
                     setWithoutChange (obj1, "parent", obj2)
-                    msgdm (Template("DevModeComExecute"))
+                    DevModeOutput (Template("DevModeComExecute"))
                   }
                 }
               }
@@ -429,7 +429,7 @@
           // The value is assigned to the attribute and a corresponding output appears
           // ----------------------------------------------------------------------------------------------------
           set (object, attribute, value)
-          msgdm (Template("DevModeComSetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(value))
+          DevModeOutput (Template("DevModeComSetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(value))
 
         }
 
@@ -464,7 +464,7 @@
           // VALUE-READING
           // The value of the attribute is read out
           // ----------------------------------------------------------------------------------------------------
-          msgdm (Template("DevModeComGetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(current_value))
+          DevModeOutput (Template("DevModeComGetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(current_value))
 
         }
       }
@@ -539,12 +539,20 @@
     ]]>
   </function>
 
-  <function name="msgdm" parameters="str">
+  <function name="DevModeOutput" parameters="str">
     <![CDATA[
       if (game.devmode_showinfos) {
         if (game.devmode_ownfontcolour) col = " color=\"" + game.devmode_fontcolour + "\""
         else col = ""
         msg ("<font" + col + ">" + str + "</font>")
+      }
+    ]]>
+  </function>
+
+  <function name="DevModeOutputError" parameters="str">
+    <![CDATA[
+      if (game.devmode_showinfos) {
+        msg ("<font color=\"red\">" + str + "</font>")
       }
     ]]>
   </function>
@@ -568,7 +576,7 @@
   <function name="setDevMode">
 	  if (HasAttribute(game, "devmode_active")) {
       if (game.devmode_active) {
-        msgdm (Template("DevModeActive"))
+        DevModeOutput (Template("DevModeActive"))
         if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
           foreach(key, game.devmode_attributes) ParseToQuestCode (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
         }
@@ -583,7 +591,7 @@
         if (game.devmode_setverbs) setVerbs
         if (game.devmode_showdebugtable) JS.initDebugTable (GetFileData("DevMode/tabulator.css"))
         if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
-          msgdm (Template("DevModeStartScript"))
+          DevModeOutput (Template("DevModeStartScript"))
           do (game, "devmode_initscript")
         }
         if (game.devmode_selftest) selfTest
@@ -619,7 +627,7 @@
 
   <function name="commandOutput" parameters="command">
     msg("")
-    msgdm ("&gt; " + command)
+    DevModeOutput ("&gt; " + command)
   </function>
 
   <function name="setVerbs">
@@ -634,7 +642,7 @@
     }
     game.enablehyperlinks = true
     msg("")
-    msgdm (Template("DevModeSetVerbs"))
+    DevModeOutput (Template("DevModeSetVerbs"))
   </function>
 
   <function name="getObjectExt" parameters="name" type="object">
@@ -652,7 +660,7 @@
   <function name="selfTest">
     <![CDATA[
       msg ("")
-      msgdm ("<b>Start DevMode-Selftest...</b>")
+      DevModeOutput ("<b>Start DevMode-Selftest...</b>")
 
       // ----------------------------------------------------------------------------------------------------
       // TESTOBJECTS
@@ -660,6 +668,7 @@
       // ----------------------------------------------------------------------------------------------------
       create("testobject1")
       create("testobject2")
+      testobject1.testattribut = ""
 
       // ----------------------------------------------------------------------------------------------------
       // COMMANDS
@@ -684,11 +693,39 @@
       dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut=25")
       dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut=25.25")
       dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",\"testitem3\"]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ListItem(testobject1.testattribut, 2) = \"testitem3\"")
-      dictionary add (commands, "#testobject1.testattribut[]=newtestitem4", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, \"3\") = \"newtestitem4\"")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+      // In den Parsecodes bei Lists und Dictionarys Anführungszeichen bei den Items als String ohne Anführungszeichen behandeln.
+
+      dictionary add (commands, "#testobject1.testattribut=[testitem1,testitem2,testitem3]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ToString(ListItem(testobject1.testattribut, 2)) = \"testitem3\"")
+
+
+
+      dictionary add (commands, "#testobject1.testattribut[]=newtestitem4", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, 3) = \"newtestitem4\"")
       dictionary add (commands, "#testobject1.testattribut[1]", "")
       dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut={\"testkey1\":\"testitem1\",\"testkey2\":\"testitem2\",\"testkey3\":\"testitem3\"}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and DictionaryItem(testobject1.testattribut, \"testkey3\") = \"testitem3\"")
+      dictionary add (commands, "#testobject1.testattribut={\"testkey1\":\"testitem1\",\"testkey2\":\"testitem2\",\"testkey3\":\"testitem3\"}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ToString(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"testitem3\"")
       dictionary add (commands, "#testobject1.testattribut{testitem1}=\"newtestitem1\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ListItem(testobject1.testattribut, \"testkey1\") = \"newtestitem1\"")
       dictionary add (commands, "#testobject1.testattribut{testitem1}", "")
       dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
@@ -698,14 +735,22 @@
       // TESTING
       // Testing the Commands
       // ----------------------------------------------------------------------------------------------------
+      iserror = false
       foreach (command, commands) {
-        on ready {
-          msgdm ("<br/>&gt; " + command)
-          HandleSingleCommand(command)
+        if (not iserror) {
           on ready {
-            compare = ToString(DictionaryItem(commands, command))
-            if (compare <> "") result = Eval(compare)
-            if (not result) error(Template("DevModeComSelfTestFailed"))
+            DevModeOutput ("<br/>&gt; " + command)
+            HandleSingleCommand(command)
+            on ready {
+              compare = ToString(DictionaryItem(commands, command))
+              if (compare <> "") result = Eval(compare)
+              DevModeOutput ("Quest-Presentation: testobject1.testattribut = " + ToString(testobject1.testattribut))
+              if (not result) {
+                iserror = true
+                DevModeOutputError (Template("DevModeComSelfTestFailed"))
+                Log (ToString(ListItem(testobject1.testattribut, 2)))
+              }
+            }
           }
         }
       }
