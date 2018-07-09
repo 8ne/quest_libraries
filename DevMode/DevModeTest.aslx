@@ -17,13 +17,14 @@
     <enablehyperlinks />
     <devmode_setverbs />
     <devmode_attributes type="stringdictionary" />
-    <attr name="devmode_pov">player2</attr>
-    <attr name="devmode_povpos">room2</attr>
+    <attr name="devmode_pov">player1</attr>
+    <attr name="devmode_povpos">room1</attr>
     <devmode_showdebugtable />
     <devmode_showinfos />
     <attr name="feature_devmode" type="boolean">false</attr>
     <attr name="devmode_fontcolour">Green</attr>
     <devmode_ownfontcolour />
+    <devmode_selftest />
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
     </attr>
@@ -55,9 +56,10 @@
         <value>Take</value>
       </displayverbs>
     </object>
-    <object name="table">
+    <object name="test">
       <inherit name="editor_object" />
-      <alias>Brown Table</alias>
+      <alias>Test</alias>
+      <test type="string"></test>
     </object>
   </object>
   <object name="room2">

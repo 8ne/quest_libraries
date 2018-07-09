@@ -194,9 +194,7 @@ function initDebugTable(css) {
         cellEdited: function (cell) { // When you change the attributes
             console.log("ATT: " + cell.getRow().getData().attribute);
             console.log("VAL: " + cell.getRow().getData().value);
-            ASLEvent("ParseToQuestCode", selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value);
-            // command = "#" + selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value + "\r\n";
-            // $('#txtCommand').val(command);
+            ASLEvent("setTableData", selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value);
         }
     });
 

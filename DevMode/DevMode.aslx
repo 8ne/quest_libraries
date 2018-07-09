@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.25
+  Version 1.3
   ****************************************************************************************************
   Quest-Version: 5.7
   ****************************************************************************************************
@@ -20,7 +20,7 @@
   ****************************************************************************************************
 
   ****************************************************************************************************
-  Version 1.25
+  Version 1.3
   Editable debug table added.
   The code to be executed in DevMode slightly changed.
   It is now closer to JSON. Comma separators are now used instead of semicolons.
@@ -105,9 +105,10 @@
   <template name="DevModeChangedPovPos">Position of the player changed to </template>
   <template name="DevModeStartScript">Initialization script started.</template>
   <template name="DevModeSetVerbs">Verbs assigned.</template>
-  <template name="DevModeComExecute">Command executed: </template>
+  <template name="DevModeComExecute">Command executed.</template>
   <template name="DevModeComSetAttribute">Set Attribute: </template>
   <template name="DevModeComGetAttribute">Get Attribute: </template>
+  <template name="DevModeComSelfTestFailed">The assignment as it should be after the command is incorrect.</template>
   <dynamictemplate name="DevModeErrorCantFindObject">"The object with the name '" + text + "' cannot be found."</dynamictemplate>
   <dynamictemplate name="DevModeErrorCantFindAttribute">"The attribute with the name '" + text + "' cannot be found."</dynamictemplate>
 
@@ -149,9 +150,10 @@
   <template name="DevModeChangedPovPos">Position des Spielers geändert zu </template>
   <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
   <template name="DevModeSetVerbs">Verben zugeordnet.</template>
-  <template name="DevModeComExecute">Kommando ausgeführt: </template>
+  <template name="DevModeComExecute">Kommando ausgeführt.</template>
   <template name="DevModeComSetAttribute">Attribut gesetzt: </template>
   <template name="DevModeComGetAttribute">Attribut abgefragt: </template>
+  <template name="DevModeComSelfTestFailed">Die Zuordnung, wie sie nach dem Kommando sein sollte ist inkorrekt.</template>
   <dynamictemplate name="DevModeErrorCantFindObject">"Das Objekt mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
   <dynamictemplate name="DevModeErrorCantFindAttribute">"Das Attribut mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
 
@@ -212,33 +214,35 @@
                 switch (LCase(com1)) {
                   case ("drop") {
                     setWithoutChange (obj, "parent", game.pov.parent)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                   case ("take") {
                     setWithoutChange (obj, "parent", game.pov)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                   case ("to") {
-                    setPov (obj)
+                    setWithoutChange (game, "pov", obj)
+                    msgdm (Template("DevModeComExecute"))
                   }                
                   case ("go") {
-                    setPovPos (obj)
+                    setWithoutChange (game.pov, "parent", obj)
+                    msgdm (Template("DevModeComExecute"))
                   }
                   case ("open") {
                     setWithoutChange (obj, "isopen", true)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                   case ("close") {
                     setWithoutChange (obj, "isopen", false)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                   case ("on") {
                     setWithoutChange (obj, "switchedon", true)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                   case ("off") {
                     setWithoutChange (obj, "switchedon", false)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                 }
               }
@@ -252,7 +256,7 @@
                 switch (LCase(ToString(DictionaryItem(result, "command2")))) {
                   case ("put") {
                     setWithoutChange (obj1, "parent", obj2)
-                    msgdm (Template("DevModeComExecute") + text)
+                    msgdm (Template("DevModeComExecute"))
                   }
                 }
               }
@@ -561,16 +565,6 @@
     }
   </function>
 
-  <function name="setPov" parameters="obj">
-    setWithoutChange (game, "pov", obj)
-    msgdm (Template("DevModeChangedPov") + game.pov.alias)
-  </function>
-
-  <function name="setPovPos" parameters="obj">
-    setWithoutChange (game.pov, "parent", obj)
-    msgdm (Template("DevModeChangedPovPos") + game.pov.parent.alias)
-  </function>
-
   <function name="setDevMode">
 	  if (HasAttribute(game, "devmode_active")) {
       if (game.devmode_active) {
@@ -578,14 +572,21 @@
         if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
           foreach(key, game.devmode_attributes) ParseToQuestCode (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
         }
-        if (game.devmode_changepov) setPov (getObjectExt(game.devmode_pov))
-        if (game.devmode_changepovpos) setPovPos (getObjectExt(game.devmode_povpos))
+        if (game.devmode_changepov) {
+          commandOutput ("#to " + game.devmode_pov)
+          HandleSingleCommand ("#to " + game.devmode_pov)
+        }
+        if (game.devmode_changepovpos) {
+          commandOutput ("#go " + game.devmode_povpos)
+          HandleSingleCommand ("#go " + game.devmode_povpos)
+        }
         if (game.devmode_setverbs) setVerbs
         if (game.devmode_showdebugtable) JS.initDebugTable (GetFileData("DevMode/tabulator.css"))
         if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
           msgdm (Template("DevModeStartScript"))
           do (game, "devmode_initscript")
         }
+        if (game.devmode_selftest) selfTest
       }
 	  }
   </function>
@@ -611,6 +612,16 @@
     JS.setTableData("attr", datastr)
   </function>
 
+  <function name="setTableData" parameters="command">
+    ParseToQuestCode (command)
+    commandOutput ("#" + command)
+  </function>
+
+  <function name="commandOutput" parameters="command">
+    msg("")
+    msgdm ("&gt; " + command)
+  </function>
+
   <function name="setVerbs">
     verbs = game.devmode_verbs
     foreach (object, AllObjects()) {
@@ -622,6 +633,7 @@
       }
     }
     game.enablehyperlinks = true
+    msg("")
     msgdm (Template("DevModeSetVerbs"))
   </function>
 
@@ -636,6 +648,69 @@
     }
     return (obj)
   </function>
+  
+  <function name="selfTest">
+    <![CDATA[
+      msg ("")
+      msgdm ("<b>Start DevMode-Selftest...</b>")
+
+      // ----------------------------------------------------------------------------------------------------
+      // TESTOBJECTS
+      // Generate testobjects
+      // ----------------------------------------------------------------------------------------------------
+      create("testobject1")
+      create("testobject2")
+
+      // ----------------------------------------------------------------------------------------------------
+      // COMMANDS
+      // Generate commmands for testing
+      // ----------------------------------------------------------------------------------------------------
+      commands = NewDictionary ()
+      dictionary add (commands, "#take testobject1", "Got (testobject1)")
+      dictionary add (commands, "#drop testobject1", "Contains (game.pov.parent, testobject1)")
+      dictionary add (commands, "#put testobject1 in testobject2", "Contains (testobject2, testobject1)")
+      dictionary add (commands, "#open testobject1", "testobject1.isopen")
+      dictionary add (commands, "#close testobject1", "not testobject1.isopen")
+      dictionary add (commands, "#on testobject1", "IsSwitchedOn(testobject1)")
+      dictionary add (commands, "#off testobject1", "not IsSwitchedOn(testobject1)")
+      dictionary add (commands, "#to testobject1", "game.pov = testobject1")
+      dictionary add (commands, "#go testobject2", "game.pov.parent = testobject2")
+      dictionary add (commands, "#testobject1.testattribut=true", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
+      dictionary add (commands, "#testobject1.testattribut=false", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
+      dictionary add (commands, "#testobject1.testattribut=?", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
+      dictionary add (commands, "#testobject1.testattribut=!", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
+      dictionary add (commands, "#testobject1.testattribut=~", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
+      dictionary add (commands, "#testobject1.testattribut=\"teststring\"", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"teststring\"")
+      dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut=25")
+      dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut=25.25")
+      dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
+      dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",\"testitem3\"]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ListItem(testobject1.testattribut, 2) = \"testitem3\"")
+      dictionary add (commands, "#testobject1.testattribut[]=newtestitem4", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, \"3\") = \"newtestitem4\"")
+      dictionary add (commands, "#testobject1.testattribut[1]", "")
+      dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
+      dictionary add (commands, "#testobject1.testattribut={\"testkey1\":\"testitem1\",\"testkey2\":\"testitem2\",\"testkey3\":\"testitem3\"}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and DictionaryItem(testobject1.testattribut, \"testkey3\") = \"testitem3\"")
+      dictionary add (commands, "#testobject1.testattribut{testitem1}=\"newtestitem1\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ListItem(testobject1.testattribut, \"testkey1\") = \"newtestitem1\"")
+      dictionary add (commands, "#testobject1.testattribut{testitem1}", "")
+      dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
+      dictionary add (commands, "#testobject1.testattribut", "")
+
+      // ----------------------------------------------------------------------------------------------------
+      // TESTING
+      // Testing the Commands
+      // ----------------------------------------------------------------------------------------------------
+      foreach (command, commands) {
+        on ready {
+          msgdm ("<br/>&gt; " + command)
+          HandleSingleCommand(command)
+          on ready {
+            compare = ToString(DictionaryItem(commands, command))
+            if (compare <> "") result = Eval(compare)
+            if (not result) error(Template("DevModeComSelfTestFailed"))
+          }
+        }
+      }
+    ]]>
+  </function>
 
   <!-- Types -->
 
@@ -645,12 +720,13 @@
     <devmode_changepovpos type="boolean">false</devmode_changepovpos>
     <devmode_setinitscript type="boolean">false</devmode_setinitscript>
     <devmode_setverbs type="boolean">true</devmode_setverbs>
-    <devmode_verbs type="simplestringlist">#drop;#take;#to;#open;#close;#on;#off</devmode_verbs>
     <devmode_showinfos type="boolean">true</devmode_showinfos>
     <devmode_showdebugtable type="boolean">true</devmode_showdebugtable>
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
     <devmode_fontcolour type="string">Green</devmode_fontcolour>
+    <devmode_selftest type="boolean">false</devmode_selftest>
     <devmode_attributes type="stringdictionary" />
+    <devmode_verbs type="simplestringlist">#drop;#take;#to;#open;#close;#on;#off</devmode_verbs>
  </type>
 
   <!-- Interface -->
