@@ -8,7 +8,10 @@
   by SoonGames, 2018
   Version 1.3
   ****************************************************************************************************
-  Quest-Version: 5.7
+  Compatible with Quest 5.7
+  ****************************************************************************************************
+  Edited in Visual Studio Code 1.25.0
+  - with extension Mark Jump
   ****************************************************************************************************
   If you are viewing this on GitHub and want to download it, right click on the RAW button
   just above, and select "Save link as..."
@@ -89,7 +92,7 @@
   
   <!--
   ****************************************************************************************************
-  Include debug table
+  // MARK: Include debug table
   
   ****************************************************************************************************
   -->
@@ -98,7 +101,7 @@
 
   <!--
   ****************************************************************************************************
-  Languages
+  // MARK: Languages
   
   ****************************************************************************************************
   -->
@@ -192,7 +195,7 @@
 
   <!--
   ****************************************************************************************************
-  devmode_commands
+  // MARK: devmode_commands
   The commands are processed here
   ****************************************************************************************************
   -->
@@ -299,7 +302,7 @@
 
   <!--
   ****************************************************************************************************
-  ParseToQuestCode
+  // MARK: ParseToQuestCode
   Converts the flyscript to quest code
   ****************************************************************************************************
   -->
@@ -310,7 +313,7 @@
       // the regular expression to check the user input.
       // RegEx available in https://regex101.com/r/9hkAAu/7
       // ----------------------------------------------------------------------------------------------------
-      regex = "^(?<object>.+?)\\.(?<attribute>.+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:(?<istoken>\\=)(?:(?<valitemtoken>(?:\\[|\\{)?)(?<value>.*?)(?:\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+      regex = "^(?<object>\\S+?)\\.(?<attribute>\\S+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:\\s?(?<istoken>\\=)\\s?(?:(?<valitemtoken>(?:\\[|\\{)?)(?<value>.*?)(?:\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
       
       // ----------------------------------------------------------------------------------------------------
       // SUCCESS MATCH
@@ -364,7 +367,7 @@
             value = NewList ()
             if (result["value"] <> "") {
               list = Split(result["value"], ",")
-              foreach (item, list) list add (value, Eval(item))
+              foreach (item, list) list add (value, Eval(Trim(item)))
             }
           }
 
@@ -381,7 +384,7 @@
                   dic = Split(assign, ":")
                   dickey = dic[0]
                   dicvalue = dic[1]
-                  dictionary add (value, dickey, Eval(dicvalue))
+                  dictionary add (value, dickey, Eval(Trim(dicvalue)))
                 }
                 else {
                   error (Template("DevModeErrorWrongFormat"))
@@ -411,7 +414,6 @@
           // Value is evaluated
           // ----------------------------------------------------------------------------------------------------
           else {
-            Log (result["value"])
             value = Eval(result["value"])
           }
 
@@ -500,7 +502,7 @@
 
   <!--
   ****************************************************************************************************
-  ParseToFlyScript
+  // MARK: ParseToFlyScript
   Converts the quest code to flyscript
   ****************************************************************************************************
   -->
@@ -519,8 +521,11 @@
         case ("list", "stringlist", "objectlist") {
           list = NewStringList()
           foreach (item, text) {
-            if (TypeOf(item) = "string") item = ToString("\"" + item + "\"")
-            else ToString(item)
+            switch (TypeOf(item)) {
+              case ("string") item = "\"" + item + "\""
+              case ("object") item = item.name
+              default item = ToString(item)
+            }
             list add (list, item)
           }
           parsetext = "[" + Join (list, ",") + "]"
@@ -529,9 +534,12 @@
           list = NewStringList()
           foreach (key, text) {
             item = DictionaryItem(text, key)
-            if (TypeOf(item) = "string") item = ToString("\"" + item + "\"")
-            else if (TypeOf(item) = "script") item = "<" + Replace(ToString(item), "Script: ", "") + ">"
-            else ToString(item)
+            switch (TypeOf(item)) {
+              case ("string") item = "\"" + item + "\""
+              case ("object") item = item.name
+              case ("script") item = "<" + Replace(ToString(item), "Script: ", "") + ">"
+              default item = ToString(item)
+            }
             list add (list, key + ":" + item)
           }
           parsetext = "{" + Join (list, ",") + "}"
@@ -546,7 +554,7 @@
 
   <!--
   ****************************************************************************************************
-  DevModeOutput
+  // MARK: DevModeOutput
   
   ****************************************************************************************************
   -->
@@ -562,7 +570,7 @@
 
   <!--
   ****************************************************************************************************
-  DevModeOutputError
+  // MARK: DevModeOutputError
   
   ****************************************************************************************************
   -->
@@ -576,7 +584,7 @@
 
   <!--
   ****************************************************************************************************
-  setWithoutChange
+  // MARK: setWithoutChange
   
   ****************************************************************************************************
   -->
@@ -598,7 +606,7 @@
 
   <!--
   ****************************************************************************************************
-  setDevMode
+  // MARK: setDevMode
   
   ****************************************************************************************************
   -->
@@ -630,7 +638,7 @@
 
   <!--
   ****************************************************************************************************
-  getTableDataNames
+  // MARK: getTableDataNames
   
   ****************************************************************************************************
   -->
@@ -646,7 +654,7 @@
 
   <!--
   ****************************************************************************************************
-  getTableDataAttr
+  // MARK: getTableDataAttr
   
   ****************************************************************************************************
   -->
@@ -663,7 +671,7 @@
 
   <!--
   ****************************************************************************************************
-  setTableData
+  // MARK: setTableData
   
   ****************************************************************************************************
   -->
@@ -674,7 +682,7 @@
 
   <!--
   ****************************************************************************************************
-  commandOutput
+  // MARK: commandOutput
   
   ****************************************************************************************************
   -->
@@ -685,7 +693,7 @@
 
   <!--
   ****************************************************************************************************
-  setVerbs
+  // MARK: setVerbs
   
   ****************************************************************************************************
   -->
@@ -706,7 +714,7 @@
 
   <!--
   ****************************************************************************************************
-  getObjectExt
+  // MARK: getObjectExt
   
   ****************************************************************************************************
   -->
@@ -724,7 +732,7 @@
 
   <!--
   ****************************************************************************************************
-  selfTest
+  // MARK: selfTest
   
   ****************************************************************************************************
   -->
@@ -761,15 +769,16 @@
       dictionary add (commands, "#testobject1.testattribut=!", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
       dictionary add (commands, "#testobject1.testattribut=~", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
       dictionary add (commands, "#testobject1.testattribut=\"teststring\"", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"teststring\"")
-      dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut=25")
-      dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut=25.25")
+      dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut = 25")
+      dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut = 25.25")
+      dictionary add (commands, "#testobject1.testattribut=testobject1", "TypeOf(testobject1.testattribut) = \"object\" and testobject1.testattribut = testobject1")
       dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",\"testitem3\"]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ToString(ListItem(testobject1.testattribut, 2)) = \"testitem3\"")
-      dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem4\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, 3) = \"newtestitem4\"")
+      dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",testobject1,testobject2]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 0)) = \"string\" and ListItem(testobject1.testattribut, 0) = \"testitem1\" and TypeOf(ListItem(testobject1.testattribut, 1)) = \"string\" and ListItem(testobject1.testattribut, 1) = \"testitem2\" and TypeOf(ListItem(testobject1.testattribut, 2)) = \"object\" and ListItem(testobject1.testattribut, 2) = testobject1 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"object\" and ListItem(testobject1.testattribut, 3) = testobject2")
+      dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem5\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 5 and ListItem(testobject1.testattribut, 4) = \"newtestitem5\"")
       dictionary add (commands, "#testobject1.testattribut[1]", "")
       dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut={testkey1:\"testitem1\",testkey2:\"testitem2\",testkey3:\"testitem3\"}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ToString(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"testitem3\"")
-      dictionary add (commands, "#testobject1.testattribut{testkey1}=\"newtestitem1\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and DictionaryItem(testobject1.testattribut, \"testkey1\") = \"newtestitem1\"")
+      dictionary add (commands, "#testobject1.testattribut={testkey1:\"testitem1\",testkey2:\"testitem2\",testkey3:testobject1,testkey4:testobject2}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 4 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey1\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey1\") = \"testitem1\" and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey2\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey2\") = \"testitem2\" and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"object\" and DictionaryItem(testobject1.testattribut, \"testkey3\") = testobject1 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey4\")) = \"object\" and DictionaryItem(testobject1.testattribut, \"testkey4\") = testobject2")
+      dictionary add (commands, "#testobject1.testattribut{testkey4}=\"newtestitem4\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 4 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey4\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey4\") = \"newtestitem4\"")
       dictionary add (commands, "#testobject1.testattribut{testkey1}", "")
       dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
       dictionary add (commands, "#testobject1.testattribut", "")
@@ -802,7 +811,7 @@
 
   <!--
   ****************************************************************************************************
-  Types
+  // MARK: Types
   
   ****************************************************************************************************
   -->
@@ -824,7 +833,7 @@
 
   <!--
   ****************************************************************************************************
-  Interface
+  // MARK: Interface
   
   ****************************************************************************************************
   -->
