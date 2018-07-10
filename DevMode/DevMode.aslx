@@ -704,8 +704,8 @@
   ****************************************************************************************************
   -->
   <function name="setTableData" parameters="command">
-    ParseToQuestCode (command)
     commandOutput ("#" + command)
+    ParseToQuestCode (command)
   </function>
 
   <!--

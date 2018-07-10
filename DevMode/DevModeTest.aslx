@@ -24,7 +24,7 @@
     <attr name="feature_devmode" type="boolean">false</attr>
     <attr name="devmode_fontcolour">Green</attr>
     <devmode_ownfontcolour />
-    <devmode_selftest />
+    <attr name="devmode_selftest" type="boolean">false</attr>
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
     </attr>
