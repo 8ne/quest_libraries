@@ -87,11 +87,21 @@
 
 -->
   
-  <!-- Include debug table -->
+  <!--
+  ****************************************************************************************************
+  Include debug table
+  
+  ****************************************************************************************************
+  -->
   <javascript src="DevMode/tabulator.min.js" />
   <javascript src="DevMode/debugtable.js" />
 
-  <!-- Languages -->
+  <!--
+  ****************************************************************************************************
+  Languages
+  
+  ****************************************************************************************************
+  -->
   <!-- English -->
   <template name="DevModeErrorWrongFormat">That's the wrong format.</template>
   <template name="DevModeErrorObjectNotRecognised">The object was not found.</template>
@@ -180,7 +190,12 @@
   <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Listen (["Hallo","Welt","!"]) und Wörterbücher ({H:"Hallo",W:"Welt"} zu erstellen.)]]></template>
   -->
 
-  <!-- Commands -->
+  <!--
+  ****************************************************************************************************
+  devmode_commands
+  The commands are processed here
+  ****************************************************************************************************
+  -->
   <command name="devmode_commands">
     <pattern type="string"></pattern>
     <pattern type="string"><![CDATA[^#(?<text>.*)]]></pattern>
@@ -282,8 +297,12 @@
     </script>
   </command>
 
-  <!-- Functions -->
-
+  <!--
+  ****************************************************************************************************
+  ParseToQuestCode
+  Converts the flyscript to quest code
+  ****************************************************************************************************
+  -->
   <function name="ParseToQuestCode" parameters="text">
     <![CDATA[
       // ----------------------------------------------------------------------------------------------------
@@ -397,28 +416,26 @@
           }
 
           // ----------------------------------------------------------------------------------------------------
-          // VALUE-LIST
+          // SET-ATTRIBUTE-LIST
           // Add a new item to a list or overwrite an existing one
           // ----------------------------------------------------------------------------------------------------
           if (result["itemtoken"] = "[") {
             if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") current_value = NewList ()
-            if (result["item"] <> "") {
-              if (result["item"] in current_value) list remove (current_value, result["item"])
-              list add (current_value, value)
-              value = NewList ()
-              value = current_value
-            }
+            if (result["item"] in current_value) list remove (current_value, result["item"])
+            list add (current_value, value)
+            value = NewList ()
+            value = current_value
           }
 
           // ----------------------------------------------------------------------------------------------------
-          // VALUE-DICTIONARY
+          // SET-ATTRIBUTE-DICTIONARY
           // Add a new item to a dictionary or overwrite an existing one
           // ----------------------------------------------------------------------------------------------------
           else if (result["itemtoken"] = "{") {
-            if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") current_value = NewDictionary ()
+            if (TypeOf(current_value) <> "dictionary" and TypeOf(current_value) <> "objectdictionary" and TypeOf(current_value) <> "stringdictionary") current_value = NewDictionary ()
             if (result["item"] <> "") {
               if (result["item"] in current_value) dictionary remove (current_value, result["item"])
-              dictionary add (current_value, value)
+              dictionary add (current_value, result["item"], value)
               value = NewDictionary ()
               value = current_value
             }
@@ -429,7 +446,7 @@
           // The value is assigned to the attribute and a corresponding output appears
           // ----------------------------------------------------------------------------------------------------
           set (object, attribute, value)
-          DevModeOutput (Template("DevModeComSetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(value))
+          DevModeOutput (Template("DevModeComSetAttribute") + object.name + "." + attribute + "=" + ParseToFlyScript(value))
 
         }
 
@@ -438,9 +455,10 @@
         // If no equal sign has been set, the result is treated as readout.
         // ----------------------------------------------------------------------------------------------------
         else {
+          item = ""
 
           // ----------------------------------------------------------------------------------------------------
-          // ATTRIBUTE-LIST
+          // GET-ATTRIBUTE-LIST
           // If the attribute is a list and the specified item is in it, the content is read out.
           // ----------------------------------------------------------------------------------------------------
           if (result["itemtoken"] = "[") {
@@ -448,23 +466,25 @@
             else if (not IsNumeric(result["item"])) error (Template("DevModeErrorWrongTyp"))
             else if (ToInt(result["item"]) > ListCount(current_value)-1) error (Template("DevModeErrorWrongKey"))
             else current_value = ListItem(current_value, ToInt(result["item"]))
+            item = "[" + result["item"] + "]"
           }
 
           // ----------------------------------------------------------------------------------------------------
-          // ATTRIBUTE-DICTIONARY
+          // GET-ATTRIBUTE-DICTIONARY
           // If the attribute is a dictionary and the specified item is in it, the content is read out.
           // ----------------------------------------------------------------------------------------------------
           if (result["itemtoken"] = "{") {
             if (TypeOf(current_value) <> "dictionary" and TypeOf(current_value) <> "objectdictionary" and TypeOf(current_value) <> "stringdictionary") error (Template("DevModeErrorWrongTyp"))
             else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
             else current_value = DictionaryItem(current_value, result["item"])
+            item = "{" + result["item"] + "}"
           }
 
           // ----------------------------------------------------------------------------------------------------
           // VALUE-READING
           // The value of the attribute is read out
           // ----------------------------------------------------------------------------------------------------
-          DevModeOutput (Template("DevModeComGetAttribute") + object.name + "." + attribute + "=" + ParseToDevCode(current_value))
+          DevModeOutput (Template("DevModeComGetAttribute") + object.name + "." + attribute + item + "=" + ParseToFlyScript(current_value))
 
         }
       }
@@ -478,7 +498,13 @@
     ]]>
   </function>
 
-  <function name="ParseToDevCode" parameters="text" type="string">
+  <!--
+  ****************************************************************************************************
+  ParseToFlyScript
+  Converts the quest code to flyscript
+  ****************************************************************************************************
+  -->
+  <function name="ParseToFlyScript" parameters="text" type="string">
     <![CDATA[
       switch (TypeOf(text)) {
         case ("string") {
@@ -539,6 +565,12 @@
     ]]>
   </function>
 
+  <!--
+  ****************************************************************************************************
+  DevModeOutput
+  
+  ****************************************************************************************************
+  -->
   <function name="DevModeOutput" parameters="str">
     <![CDATA[
       if (game.devmode_showinfos) {
@@ -549,6 +581,12 @@
     ]]>
   </function>
 
+  <!--
+  ****************************************************************************************************
+  DevModeOutputError
+  
+  ****************************************************************************************************
+  -->
   <function name="DevModeOutputError" parameters="str">
     <![CDATA[
       if (game.devmode_showinfos) {
@@ -557,6 +595,12 @@
     ]]>
   </function>
 
+  <!--
+  ****************************************************************************************************
+  setWithoutChange
+  
+  ****************************************************************************************************
+  -->
   <function name="setWithoutChange" parameters="obj, att, val">
     cha = "changed" + att
     bla => { }
@@ -573,6 +617,12 @@
     }
   </function>
 
+  <!--
+  ****************************************************************************************************
+  setDevMode
+  
+  ****************************************************************************************************
+  -->
   <function name="setDevMode">
 	  if (HasAttribute(game, "devmode_active")) {
       if (game.devmode_active) {
@@ -599,6 +649,12 @@
 	  }
   </function>
 
+  <!--
+  ****************************************************************************************************
+  getTableDataNames
+  
+  ****************************************************************************************************
+  -->
   <function name="getTableDataNames" parameters="empty">
     data = NewStringList ()
     list add (data, "{\"name\":\"game\"}")
@@ -609,27 +665,51 @@
     JS.setTableData("names", datastr)
   </function>
 
+  <!--
+  ****************************************************************************************************
+  getTableDataAttr
+  
+  ****************************************************************************************************
+  -->
   <function name="getTableDataAttr" parameters="name">
     data = NewStringList ()
     obj = GetObject (name)
     foreach (attr, GetAttributeNames (obj, true)) {
-      val = ParseToDevCode (GetAttribute (obj, attr))
+      val = ParseToFlyScript (GetAttribute (obj, attr))
       list add (data, "{\"attribute\":\"" + attr + "\",\"value\":\"" + Replace(val, "\"", "\\\"") + "\"}")
     }
     datastr = "[" + Join (data, ",") + "]"
     JS.setTableData("attr", datastr)
   </function>
 
+  <!--
+  ****************************************************************************************************
+  setTableData
+  
+  ****************************************************************************************************
+  -->
   <function name="setTableData" parameters="command">
     ParseToQuestCode (command)
     commandOutput ("#" + command)
   </function>
 
+  <!--
+  ****************************************************************************************************
+  commandOutput
+  
+  ****************************************************************************************************
+  -->
   <function name="commandOutput" parameters="command">
     msg("")
     DevModeOutput ("&gt; " + command)
   </function>
 
+  <!--
+  ****************************************************************************************************
+  setVerbs
+  
+  ****************************************************************************************************
+  -->
   <function name="setVerbs">
     verbs = game.devmode_verbs
     foreach (object, AllObjects()) {
@@ -645,6 +725,12 @@
     DevModeOutput (Template("DevModeSetVerbs"))
   </function>
 
+  <!--
+  ****************************************************************************************************
+  getObjectExt
+  
+  ****************************************************************************************************
+  -->
   <function name="getObjectExt" parameters="name" type="object">
     obj = GetObject(name)
     if (obj = null) {
@@ -656,7 +742,13 @@
     }
     return (obj)
   </function>
+
+  <!--
+  ****************************************************************************************************
+  selfTest
   
+  ****************************************************************************************************
+  -->
   <function name="selfTest">
     <![CDATA[
       msg ("")
@@ -693,41 +785,13 @@
       dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut=25")
       dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut=25.25")
       dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-      // In den Parsecodes bei Lists und Dictionarys Anführungszeichen bei den Items als String ohne Anführungszeichen behandeln.
-
       dictionary add (commands, "#testobject1.testattribut=[testitem1,testitem2,testitem3]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ToString(ListItem(testobject1.testattribut, 2)) = \"testitem3\"")
-
-
-
-      dictionary add (commands, "#testobject1.testattribut[]=newtestitem4", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, 3) = \"newtestitem4\"")
+      dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem4\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, 3) = \"newtestitem4\"")
       dictionary add (commands, "#testobject1.testattribut[1]", "")
       dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut={\"testkey1\":\"testitem1\",\"testkey2\":\"testitem2\",\"testkey3\":\"testitem3\"}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ToString(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"testitem3\"")
-      dictionary add (commands, "#testobject1.testattribut{testitem1}=\"newtestitem1\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ListItem(testobject1.testattribut, \"testkey1\") = \"newtestitem1\"")
-      dictionary add (commands, "#testobject1.testattribut{testitem1}", "")
+      dictionary add (commands, "#testobject1.testattribut={testkey1:testitem1,testkey2:testitem2,testkey3:testitem3}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ToString(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"testitem3\"")
+      dictionary add (commands, "#testobject1.testattribut{testkey1}=\"newtestitem1\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and DictionaryItem(testobject1.testattribut, \"testkey1\") = \"newtestitem1\"")
+      dictionary add (commands, "#testobject1.testattribut{testkey1}", "")
       dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
       dictionary add (commands, "#testobject1.testattribut", "")
 
@@ -757,8 +821,12 @@
     ]]>
   </function>
 
-  <!-- Types -->
-
+  <!--
+  ****************************************************************************************************
+  Types
+  
+  ****************************************************************************************************
+  -->
   <type name="devmode">
     <devmode_active type="boolean">true</devmode_active>
     <devmode_changepov type="boolean">false</devmode_changepov>
@@ -774,8 +842,13 @@
     <devmode_verbs type="simplestringlist">#drop;#take;#to;#open;#close;#on;#off</devmode_verbs>
  </type>
 
-  <!-- Interface -->
 
+  <!--
+  ****************************************************************************************************
+  Interface
+  
+  ****************************************************************************************************
+  -->
   <tab>
     <parent>_GameEditor</parent>
     <caption>[EditorGameDevMode]</caption>
