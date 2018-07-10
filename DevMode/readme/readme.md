@@ -11,7 +11,7 @@
 ![Preview DevMode](https://raw.githubusercontent.com/SoonGames/quest_libraries/master/DevMode/readme/DevMode.gif)
 
 ---
-**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/DevMode/DevMode.aslx)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/SoonGames/quest_libraries/raw/master/DevMode/DevMode.zip)**
 
 
 ---
