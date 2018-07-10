@@ -364,7 +364,7 @@
             value = NewList ()
             if (result["value"] <> "") {
               list = Split(result["value"], ",")
-              foreach (item, list) list add (value, item)
+              foreach (item, list) list add (value, Eval(item))
             }
           }
 
@@ -381,7 +381,7 @@
                   dic = Split(assign, ":")
                   dickey = dic[0]
                   dicvalue = dic[1]
-                  dictionary add (value, dickey, dicvalue)
+                  dictionary add (value, dickey, Eval(dicvalue))
                 }
                 else {
                   error (Template("DevModeErrorWrongFormat"))
@@ -516,46 +516,25 @@
         case ("script") {
           parsetext = "<" + Replace(ToString(text), "Script: ", "") + ">"
         }
-        case ("list") {
-          arr = NewStringList()
-          foreach (item, text) list add (arr, item)
-          parsetext = "[" + Join (arr, ",") + "]"
-        }
-        case ("stringlist") {
-          arr = NewStringList()
-          foreach (str, text) list add (arr, "\"" + str + "\"")
-          parsetext = "[" + Join (arr, ",") + "]"
-        }
-        case ("objectlist") {
-          arr = NewStringList()
-          foreach (obj, text) list add (arr, obj.name)
-          parsetext = "[" + Join (arr, ",") + "]"
-        }
-        case ("dictionary") {
-          arr = NewStringList()
-          foreach (key, text) list add (arr, key + ":" + DictionaryItem(text, key))
-          parsetext = "{" + Join (arr, ",") + "}"
-        }
-        case ("stringdictionary") {
-          arr = NewStringList()
-          foreach (key, text) list add (arr, key + ":\"" + StringDictionaryItem(text, key) + "\"")
-          parsetext = "{" + Join (arr, ",") + "}"
-        }
-        case ("objectdictionary") {
-          arr = NewStringList()
-          foreach (key, text) {
-            obj = ObjectDictionaryItem(text, key)
-            list add (arr, key + ":" + obj.name)
+        case ("list", "stringlist", "objectlist") {
+          list = NewStringList()
+          foreach (item, text) {
+            if (TypeOf(item) = "string") item = ToString("\"" + item + "\"")
+            else ToString(item)
+            list add (list, item)
           }
-          parsetext = "{" + Join (arr, ",") + "}"
+          parsetext = "[" + Join (list, ",") + "]"
         }
-        case ("scriptdictionary") {
-          arr = NewStringList()
+        case ("dictionary", "stringdictionary", "objectdictionary", "scriptdictionary") {
+          list = NewStringList()
           foreach (key, text) {
-            scr = ScriptDictionaryItem(text, key)
-            list add (arr, key + ":" + "<" + Replace(ToString(scr), "Script: ", "") + ">")
+            item = DictionaryItem(text, key)
+            if (TypeOf(item) = "string") item = ToString("\"" + item + "\"")
+            else if (TypeOf(item) = "script") item = "<" + Replace(ToString(item), "Script: ", "") + ">"
+            else ToString(item)
+            list add (list, key + ":" + item)
           }
-          parsetext = "{" + Join (arr, ",") + "}"
+          parsetext = "{" + Join (list, ",") + "}"
         }
         default {
           parsetext = ToString(text)
@@ -785,11 +764,11 @@
       dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut=25")
       dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut=25.25")
       dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut=[testitem1,testitem2,testitem3]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ToString(ListItem(testobject1.testattribut, 2)) = \"testitem3\"")
+      dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",\"testitem3\"]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 3 and ToString(ListItem(testobject1.testattribut, 2)) = \"testitem3\"")
       dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem4\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and ListItem(testobject1.testattribut, 3) = \"newtestitem4\"")
       dictionary add (commands, "#testobject1.testattribut[1]", "")
       dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut={testkey1:testitem1,testkey2:testitem2,testkey3:testitem3}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ToString(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"testitem3\"")
+      dictionary add (commands, "#testobject1.testattribut={testkey1:\"testitem1\",testkey2:\"testitem2\",testkey3:\"testitem3\"}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and ToString(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"testitem3\"")
       dictionary add (commands, "#testobject1.testattribut{testkey1}=\"newtestitem1\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 3 and DictionaryItem(testobject1.testattribut, \"testkey1\") = \"newtestitem1\"")
       dictionary add (commands, "#testobject1.testattribut{testkey1}", "")
       dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
