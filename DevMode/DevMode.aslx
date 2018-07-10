@@ -77,6 +77,7 @@
   #object.attribute=25.55 (double)
   #object.attribute=[item1,item2,item3] (list)
   #object.attribute[]=element (add element to list)
+  #object.attribute[key]=element (add or overwrite element to list)
   #object.attribute=[] (create new list)
   #object.attribute={"key1":item1,"key2":item2,"key3":item3} (dictionary)
   #object.attribute{key}=element (add or overwrite element to dictionary)
@@ -313,7 +314,7 @@
       // the regular expression to check the user input.
       // RegEx available in https://regex101.com/r/9hkAAu/7
       // ----------------------------------------------------------------------------------------------------
-      regex = "^(?<object>\\S+?)\\.(?<attribute>\\S+?)(?:(?<itemtoken>\\[|\\{)(?<item>.*?)(?:\\]|\\}))?(?:\\s?(?<istoken>\\=)\\s?(?:(?<valitemtoken>(?:\\[|\\{)?)(?<value>.*?)(?:\\]|\\})?)(?(valitemtoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
+      regex = "^(?<object>\\S+?)\\.(?<attribute>\\S+?)(?:(?<keytoken>\\[|\\{)(?<key>.*?)(?:\\]|\\}))?(?:\\s?(?<istoken>\\=)\\s?(?:(?<valkeytoken>(?:\\[|\\{)?)(?<value>.*?)(?:\\]|\\})?)(?(valkeytoken)|(?:(?<valobject>.+?)\\.(?<valattribute>.+?))))?$"
       
       // ----------------------------------------------------------------------------------------------------
       // SUCCESS MATCH
@@ -363,7 +364,7 @@
           // VALUE-LIST
           // Creating a new list
           // ----------------------------------------------------------------------------------------------------
-          else if (result["valitemtoken"] = "[") {
+          else if (result["valkeytoken"] = "[") {
             value = NewList ()
             if (result["value"] <> "") {
               list = Split(result["value"], ",")
@@ -375,7 +376,7 @@
           // VALUE-DICTIONARY
           // Creating a new dictionary
           // ----------------------------------------------------------------------------------------------------
-          else if (result["valitemtoken"] = "{") {
+          else if (result["valkeytoken"] = "{") {
             value = NewDictionary ()
             if (result["value"] <> "") {
               list = Split(result["value"], ",")
@@ -421,9 +422,12 @@
           // SET-ATTRIBUTE-LIST
           // Add a new item to a list or overwrite an existing one
           // ----------------------------------------------------------------------------------------------------
-          if (result["itemtoken"] = "[") {
+          if (result["keytoken"] = "[") {
             if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") current_value = NewList ()
-            if (result["item"] in current_value) list remove (current_value, result["item"])
+            if (result["key"] <> "") {
+              if (not IsNumeric(result["key"])) error (Template("DevModeErrorWrongTyp"))
+              else if (ToInt(result["key"]) < ListCount(current_value)) list remove (current_value, ListItem(current_value, ToInt(result["key"])))
+            }
             list add (current_value, value)
             value = NewList ()
             value = current_value
@@ -431,13 +435,13 @@
 
           // ----------------------------------------------------------------------------------------------------
           // SET-ATTRIBUTE-DICTIONARY
-          // Add a new item to a dictionary or overwrite an existing one
+          // Add a new key to a dictionary or overwrite an existing one
           // ----------------------------------------------------------------------------------------------------
-          else if (result["itemtoken"] = "{") {
+          else if (result["keytoken"] = "{") {
             if (TypeOf(current_value) <> "dictionary" and TypeOf(current_value) <> "objectdictionary" and TypeOf(current_value) <> "stringdictionary") current_value = NewDictionary ()
-            if (result["item"] <> "") {
-              if (result["item"] in current_value) dictionary remove (current_value, result["item"])
-              dictionary add (current_value, result["item"], value)
+            if (result["key"] <> "") {
+              if (result["key"] in current_value) dictionary remove (current_value, result["key"])
+              dictionary add (current_value, result["key"], value)
               value = NewDictionary ()
               value = current_value
             }
@@ -457,36 +461,36 @@
         // If no equal sign has been set, the result is treated as readout.
         // ----------------------------------------------------------------------------------------------------
         else {
-          item = ""
+          key = ""
 
           // ----------------------------------------------------------------------------------------------------
           // GET-ATTRIBUTE-LIST
-          // If the attribute is a list and the specified item is in it, the content is read out.
+          // If the attribute is a list and the specified key is in it, the content is read out.
           // ----------------------------------------------------------------------------------------------------
-          if (result["itemtoken"] = "[") {
+          if (result["keytoken"] = "[") {
             if (TypeOf(current_value) <> "list" and TypeOf(current_value) <> "objectlist" and TypeOf(current_value) <> "stringlist") error (Template("DevModeErrorWrongTyp"))
-            else if (not IsNumeric(result["item"])) error (Template("DevModeErrorWrongTyp"))
-            else if (ToInt(result["item"]) > ListCount(current_value)-1) error (Template("DevModeErrorWrongKey"))
-            else current_value = ListItem(current_value, ToInt(result["item"]))
-            item = "[" + result["item"] + "]"
+            else if (not IsNumeric(result["key"])) error (Template("DevModeErrorWrongTyp"))
+            else if (ToInt(result["key"]) > ListCount(current_value)-1) error (Template("DevModeErrorWrongKey"))
+            else current_value = ListItem(current_value, ToInt(result["key"]))
+            key = "[" + result["key"] + "]"
           }
 
           // ----------------------------------------------------------------------------------------------------
           // GET-ATTRIBUTE-DICTIONARY
-          // If the attribute is a dictionary and the specified item is in it, the content is read out.
+          // If the attribute is a dictionary and the specified key is in it, the content is read out.
           // ----------------------------------------------------------------------------------------------------
-          if (result["itemtoken"] = "{") {
+          if (result["keytoken"] = "{") {
             if (TypeOf(current_value) <> "dictionary" and TypeOf(current_value) <> "objectdictionary" and TypeOf(current_value) <> "stringdictionary") error (Template("DevModeErrorWrongTyp"))
-            else if (not result["item"] in current_value) error (Template("DevModeErrorWrongKey"))
-            else current_value = DictionaryItem(current_value, result["item"])
-            item = "{" + result["item"] + "}"
+            else if (not result["key"] in current_value) error (Template("DevModeErrorWrongKey"))
+            else current_value = DictionaryItem(current_value, result["key"])
+            key = "{" + result["key"] + "}"
           }
 
           // ----------------------------------------------------------------------------------------------------
           // VALUE-READING
           // The value of the attribute is read out
           // ----------------------------------------------------------------------------------------------------
-          DevModeOutput (Template("DevModeComGetAttribute") + object.name + "." + attribute + item + "=" + ParseToFlyScript(current_value))
+          DevModeOutput (Template("DevModeComGetAttribute") + object.name + "." + attribute + key + "=" + ParseToFlyScript(current_value))
 
         }
       }
@@ -774,6 +778,7 @@
       dictionary add (commands, "#testobject1.testattribut=testobject1", "TypeOf(testobject1.testattribut) = \"object\" and testobject1.testattribut = testobject1")
       dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
       dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",testobject1,testobject2]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 0)) = \"string\" and ListItem(testobject1.testattribut, 0) = \"testitem1\" and TypeOf(ListItem(testobject1.testattribut, 1)) = \"string\" and ListItem(testobject1.testattribut, 1) = \"testitem2\" and TypeOf(ListItem(testobject1.testattribut, 2)) = \"object\" and ListItem(testobject1.testattribut, 2) = testobject1 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"object\" and ListItem(testobject1.testattribut, 3) = testobject2")
+      dictionary add (commands, "#testobject1.testattribut[2]=\"newtestitem2\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"string\" and ListItem(testobject1.testattribut, 3) = \"newtestitem2\"")
       dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem5\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 5 and ListItem(testobject1.testattribut, 4) = \"newtestitem5\"")
       dictionary add (commands, "#testobject1.testattribut[1]", "")
       dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
