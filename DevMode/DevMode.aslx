@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.3
+  Version 1.5
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -23,7 +23,7 @@
   ****************************************************************************************************
 
   ****************************************************************************************************
-  Version 1.3
+  Version 1.5
   Editable debug table added.
   The code to be executed in DevMode slightly changed.
   It is now closer to JSON. Comma separators are now used instead of semicolons.
@@ -94,7 +94,7 @@
   <!--
   ****************************************************************************************************
   // MARK: Include debug table
-  
+  Files required for DevMode
   ****************************************************************************************************
   -->
   <javascript src="DevMode/tabulator.min.js" />
@@ -103,7 +103,7 @@
   <!--
   ****************************************************************************************************
   // MARK: Languages
-  
+  The available language templates
   ****************************************************************************************************
   -->
   <!-- English -->
@@ -513,15 +513,31 @@
   <function name="ParseToFlyScript" parameters="text" type="string">
     <![CDATA[
       switch (TypeOf(text)) {
+
+        // ----------------------------------------------------------------------------------------------------
+        // STRING
+        // ----------------------------------------------------------------------------------------------------
         case ("string") {
           parsetext = "\"" + text + "\""
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // OBJECT
+        // ----------------------------------------------------------------------------------------------------
         case ("object") {
           parsetext = text.name
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // SCRIPT
+        // ----------------------------------------------------------------------------------------------------
         case ("script") {
           parsetext = "<" + Replace(ToString(text), "Script: ", "") + ">"
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // LIST
+        // ----------------------------------------------------------------------------------------------------
         case ("list", "stringlist", "objectlist") {
           list = NewStringList()
           foreach (item, text) {
@@ -534,6 +550,10 @@
           }
           parsetext = "[" + Join (list, ",") + "]"
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // DICTIONARY
+        // ----------------------------------------------------------------------------------------------------
         case ("dictionary", "stringdictionary", "objectdictionary", "scriptdictionary") {
           list = NewStringList()
           foreach (key, text) {
@@ -548,6 +568,10 @@
           }
           parsetext = "{" + Join (list, ",") + "}"
         }
+
+        // ----------------------------------------------------------------------------------------------------
+        // OTHER TYPES
+        // ----------------------------------------------------------------------------------------------------
         default {
           parsetext = ToString(text)
         }
@@ -559,7 +583,7 @@
   <!--
   ****************************************************************************************************
   // MARK: DevModeOutput
-  
+  Output display of the DevMode in the selected color
   ****************************************************************************************************
   -->
   <function name="DevModeOutput" parameters="str">
@@ -575,7 +599,7 @@
   <!--
   ****************************************************************************************************
   // MARK: DevModeOutputError
-  
+  Output display of DevMode in red
   ****************************************************************************************************
   -->
   <function name="DevModeOutputError" parameters="str">
@@ -589,7 +613,7 @@
   <!--
   ****************************************************************************************************
   // MARK: setWithoutChange
-  
+  The intercept scripts are bypassed
   ****************************************************************************************************
   -->
   <function name="setWithoutChange" parameters="obj, att, val">
@@ -611,7 +635,7 @@
   <!--
   ****************************************************************************************************
   // MARK: setDevMode
-  
+  The DevMode is initialized
   ****************************************************************************************************
   -->
   <function name="setDevMode">
@@ -643,7 +667,7 @@
   <!--
   ****************************************************************************************************
   // MARK: getTableDataNames
-  
+  All names of the objects are transferred to the table
   ****************************************************************************************************
   -->
   <function name="getTableDataNames" parameters="empty">
@@ -659,7 +683,7 @@
   <!--
   ****************************************************************************************************
   // MARK: getTableDataAttr
-  
+  All attributes and values of the objects are transferred to the table
   ****************************************************************************************************
   -->
   <function name="getTableDataAttr" parameters="name">
@@ -676,7 +700,7 @@
   <!--
   ****************************************************************************************************
   // MARK: setTableData
-  
+  The changes to the table data are transferred to Quest
   ****************************************************************************************************
   -->
   <function name="setTableData" parameters="command">
@@ -687,7 +711,7 @@
   <!--
   ****************************************************************************************************
   // MARK: commandOutput
-  
+  The command is output with an arrow in front of it
   ****************************************************************************************************
   -->
   <function name="commandOutput" parameters="command">
@@ -698,7 +722,7 @@
   <!--
   ****************************************************************************************************
   // MARK: setVerbs
-  
+  The verbs of the object commands are assigned to the object list
   ****************************************************************************************************
   -->
   <function name="setVerbs">
@@ -719,7 +743,7 @@
   <!--
   ****************************************************************************************************
   // MARK: getObjectExt
-  
+  Extended getObject, which takes into account the alias of the object instead of the name
   ****************************************************************************************************
   -->
   <function name="getObjectExt" parameters="name" type="object">
@@ -737,7 +761,7 @@
   <!--
   ****************************************************************************************************
   // MARK: selfTest
-  
+  A test, at game start to check all functions of the DevMode
   ****************************************************************************************************
   -->
   <function name="selfTest">
@@ -758,6 +782,11 @@
       // Generate commmands for testing
       // ----------------------------------------------------------------------------------------------------
       commands = NewDictionary ()
+
+      // ----------------------------------------------------------------------------------------------------
+      // OBJECT-COMMANDS
+      // Unlike the commands in the game, they are executed directly and without detours via intercept scripts
+      // ----------------------------------------------------------------------------------------------------      
       dictionary add (commands, "#take testobject1", "Got (testobject1)")
       dictionary add (commands, "#drop testobject1", "Contains (game.pov.parent, testobject1)")
       dictionary add (commands, "#put testobject1 in testobject2", "Contains (testobject2, testobject1)")
@@ -767,26 +796,49 @@
       dictionary add (commands, "#off testobject1", "not IsSwitchedOn(testobject1)")
       dictionary add (commands, "#to testobject1", "game.pov = testobject1")
       dictionary add (commands, "#go testobject2", "game.pov.parent = testobject2")
-      dictionary add (commands, "#testobject1.testattribut=true", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
-      dictionary add (commands, "#testobject1.testattribut=false", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
-      dictionary add (commands, "#testobject1.testattribut=?", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
-      dictionary add (commands, "#testobject1.testattribut=!", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
-      dictionary add (commands, "#testobject1.testattribut=~", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
-      dictionary add (commands, "#testobject1.testattribut=\"teststring\"", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"teststring\"")
-      dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut = 25")
-      dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut = 25.25")
-      dictionary add (commands, "#testobject1.testattribut=testobject1", "TypeOf(testobject1.testattribut) = \"object\" and testobject1.testattribut = testobject1")
-      dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",testobject1,testobject2]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 0)) = \"string\" and ListItem(testobject1.testattribut, 0) = \"testitem1\" and TypeOf(ListItem(testobject1.testattribut, 1)) = \"string\" and ListItem(testobject1.testattribut, 1) = \"testitem2\" and TypeOf(ListItem(testobject1.testattribut, 2)) = \"object\" and ListItem(testobject1.testattribut, 2) = testobject1 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"object\" and ListItem(testobject1.testattribut, 3) = testobject2")
-      dictionary add (commands, "#testobject1.testattribut[2]=\"newtestitem2\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"string\" and ListItem(testobject1.testattribut, 3) = \"newtestitem2\"")
-      dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem5\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 5 and ListItem(testobject1.testattribut, 4) = \"newtestitem5\"")
-      dictionary add (commands, "#testobject1.testattribut[1]", "")
-      dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
-      dictionary add (commands, "#testobject1.testattribut={testkey1:\"testitem1\",testkey2:\"testitem2\",testkey3:testobject1,testkey4:testobject2}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 4 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey1\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey1\") = \"testitem1\" and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey2\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey2\") = \"testitem2\" and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"object\" and DictionaryItem(testobject1.testattribut, \"testkey3\") = testobject1 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey4\")) = \"object\" and DictionaryItem(testobject1.testattribut, \"testkey4\") = testobject2")
-      dictionary add (commands, "#testobject1.testattribut{testkey4}=\"newtestitem4\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 4 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey4\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey4\") = \"newtestitem4\"")
-      dictionary add (commands, "#testobject1.testattribut{testkey1}", "")
-      dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
-      dictionary add (commands, "#testobject1.testattribut", "")
+
+      // ----------------------------------------------------------------------------------------------------
+      // OBJECT-ATTRIBUTES
+      // assign and read attributes
+      // ----------------------------------------------------------------------------------------------------
+
+        // BOOLEAN
+        dictionary add (commands, "#testobject1.testattribut=true", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
+        dictionary add (commands, "#testobject1.testattribut=false", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
+        dictionary add (commands, "#testobject1.testattribut=?", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
+        dictionary add (commands, "#testobject1.testattribut=!", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=false")
+        dictionary add (commands, "#testobject1.testattribut=~", "TypeOf(testobject1.testattribut) = \"boolean\" and testobject1.testattribut=true")
+
+        // STRING
+        dictionary add (commands, "#testobject1.testattribut=\"teststring\"", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"teststring\"")
+
+        // INTEGER
+        dictionary add (commands, "#testobject1.testattribut=25", "TypeOf(testobject1.testattribut) = \"int\" and testobject1.testattribut = 25")
+
+        // DOUBLE
+        dictionary add (commands, "#testobject1.testattribut=25.25", "TypeOf(testobject1.testattribut) = \"double\" and testobject1.testattribut = 25.25")
+
+        // OBJECT
+        dictionary add (commands, "#testobject1.testattribut=testobject1", "TypeOf(testobject1.testattribut) = \"object\" and testobject1.testattribut = testobject1")
+
+        // LIST
+        dictionary add (commands, "#testobject1.testattribut=[]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 0")
+        dictionary add (commands, "#testobject1.testattribut=[\"testitem1\",\"testitem2\",testobject1,testobject2]", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 0)) = \"string\" and ListItem(testobject1.testattribut, 0) = \"testitem1\" and TypeOf(ListItem(testobject1.testattribut, 1)) = \"string\" and ListItem(testobject1.testattribut, 1) = \"testitem2\" and TypeOf(ListItem(testobject1.testattribut, 2)) = \"object\" and ListItem(testobject1.testattribut, 2) = testobject1 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"object\" and ListItem(testobject1.testattribut, 3) = testobject2")
+        dictionary add (commands, "#testobject1.testattribut[2]=\"newtestitem2\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 4 and TypeOf(ListItem(testobject1.testattribut, 3)) = \"string\" and ListItem(testobject1.testattribut, 3) = \"newtestitem2\"")
+        dictionary add (commands, "#testobject1.testattribut[]=\"newtestitem5\"", "TypeOf(testobject1.testattribut) = \"list\" and ListCount(testobject1.testattribut) = 5 and ListItem(testobject1.testattribut, 4) = \"newtestitem5\"")
+        dictionary add (commands, "#testobject1.testattribut[1]", "")
+
+        // DICTIONARY
+        dictionary add (commands, "#testobject1.testattribut={}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 0")
+        dictionary add (commands, "#testobject1.testattribut={testkey1:\"testitem1\",testkey2:\"testitem2\",testkey3:testobject1,testkey4:testobject2}", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 4 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey1\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey1\") = \"testitem1\" and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey2\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey2\") = \"testitem2\" and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey3\")) = \"object\" and DictionaryItem(testobject1.testattribut, \"testkey3\") = testobject1 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey4\")) = \"object\" and DictionaryItem(testobject1.testattribut, \"testkey4\") = testobject2")
+        dictionary add (commands, "#testobject1.testattribut{testkey4}=\"newtestitem4\"", "TypeOf(testobject1.testattribut) = \"dictionary\" and DictionaryCount(testobject1.testattribut) = 4 and TypeOf(DictionaryItem(testobject1.testattribut, \"testkey4\")) = \"string\" and DictionaryItem(testobject1.testattribut, \"testkey4\") = \"newtestitem4\"")
+        dictionary add (commands, "#testobject1.testattribut{testkey1}", "")
+
+        // OBJECTATTRIBUT
+        dictionary add (commands, "#testobject1.testattribut=testobject2.name", "TypeOf(testobject1.testattribut) = \"string\" and testobject1.testattribut=\"testobject2\"")
+
+        // ALL TYPES
+        dictionary add (commands, "#testobject1.testattribut", "")
 
       // ----------------------------------------------------------------------------------------------------
       // TESTING
@@ -817,7 +869,7 @@
   <!--
   ****************************************************************************************************
   // MARK: Types
-  
+  The types required for the interface
   ****************************************************************************************************
   -->
   <type name="devmode">
@@ -839,7 +891,7 @@
   <!--
   ****************************************************************************************************
   // MARK: Interface
-  
+  The interface of the DevMode
   ****************************************************************************************************
   -->
   <tab>
