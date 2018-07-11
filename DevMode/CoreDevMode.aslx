@@ -100,100 +100,6 @@
   <javascript src="DevMode/tabulator.min.js" />
   <javascript src="DevMode/debugtable.js" />
 
-  <!-- ******************************************************************************************* -->
-  <!-- // TODO: Start Exclude in core mode                                                         -->
-
-  <!--
-  ****************************************************************************************************
-  // MARK: Languages
-  The available language templates
-  ****************************************************************************************************
-  -->
-  <!-- English -->
-  <template name="DevModeErrorWrongFormat">That's the wrong format.</template>
-  <template name="DevModeErrorObjectNotRecognised">The object was not found.</template>
-  <template name="DevModeErrorWrongTyp">That's the wrong type.</template>
-  <template name="DevModeErrorWrongKey">The key was not found.</template>
-  <template name="DevModeExecuteCommand">The command was executed.</template>
-  <template name="DevModeNotActive">DevMode is not active!</template>
-  <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Help</h3><b><u>Object-Commends</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Unlike the commands in the game, they are executed directly and without detours via intercept scripts.</i><br/><br/><b><u>Single-Commands</u></b><br/>#clr (clear screen)<br/>#? (help)<br/># (close game)<br/><br/><b><u>Object-Attributes</u></b><br/>#object1.attribute=object2.attribute (attribute assignment of another object)<br/>#object.attribute=true / false (set true / false)<br/>#object.attribute=? / ! (set true / false)<br/>#~object.attribute (toggle true or false)<br/>#object.attribute="value" (string)<br/>#object.attribute=15 (integer)<br/>#object.attribute=25.55 (double)<br/>#object.attribute=[item1,item2,item3] (list)<br/>#object.attribute[]=element (add element to list)<br/>#object.attribute[key]=element (add or overwrite element to list)<br/>#object.attribute=[] (create new list)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (dictionary)<br/>#object.attribute{key}=element (add or overwrite element to dictionary)<br/>#object.attribute={} (create new dictionary)<br/>#object.attribute (read attribute)<br/>]]></template>
-  <template name="DevModeActive"><![CDATA[<b>DevMode: Active</b>]]></template>
-  <template name="DevModeInitDegugTable">Debug table initialized.</template>
-  <template name="DevModeStartScript">Initialization script started.</template>
-  <template name="DevModeSetVerbs">Verbs assigned.</template>
-  <template name="DevModeComExecute">Command executed.</template>
-  <template name="DevModeComSetAttribute">Set Attribute: </template>
-  <template name="DevModeComGetAttribute">Get Attribute: </template>
-  <template name="DevModeComSelfTestFailed">The assignment as it should be after the command is incorrect.</template>
-  <dynamictemplate name="DevModeErrorCantFindObject">"The object with the name '" + text + "' cannot be found."</dynamictemplate>
-  <dynamictemplate name="DevModeErrorCantFindAttribute">"The attribute with the name '" + text + "' cannot be found."</dynamictemplate>
-
-  <template name="EditorGameDevMode">DevMode</template>
-  <template name="EditorGameDevModeInfoRelease">Important: Before releasing the game DevMode must be deactivated!</template>
-  <template name="EditorGameDevModeInfoCommands">Enhanced commands are available in the current game. Enter '#?' to get more information.</template>
-  <template name="EditorGameDevModeOptions">Options</template>
-  <template name="EditorGameDevModeChangePov">Select another player</template>
-  <template name="EditorGameDevModeChangePovPos">Select another starting location for the player</template>
-  <template name="EditorGameDevModePov">Player</template>
-  <template name="EditorGameDevModePlace">Location</template>
-  <template name="EditorGameDevModeSetInitScript">Use an initialization script for DevMode</template>
-  <template name="EditorGameDevModeInitScript">Initialization script for DevMode</template>
-  <template name="EditorGameDevModeShowDebugTable">Show debugtable</template>
-  <template name="EditorGameDevModeSetVerbs">Add DevMode verbs to the verb list of objects</template>
-  <template name="EditorGameDevModeShowInfos">Display DevMode output</template>
-  <template name="EditorGameDevModeOwnFontColour">Use your own font color for DevMode output</template>
-  <template name="EditorGameDevModeFontColour">Font color for DevMode output</template>
-  <template name="EditorGameDevModeOn">Active</template>
-  <template name="EditorGameDevModeOff">Inactive</template>
-  <template name="EditorGameDevModeAttributes">Attributes</template>
-  <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[Enter the object with the corresponding attribute in "Key" (e. g. game.showtitle or player.look). The assignment is entered in "Value". It is possible to create Strings ("Hello World!"), Boolean (true or false), Integer (15), Double (25.55), Listen (["Hello","World","!"]) and Dictionarys ({H:"Hello",W:"World"}.)]]></template>
-    
-
-  <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
-  <!-- Deutsch -->
-  <!--
-  <template name="DevModeErrorWrongFormat">Das ist leider das falsche Format.</template>
-  <template name="DevModeErrorObjectNotRecognised">Das Objekt wurde nicht erkannt.</template>
-  <template name="DevModeErrorWrongTyp">Das ist der falsche Typ.</template>
-  <template name="DevModeErrorWrongKey">Der Key wurde nicht gefunden.</template>
-  <template name="DevModeExecuteCommand">Der Befehl wurde ausgeführt.</template>
-  <template name="DevModeNotActive">Der DevMode ist nicht aktiv!</template>
-  <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Hilfe</h3><b><u>Objekt-Kommandos</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b><u>Single-Kommandos</u></b><br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)<br/><br/><b><u>Objekt-Attribute</u></b><br/>#object1.attribute=object2.attribute (Attributzuweisung eines anderen Objektes)<br/>#object.attribute=true / false (Setze auf wahr / falsch)<br/>#object.attribute=? / ! (Setze auf wahr / falsch)<br/>#~object.attribute (Toggle auf wahr oder falsch)<br/>#object.attribute="value" (String)<br/>#object.attribute=15 (Integer)<br/>#object.attribute=25.55 (Double)<br/>#object.attribute=[item1,item2,item3] (List)<br/>#object.attribute[]=element (Element zur List hinzufügen)<br/>#object.attribute[key]=element (Element zur List hinzufügen oder überschreiben)<br/>#object.attribute=[] (Eine neue List erstellen)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (Dictionary)<br/>#object.attribute{key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribute={} (Neues Dictionary erstellen)<br/>#object.attribute (Lese Attribute)<br/>]]></template>
-  <template name="DevModeActive"><![CDATA[<b>Entwicklermodus: Aktiviert</b>]]></template>
-  <template name="DevModeInitDegugTable">Debugtabelle initialisiert.</template>
-  <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
-  <template name="DevModeSetVerbs">Verben zugeordnet.</template>
-  <template name="DevModeComExecute">Kommando ausgeführt.</template>
-  <template name="DevModeComSetAttribute">Attribut gesetzt: </template>
-  <template name="DevModeComGetAttribute">Attribut abgefragt: </template>
-  <template name="DevModeComSelfTestFailed">Die Zuordnung, wie sie nach dem Kommando sein sollte ist inkorrekt.</template>
-  <dynamictemplate name="DevModeErrorCantFindObject">"Das Objekt mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
-  <dynamictemplate name="DevModeErrorCantFindAttribute">"Das Attribut mit dem Namen '" + text + "' kann nicht gefunden werden."</dynamictemplate>
-
-  <template name="EditorGameDevMode">Entwicklermodus</template>
-  <template name="EditorGameDevModeInfoRelease">Wichtig: Vor Veröffentlichung des Spiels muss der Entwicklermodus deaktiviert werden!</template>  
-  <template name="EditorGameDevModeInfoCommands">Es stehen im laufenden Spiel erweiterte Kommandos zur Verfügung. Geben Sie '#?' ein um weitere Informationen zu erhalten.</template>
-  <template name="EditorGameDevModeOptions">Optionen</template>
-  <template name="EditorGameDevModeChangePov">Einen anderen Spieler wählen</template>
-  <template name="EditorGameDevModePov">Spieler</template>
-  <template name="EditorGameDevModeChangePovPos">Eine andere Position des Spielers wählen</template>
-  <template name="EditorGameDevModePlace">Ort</template>
-  <template name="EditorGameDevModeSetInitScript">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
-  <template name="EditorGameDevModeInitScript">Initialisierungsscript für den Entwicklermodus</template>
-  <template name="EditorGameDevModeShowDebugTable">Zeige Debugtabelle</template>
-  <template name="EditorGameDevModeSetVerbs">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>
-  <template name="EditorGameDevModeShowInfos">Ausgaben des Entwicklungsmodus anzeigen</template>  
-  <template name="EditorGameDevModeOwnFontColour">Eigene Schriftfarbe für die Ausgabe des Entwicklermodus verwenden</template>
-  <template name="EditorGameDevModeFontColour">Schriftfarbe für die Ausgaben des Entwicklermodus</template>
-  <template name="EditorGameDevModeOn">Aktiviert</template>
-  <template name="EditorGameDevModeOff">Deaktiviert</template>
-  <template name="EditorGameDevModeAttributes">Attributes</template>
-  <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Lists (["Hallo","Welt","!"]) und Dictionarys ({H:"Hallo",W:"Welt"} zu erstellen.)]]></template>
-  -->
-
-  <!-- // TODO: End Exclude in core mode                                                           -->
-  <!-- ******************************************************************************************* -->
-
   <!--
   ****************************************************************************************************
   // MARK: devmode_commands
@@ -899,13 +805,6 @@
     <devmode_selftest type="boolean">false</devmode_selftest>
     <devmode_attributes type="stringdictionary" />
     <devmode_verbs type="simplestringlist">#drop;#take;#to;#open;#close;#on;#off</devmode_verbs>
-    <!-- ******************************************************************************************* -->
-    <!-- // TODO: Start Exclude in core mode                                                         -->
-    <inituserinterface type="script">
-      setDevMode
-    </inituserinterface>
-    <!-- // TODO: End Exclude in core mode                                                           -->
-    <!-- ******************************************************************************************* -->
  </type>
 
   <!--
@@ -917,11 +816,7 @@
   <tab>
     <parent>_GameEditor</parent>
     <caption>[EditorGameDevMode]</caption>
-    <!-- ******************************************************************************************* -->
-    <!-- // TODO: Start Include in core mode                                                         -->
-    <!-- <onlydisplayif>GetBoolean (game, "feature_devmode")</onlydisplayif> -->
-    <!-- // TODO: End Include in core mode                                                           -->
-    <!-- ******************************************************************************************* -->
+    <onlydisplayif>GetBoolean (game, "feature_devmode")</onlydisplayif>
 
     <control>
       <controltype>dropdowntypes</controltype>
