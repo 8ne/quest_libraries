@@ -10,15 +10,20 @@
     <firstpublished>2018</firstpublished>
     <feature_advancedscripts />
     <statusattributes type="stringdictionary" />
-    <attr name="devmode_setinitscript" type="boolean">false</attr>
-    <attr name="devmode_changepovpos" type="boolean">false</attr>
-    <attr name="devmode_changepov" type="boolean">false</attr>
+    <devmode_setinitscript />
+    <devmode_changepovpos />
+    <devmode_changepov />
     <deactivatecommandlinks type="boolean">false</deactivatecommandlinks>
     <enablehyperlinks />
     <devmode_setverbs />
-    <devmode_attributes type="stringdictionary" />
-    <attr name="devmode_pov">player1</attr>
-    <attr name="devmode_povpos">room1</attr>
+    <devmode_attributes type="stringdictionary">
+      <item>
+        <key>game.showtitle</key>
+        <value>false</value>
+      </item>
+    </devmode_attributes>
+    <attr name="devmode_pov">player2</attr>
+    <attr name="devmode_povpos">room2</attr>
     <devmode_showdebugtable />
     <devmode_showinfos />
     <attr name="feature_devmode" type="boolean">false</attr>
@@ -27,14 +32,17 @@
     <attr name="devmode_selftest" type="boolean">false</attr>
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
+      msg ("TEST")
     </attr>
     <scopebackdrop type="script">
     </scopebackdrop>
     <unresolvedcommandhandler type="script">
     </unresolvedcommandhandler>
     <start type="script">
-      setDevMode
     </start>
+    <inituserinterface type="script">
+      setDevMode
+    </inituserinterface>
   </game>
   <object name="room1">
     <inherit name="editor_room" />
