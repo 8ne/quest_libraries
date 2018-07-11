@@ -1,13 +1,15 @@
 ﻿// ----------------------------------------------------------------------------------------------------
 // CommandBar with Own Cursor
 // by SoonGames, 2017
-// Version 1.2
+// Version 1.2.1
 // ----------------------------------------------------------------------------------------------------
 // Quest-Version: 5.7
 // ----------------------------------------------------------------------------------------------------
 // Just download the OwnCursor.js and integrate it as javascript in Quest.
 // ----------------------------------------------------------------------------------------------------
 
+// Version 1.2.1
+// incompatibility with DevMode removed.
 // ----------------------------------------------------------------------------------------------------
 // Version 1.2
 // bugfix from after clicking a button the command bar did not empty itself.
@@ -28,7 +30,7 @@
 	//var OwnCurCursor = "►";
 	var OwnCurCursorLen = OwnCurCursor.length;
 	// --------------------------------------------------------------------------------------------------------------
-	var OwnCurBlinking = true; // determines whether the cursor flashes.
+	var OwnCurBlinking = false; // determines whether the cursor flashes.
 	var OwnCurBlinkinterval = 500; // how often the cursor of the indicated milliseconds should blink.
 	// --------------------------------------------------------------------------------------------------------------
 	var OwnCurBlinkcursor = " "; // without blinkcursor
@@ -78,7 +80,6 @@
 	    		cmdbar.val(text);
 	    	}
 	    	else if (typ === "keypress") { // another key
-	    		event.preventDefault();
 		     	var text = cmdbar.val().slice(0, -OwnCurCursorLen) + strkey + OwnCurCursor;
 		    	cmdbar.val(text);
 	    	}
