@@ -1,4 +1,4 @@
-# OwnCursor 1.2
+# OwnCursor 1.3
 ### Now it is possible to use any cursor in Quest. The blinking rate is also adjustable.
 ---
 
