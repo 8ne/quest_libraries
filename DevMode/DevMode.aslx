@@ -325,7 +325,6 @@
       // ----------------------------------------------------------------------------------------------------
       if (IsRegexMatch (regex, text)) {
         result = populate (regex, text)
-        Log (ToString(result))
 
         // ----------------------------------------------------------------------------------------------------
         // ASSIGN RESULT
@@ -871,7 +870,6 @@
               if (not result) {
                 iserror = true
                 DevModeOutputError (Template("DevModeComSelfTestFailed"))
-                Log (ToString(ListItem(testobject1.testattribut, 2)))
               }
             }
           }

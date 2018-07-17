@@ -9,59 +9,36 @@ function initDebugTable(css) {
         '<div class="devmode_sidebar">' +
             '<div id="debugtable_names"></div>' +
             '<div id="debugtable_attr"></div>' +
-        '</div>'
+        '</div>' + 
+
+        '<ul id="devmode_sidebar_popupmenu">' + 
+            '<li data-action="refresh">Refresh</li>' +
+        '</ul>'
     );
 
-    $('#devmode_sidebar_labels_debugtable').css({
-        "background-image": "url('quest://res/DevMode/debugtable.png')"
+    // Popop-Menu
+    $("#debugtable_names").bind("contextmenu", function (event) {
+        event.preventDefault();
+        $("#devmode_sidebar_popupmenu").finish().toggle(100).
+        css({
+            top: event.pageY + "px",
+            left: event.pageX + "px"
+        });
     });
 
-    $('.devmode_sidebar_labels').css({
-        "box-sizing": "border-box",
-        "text-align": "center",
-        "border-bottom-left-radius": "10px",
-        "position": "fixed",
-        "top": "0px",
-        "right": "500px",
-        "height": "50px",
-        "width": "50px",
-        "background-color": "ghostwhite",
-        "background-repeat": "no-repeat, repeat",
-        "background-position": "center",
-        "box-shadow": "none",
-        "transition": "box-shadow 0.5s",
-        "z-index": "210"
+    $(document).bind("mousedown", function (e) {
+        if (!$(e.target).parents("#devmode_sidebar_popupmenu").length > 0) {
+            $("#devmode_sidebar_popupmenu").hide(100);
+        }
     });
 
-    $('.devmode_sidebar').css({
-        "box-sizing": "border-box",
-        "display": "flex",
-        "height": "100%",
-        "width": "500px",
-        "top": "0px",
-        "right": "0px",
-        "display": "flex",
-        "position": "fixed",
-        "width": "500px",
-        "border": "none",
-        "box-shadow": "none",
-        "transition": "box-shadow 0.2s",
-        "background-color": "ghostwhite",
-        "z-index": "200"
-    });
-
-    $('#debugtable_names').css({
-        "box-sizing": "border-box",
-        "float": "right",
-        "height": "100%",
-        "width": "33.3%"
-    });
-    
-    $('#debugtable_attr').css({
-        "box-sizing": "border-box",
-        "float": "right",
-        "height": "100%",
-        "width": "66.6%"
+    $("#devmode_sidebar_popupmenu li").click(function(){
+        switch($(this).attr("data-action")) {
+            case "refresh":
+                ASLEvent("getTableDataNames", "");
+                break;
+        }
+        $("#devmode_sidebar_popupmenu").hide(100);
     });
 
 
@@ -192,8 +169,6 @@ function initDebugTable(css) {
             }
         ],
         cellEdited: function (cell) { // When you change the attributes
-            console.log("ATT: " + cell.getRow().getData().attribute);
-            console.log("VAL: " + cell.getRow().getData().value);
             ASLEvent("setTableData", selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value);
         }
     });

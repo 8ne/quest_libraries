@@ -1,4 +1,96 @@
-/* Tabulator v3.5.3 (c) Oliver Folkerd */
+/*
+----------------------------------------------------------------------------------------------------
+DEVMODE SIDEBAR
+----------------------------------------------------------------------------------------------------
+*/
+#devmode_sidebar_labels_debugtable {
+  background-image: url('quest://res/DevMode/debugtable.png')
+}
+
+.devmode_sidebar_labels {
+  box-sizing: border-box;
+  text-align: center;
+  border-bottom-left-radius: 10px;
+  position: fixed;
+  top: 0px;
+  right: 500px;
+  height: 50px;
+  width: 50px;
+  background-color: ghostwhite;
+  background-repeat: no-repeat, repeat;
+  background-position: center;
+  box-shadow: none;
+  transition: box-shadow 0.5s;
+  z-index: 210;
+}
+
+.devmode_sidebar {
+  box-sizing: border-box;
+  display: flex;
+  height: 100%;
+  width: 500px;
+  top: 0px;
+  right: 0px;
+  display: flex;
+  position: fixed;
+  width: 500px;
+  border: none;
+  box-shadow: none;
+  transition: box-shadow 0.2s;
+  background-color: ghostwhite;
+  z-index: 200;
+}
+
+
+#devmode_sidebar_popupmenu {
+  display: none;
+  z-index: 1000;
+  position: absolute;
+  overflow: hidden;
+  border: 1px solid #CCC;
+  white-space: nowrap;
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  background: #FFF;
+  color: #333;
+  list-style:none;
+  padding-left:0;
+  margin: 0;
+}
+
+#devmode_sidebar_popupmenu li {
+  padding: 8px 12px;
+  cursor: default;
+}
+
+#devmode_sidebar_popupmenu li:hover {
+  background-color: #DEF;
+}
+
+/*
+----------------------------------------------------------------------------------------------------
+TABLES FOR TABULATOR
+----------------------------------------------------------------------------------------------------
+*/
+#debugtable_names {
+  box-sizing: border-box;
+  float: right;
+  height: 100%;
+  width: 33.3%;
+}
+
+#debugtable_attr {
+  box-sizing: border-box;
+  float: right;
+  height: 100%;
+  width: 66.6%;
+}
+
+/*
+----------------------------------------------------------------------------------------------------
+TABULATOR
+Tabulator v3.5.3 (c) Oliver Folkerd
+----------------------------------------------------------------------------------------------------
+*/
 .tabulator {
   position: relative;
   /* border: 1px solid #999; */
