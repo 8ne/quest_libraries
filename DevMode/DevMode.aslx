@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.6
+  Version 1.6.1
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -721,7 +721,9 @@
     obj = GetObject (name)
     foreach (attr, GetAttributeNames (obj, true)) {
       val = ParseToFlyScript (GetAttribute (obj, attr))
-      list add (data, "{\"attribute\":\"" + attr + "\",\"value\":\"" + Replace(val, "\"", "\\\"") + "\"}")
+      val = Replace(val, "\\", "\\\\")
+      val = Replace(val, "\"", "\\\"")
+      list add (data, "{\"attribute\":\"" + attr + "\",\"value\":\"" + val + "\"}")
     }
     datastr = "[" + Join (data, ",") + "]"
     JS.setTableData("attr", datastr)
