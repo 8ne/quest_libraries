@@ -69,8 +69,27 @@
       <alias>Test</alias>
       <test type="string"></test>
     </object>
+    <exit alias="east" to="room2">
+      <inherit name="eastdirection" />
+    </exit>
   </object>
   <object name="room2">
     <inherit name="editor_room" />
+    <exit alias="west" to="room1">
+      <inherit name="westdirection" />
+    </exit>
   </object>
+  <turnscript name="Test">
+    <script>
+      msg ("Test")
+    </script>
+    <enabled />
+  </turnscript>
+  <timer name="Test2">
+    <interval>1</interval>
+    <enabled type="boolean">false</enabled>
+    <script>
+      msg ("Testtimer")
+    </script>
+  </timer>
 </asl>

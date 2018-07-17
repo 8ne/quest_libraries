@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.5.2
+  Version 1.6
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -22,6 +22,9 @@
   Inspired by Pixie's Cheating-Code. ;-)
   ****************************************************************************************************
 
+  ****************************************************************************************************
+  Version 1.6
+  All exits, turn scripts and commands added
   ****************************************************************************************************
   Version 1.5
   Editable debug table added.
@@ -685,10 +688,24 @@
   -->
   <function name="getTableDataNames" parameters="empty">
     data = NewStringList ()
-    list add (data, "{\"name\":\"game\"}")
+    list add (data, "{\"name\":\"game\",\"typ\":\"Gameobject\"}")
+
     foreach (obj, AllObjects()) {
-      list add (data, "{\"name\":\"" + obj.name + "\"}")
+      list add (data, "{\"name\":\"" + obj.name + "\",\"typ\":\"Objects\"}")
     }
+
+    foreach (obj, AllExits()) {
+      list add (data, "{\"name\":\"" + obj.name + "\",\"typ\":\"Exits\"}")
+    }
+
+    foreach (obj, AllTurnScripts()) {
+      list add (data, "{\"name\":\"" + obj.name + "\",\"typ\":\"TurnScripts\"}")
+    }
+
+    foreach (obj, AllCommands()) {
+      list add (data, "{\"name\":\"" + obj.name + "\",\"typ\":\"Commands\"}")
+    }
+
     datastr = "[" + Join (data, ",") + "]"
     JS.setTableData("names", datastr)
   </function>

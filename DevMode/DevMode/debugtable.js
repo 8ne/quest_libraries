@@ -68,9 +68,6 @@ function initDebugTable(css) {
             });
         }
     });
-    $('.ui-resizable-w').css({
-        "width": "20px"
-    }) // Width of the handle
 
 
     // Hidden DevMode-Sidebar
@@ -130,12 +127,10 @@ function initDebugTable(css) {
     // Debugtable - Names
     $("#debugtable_names").tabulator({
         index: "name",
+        groupBy: "typ",
+        groupToggleElement:"header",
         selectable: 1,
         layout: "fitColumns",
-        initialSort: [{
-            column: "name",
-            dir: "asc"
-        }],
         columns: [{
             title: "Name",
             field: "name",
@@ -143,7 +138,13 @@ function initDebugTable(css) {
             headerFilter: "input",
             headerFilterPlaceholder: "Filter by...",
             resizable: false
-        }],
+        },
+        {
+            title: "Typ",
+            field: "typ",
+            visible: false
+        }
+    ],
         rowClick: function (e, row) { // For name selectiony
             row.select();
         },
