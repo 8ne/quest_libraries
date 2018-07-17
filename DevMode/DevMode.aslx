@@ -663,7 +663,7 @@
           setVerbs
         }
         if (game.devmode_showdebugtable) {
-          JS.initDebugTable (GetFileData("DevMode/tabulator.css"))
+          JS.initDebugTable (GetFileData("DevMode/devmode.css"))
           msg("")
           DevModeOutput (Template("DevModeInitDegugTable"))
         }

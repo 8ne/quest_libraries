@@ -7,12 +7,12 @@ function initDebugTable(css) {
     $('body').append(
         '<div class="devmode_sidebar_labels" id="devmode_sidebar_labels_debugtable"></div>' +
         '<div class="devmode_sidebar">' +
-            '<div id="debugtable_names"></div>' +
-            '<div id="debugtable_attr"></div>' +
-        '</div>' + 
+        '<div id="debugtable_names"></div>' +
+        '<div id="debugtable_attr"></div>' +
+        '</div>' +
 
-        '<ul id="devmode_sidebar_popupmenu">' + 
-            '<li data-action="refresh">Refresh</li>' +
+        '<ul id="devmode_sidebar_popupmenu">' +
+        '<li data-action="refresh">Refresh</li>' +
         '</ul>'
     );
 
@@ -32,8 +32,8 @@ function initDebugTable(css) {
         }
     });
 
-    $("#devmode_sidebar_popupmenu li").click(function(){
-        switch($(this).attr("data-action")) {
+    $("#devmode_sidebar_popupmenu li").click(function () {
+        switch ($(this).attr("data-action")) {
             case "refresh":
                 ASLEvent("getTableDataNames", "");
                 break;
@@ -45,77 +45,91 @@ function initDebugTable(css) {
     // Declare variables
     var devmode_sidebar_open = true;
     var devmode_sidebar_boxshadow = "-5px 5px 10px rgba(0, 0, 0, 0.2)";
-    
+
 
     // Resizing the sidebar
     $('.devmode_sidebar').resizable({
-        handles:'w',
+        handles: 'w',
         distance: 30,
         minWidth: 300,
-        resize: function (event,ui) {
+        resize: function (event, ui) {
             ui.position.left = ($(window).width() - $(this).width());
-            $('.devmode_sidebar_labels').css({ left: (ui.position.left - $('.devmode_sidebar_labels').width()) + "px" });
+            $('.devmode_sidebar_labels').css({
+                left: (ui.position.left - $('.devmode_sidebar_labels').width()) + "px"
+            });
         },
-        stop: function (event,ui) {
-            $(this).css({ left: "initial" });
-            $('.devmode_sidebar_labels').css({ right: $(this).width(), left: "initial" });
+        stop: function (event, ui) {
+            $(this).css({
+                left: "initial"
+            });
+            $('.devmode_sidebar_labels').css({
+                right: $(this).width(),
+                left: "initial"
+            });
         }
     });
-    $('.ui-resizable-w').css({ "width": "20px" }) // Width of the handle
+    $('.ui-resizable-w').css({
+        "width": "20px"
+    }) // Width of the handle
 
 
     // Hidden DevMode-Sidebar
-    toggletable (0);
+    toggletable(0);
 
 
     // Appearance of the box shadow on mouseover
-    $(".devmode_sidebar_labels").hover(function() {
+    $(".devmode_sidebar_labels").hover(function () {
         $(this).css("box-shadow", devmode_sidebar_boxshadow)
-    }).mouseout(function() {
-        if (!devmode_sidebar_open) $(this).css("box-shadow","none")
+    }).mouseout(function () {
+        if (!devmode_sidebar_open) $(this).css("box-shadow", "none")
     });
 
 
     // When clicking on the label of the sidebar it will be displayed.
-    $('.devmode_sidebar_labels').on('click', function() {
-        toggletable (200);
+    $('.devmode_sidebar_labels').on('click', function () {
+        toggletable(200);
     });
 
 
     // DevMode-Sidebar fly in or out
-    function toggletable (duration) {
+    function toggletable(duration) {
         devmode_sidebar_open = !devmode_sidebar_open;
         if (devmode_sidebar_open) {
             var tok = "+";
             var boxshadowval = devmode_sidebar_boxshadow;
             $('.devmode_sidebar').resizable("enable");
-            
-        }
-        else {
+
+        } else {
             var tok = "-";
             var boxshadowval = "none";
             $('.devmode_sidebar').resizable("disable");
         }
-        $('.devmode_sidebar, .devmode_sidebar_labels').animate({ right: tok + '=' + $('.devmode_sidebar').width() }, duration, "easeOutExpo" );
+        $('.devmode_sidebar, .devmode_sidebar_labels').animate({
+            right: tok + '=' + $('.devmode_sidebar').width()
+        }, duration, "easeOutExpo");
         $('.devmode_sidebar').css('box-shadow', boxshadowval);
     }
 
 
     // If the window is resized, the sidebar should remain at the right margin
-    $(window).resize(function() {
+    $(window).resize(function () {
         if (devmode_sidebar_open) {
-            $('.devmode_sidebar').css({ right: '0px' });
-        }
-        else {
-            $('.devmode_sidebar').css({ right: '-' + $('.devmode_sidebar').width() });
+            $('.devmode_sidebar').css({
+                right: '0px'
+            });
+        } else {
+            $('.devmode_sidebar').css({
+                right: '-' + $('.devmode_sidebar').width()
+            });
         }
     });
-    
+
     // The selected name
-    selectedname = "";
+    selectedname = "game";
 
     // Debugtable - Names
     $("#debugtable_names").tabulator({
+        index: "name",
         selectable: 1,
         layout: "fitColumns",
         initialSort: [{
@@ -132,14 +146,28 @@ function initDebugTable(css) {
         }],
         rowClick: function (e, row) { // For name selectiony
             row.select();
+        },
+        rowSelected: function (row) {
             selectedname = row.getData().name
             ASLEvent("getTableDataAttr", selectedname);
+        },
+        dataLoaded: function (data) {
+            var hasMatch = false;
+            for (var index = 0; index < data.length; ++index) {
+                var element = data[index];
+                if (element.name == selectedname) {
+                    hasMatch = true;
+                    break;
+                }
+            }
+            if (hasMatch) $("#debugtable_names").tabulator("selectRow", selectedname);
         }
     });
 
 
     // Debugtable - Attributes
     $("#debugtable_attr").tabulator({
+        index: "Attribute",
         layout: "fitColumns",
         initialSort: [{
                 column: "attribute",

@@ -75,14 +75,14 @@ TABLES FOR TABULATOR
   box-sizing: border-box;
   float: right;
   height: 100%;
-  width: 33.3%;
+  width: 40%;
 }
 
 #debugtable_attr {
   box-sizing: border-box;
   float: right;
   height: 100%;
-  width: 66.6%;
+  width: 60%;
 }
 
 /*
