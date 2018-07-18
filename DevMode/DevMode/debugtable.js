@@ -12,7 +12,14 @@ function initDebugTable(css) {
         '</div>' +
 
         '<ul id="devmode_sidebar_popupmenu">' +
-        '<li data-action="refresh">Refresh</li>' +
+        '<li data-action="take">#take</li>' +
+        '<li data-action="drop">#drop</li>' +
+        '<li data-action="close">#close</li>' +
+        '<li data-action="on">#on</li>' +
+        '<li data-action="off">#off</li>' +
+        '<li data-action="to">#to</li>' +
+        '<li data-action="go">#go</li>' +
+        '<li data-action="refresh">Refresh Names</li>' +
         '</ul>'
     );
 
@@ -36,6 +43,9 @@ function initDebugTable(css) {
         switch ($(this).attr("data-action")) {
             case "refresh":
                 ASLEvent("getTableDataNames", "");
+                break;
+            default:
+                ASLEvent("setCommand", $(this).attr("data-action") + " " + selectedname);
                 break;
         }
         $("#devmode_sidebar_popupmenu").hide(100);
@@ -122,34 +132,45 @@ function initDebugTable(css) {
     });
 
     // The selected name
-    selectedname = "game";
+    var selectedname = "game";
+    var opengroups = ["Gameobject", "Objects", "Rooms"];
 
     // Debugtable - Names
     $("#debugtable_names").tabulator({
         index: "name",
         groupBy: "typ",
-        groupToggleElement:"header",
+        groupToggleElement: "header",
         selectable: 1,
         layout: "fitColumns",
         columns: [{
-            title: "Name",
-            field: "name",
-            sorter: "string",
-            headerFilter: "input",
-            headerFilterPlaceholder: "Filter by...",
-            resizable: false
+                title: "Name",
+                field: "name",
+                sorter: "string",
+                headerFilter: "input",
+                headerFilterPlaceholder: "Filter by...",
+                resizable: false
+            },
+            {
+                title: "Typ",
+                field: "typ",
+                visible: false
+            }
+        ],
+        groupStartOpen: function (value, count, data, group) {
+            return (opengroups.indexOf(value) > -1);
         },
-        {
-            title: "Typ",
-            field: "typ",
-            visible: false
-        }
-    ],
+        groupVisibilityChanged: function (group, visible) {
+            if (visible) opengroups.push(group.getKey());
+            else opengroups.splice(opengroups.indexOf(group.getKey()), 1);
+        },
         rowClick: function (e, row) { // For name selectiony
             row.select();
         },
+        rowContext: function (e, row) {
+            row.select();
+        },
         rowSelected: function (row) {
-            selectedname = row.getData().name
+            selectedname = row.getData().name;
             ASLEvent("getTableDataAttr", selectedname);
         },
         dataLoaded: function (data) {
