@@ -1,7 +1,14 @@
-function initDebugTable(css) {
+function initDebugTable(css, verbs) {
 
     // Set original Stylesheet
     $('<style />').text(css).appendTo($('head'));
+
+    // Set Verbs in Popup-Menu
+    verbs = verbs.split(",");
+    menuitems = "";
+    verbs.forEach(function (s, i, o) {
+        menuitems += '<li data-action="' + s + '">' + s + '</li>';
+    });
 
     // Create DevMode-Sidebar
     $('body').append(
@@ -12,13 +19,7 @@ function initDebugTable(css) {
         '</div>' +
 
         '<ul id="devmode_sidebar_popupmenu">' +
-        '<li data-action="take">#take</li>' +
-        '<li data-action="drop">#drop</li>' +
-        '<li data-action="close">#close</li>' +
-        '<li data-action="on">#on</li>' +
-        '<li data-action="off">#off</li>' +
-        '<li data-action="to">#to</li>' +
-        '<li data-action="go">#go</li>' +
+        menuitems +
         '<li data-action="refresh">Refresh Names</li>' +
         '</ul>'
     );

@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.6.3
+  Version 1.7.0
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -666,7 +666,7 @@
           setVerbs
         }
         if (game.devmode_showdebugtable) {
-          JS.initDebugTable (GetFileData("DevMode/devmode.css"))
+          JS.initDebugTable (GetFileData("DevMode/devmode.css"), Join(game.devmode_verbs, ","))
           msg("")
           DevModeOutput (Template("DevModeInitDegugTable"))
         }
@@ -753,8 +753,8 @@
   ****************************************************************************************************
   -->
   <function name="setCommand" parameters="command">
-    commandOutput ("#" + command)
-    HandleSingleCommand ("#" + command)
+    commandOutput (command)
+    HandleSingleCommand (command)
   </function>
 
   <!--
@@ -942,7 +942,7 @@
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
     <devmode_fontcolour type="string">Green</devmode_fontcolour>
     <devmode_attributes type="stringdictionary" />
-    <devmode_verbs type="simplestringlist">#drop;#take;#to;#open;#close;#on;#off</devmode_verbs>
+    <devmode_verbs type="simplestringlist">#take;#drop;#open;#close;#on;#off;#to;#go</devmode_verbs>
     <!-- ******************************************************************************************* -->
     <!-- // TODO: Start Exclude in core mode                                                         -->
     <inituserinterface type="script">
