@@ -167,8 +167,28 @@ function initDebugTable(css, verbs) {
         rowClick: function (e, row) { // For name selectiony
             row.select();
         },
+        rowDblClick: function (e, row) {
+            row.select();
+            switch (row.getData().typ) {
+                case "Objects":
+                    ASLEvent("setCommand", "#take " + selectedname);
+                    break;
+                case "Rooms":
+                    ASLEvent("setCommand", "#go " + selectedname);
+                    break;
+            }
+        },
         rowContext: function (e, row) {
             row.select();
+            $('#devmode_sidebar_popupmenu li').css({"font-weight":"normal"});
+            switch (row.getData().typ) {
+                case "Objects":
+                    $('#devmode_sidebar_popupmenu li[data-action="#take"]').css({"font-weight":"bold"});
+                    break;
+                case "Rooms":
+                    $('#devmode_sidebar_popupmenu li[data-action="#go"]').css({"font-weight":"bold"});
+                    break;
+            }
         },
         rowSelected: function (row) {
             selectedname = row.getData().name;
@@ -178,7 +198,7 @@ function initDebugTable(css, verbs) {
             var hasMatch = false;
             for (var index = 0; index < data.length; ++index) {
                 var element = data[index];
-                if (element.name == selectedname) {
+                if (element.name === selectedname) {
                     hasMatch = true;
                     break;
                 }

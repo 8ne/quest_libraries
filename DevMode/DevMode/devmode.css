@@ -89,6 +89,15 @@ TABLES FOR TABULATOR
   width: 60%;
 }
 
+#devmode_sidebar_popupmenu, #debugtable_names:not(input), #debugtable_attr:not(input) {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
 /*
 ----------------------------------------------------------------------------------------------------
 TABULATOR
