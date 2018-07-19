@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.7.0
+  Version 1.7.1
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -241,20 +241,12 @@
                 obj = getObjectExt(objstr)
                 if (obj = null) error (DynamicTemplate("DevModeErrorCantFindObject", objstr))
                 switch (LCase(com1)) {
-                  case ("drop") {
-                    setWithoutChange (obj, "parent", game.pov.parent)
-                    DevModeOutput (Template("DevModeComExecute"))
-                  }
                   case ("take") {
                     setWithoutChange (obj, "parent", game.pov)
                     DevModeOutput (Template("DevModeComExecute"))
                   }
-                  case ("to") {
-                    setWithoutChange (game, "pov", obj)
-                    DevModeOutput (Template("DevModeComExecute"))
-                  }                
-                  case ("go") {
-                    setWithoutChange (game.pov, "parent", obj)
+                  case ("drop") {
+                    setWithoutChange (obj, "parent", game.pov.parent)
                     DevModeOutput (Template("DevModeComExecute"))
                   }
                   case ("open") {
@@ -271,6 +263,26 @@
                   }
                   case ("off") {
                     setWithoutChange (obj, "switchedon", false)
+                    DevModeOutput (Template("DevModeComExecute"))
+                  }
+                  case ("to") {
+                    setWithoutChange (game, "pov", obj)
+                    DevModeOutput (Template("DevModeComExecute"))
+                  }                
+                  case ("go") {
+                    setWithoutChange (game.pov, "parent", obj)
+                    if (HasString(game.pov.parent, "picture")) {
+                      if (LengthOf(game.pov.parent.picture) > 0) {
+                        roomFrameExists = true
+                        SetFramePicture(game.pov.parent.picture)
+                      }
+                    }
+                    if (game.clearframe and not roomFrameExists) {
+                      ClearFramePicture
+                    }
+                    if (game.showdescriptiononenter) {
+                      ShowRoomDescription
+                    }
                     DevModeOutput (Template("DevModeComExecute"))
                   }
                 }
@@ -653,18 +665,14 @@
         DevModeOutput (Template("DevModeActive"))
         if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
           foreach(key, game.devmode_attributes) {
-            command = key + "=" + ToString(DictionaryItem(game.devmode_attributes, key))
-            commandOutput ("#" + command)
-            ParseToQuestCode (command)
+            setAttribute (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
           }
         }
         if (game.devmode_changepov) {
-          commandOutput ("#to " + game.devmode_pov)
-          HandleSingleCommand ("#to " + game.devmode_pov)
+          setCommand ("#to " + game.devmode_pov)
         }
         if (game.devmode_changepovpos) {
-          commandOutput ("#go " + game.devmode_povpos)
-          HandleSingleCommand ("#go " + game.devmode_povpos)
+          setCommand ("#go " + game.devmode_povpos)
         }
         if (game.devmode_setverbs) {
           setVerbs
@@ -763,13 +771,13 @@
 
   <!--
   ****************************************************************************************************
-  // MARK: setTableData
+  // MARK: setAttribute
   The changes to the table data are transferred to Quest
   ****************************************************************************************************
   -->
-  <function name="setTableData" parameters="command">
-    commandOutput ("#" + command)
-    ParseToQuestCode (command)
+  <function name="setAttribute" parameters="attribute">
+    commandOutput ("#" + attribute)
+    ParseToQuestCode (attribute)
   </function>
 
   <!--

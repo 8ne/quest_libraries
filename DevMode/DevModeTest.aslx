@@ -30,6 +30,7 @@
     <attr name="devmode_fontcolour">Green</attr>
     <devmode_ownfontcolour />
     <attr name="devmode_selftest" type="boolean">false</attr>
+    <feature_pictureframe />
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
       msg ("TEST")
@@ -46,6 +47,7 @@
   </game>
   <object name="room1">
     <inherit name="editor_room" />
+    <picture>testroom1.png</picture>
     <object name="player1">
       <inherit name="editor_object" />
       <inherit name="editor_player" />
@@ -75,15 +77,16 @@
   </object>
   <object name="room2">
     <inherit name="editor_room" />
+    <picture>testroom2.png</picture>
     <exit alias="west" to="room1">
       <inherit name="westdirection" />
     </exit>
   </object>
   <turnscript name="Test">
+    <enabled />
     <script>
       msg ("Test")
     </script>
-    <enabled />
   </turnscript>
   <timer name="Test2">
     <interval>1</interval>

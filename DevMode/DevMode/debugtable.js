@@ -240,7 +240,7 @@ function initDebugTable(css, verbs) {
             }
         ],
         cellEdited: function (cell) { // When you change the attributes
-            ASLEvent("setTableData", selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value);
+            ASLEvent("setAttribute", selectedname + "." + cell.getRow().getData().attribute + "=" + cell.getRow().getData().value);
         }
     });
 
