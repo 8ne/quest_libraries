@@ -271,7 +271,8 @@
                   case ("go") {
                     setWithoutChange (game.pov, "parent", obj)
                     DevModeOutput (Template("DevModeComExecute"))
-                    if (HasString(game.pov.parent, "picture")) { // FIXME: Probleme mit dem Selftest fixen!
+                    roomFrameExists = false
+                    if (HasString(game.pov.parent, "picture")) {
                       if (LengthOf(game.pov.parent.picture) > 0) {
                         roomFrameExists = true
                         SetFramePicture(game.pov.parent.picture)
