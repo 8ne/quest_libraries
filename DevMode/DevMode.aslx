@@ -271,6 +271,7 @@
                   }                
                   case ("go") {
                     setWithoutChange (game.pov, "parent", obj)
+                    DevModeOutput (Template("DevModeComExecute"))
                     if (HasString(game.pov.parent, "picture")) {
                       if (LengthOf(game.pov.parent.picture) > 0) {
                         roomFrameExists = true
@@ -283,7 +284,6 @@
                     if (game.showdescriptiononenter) {
                       ShowRoomDescription
                     }
-                    DevModeOutput (Template("DevModeComExecute"))
                   }
                 }
               }
