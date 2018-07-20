@@ -11,6 +11,7 @@
   Compatible with Quest 5.7
   ****************************************************************************************************
   Edited in Visual Studio Code 1.25.0
+  - with extension TODOs
   ****************************************************************************************************
   If you are viewing this on GitHub and want to download it, right click on the RAW button
   just above, and select "Save link as..."
@@ -107,11 +108,11 @@
   <javascript src="DevMode/debugtable.js" />
 
   <!-- ******************************************************************************************* -->
-  <!-- // TODO: Start Exclude in core mode                                                         -->
+  <!-- TODO Start Exclude in core mode                                                             -->
 
   <!--
   ****************************************************************************************************
-  Languages
+  MARK Languages
   The available language templates
   ****************************************************************************************************
   -->
@@ -197,12 +198,12 @@
   <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Lists (["Hallo","Welt","!"]) und Dictionarys ({H:"Hallo",W:"Welt"} zu erstellen.)]]></template>
   -->
 
-  <!-- // TODO: End Exclude in core mode                                                           -->
+  <!-- TODO End Exclude in core mode                                                               -->
   <!-- ******************************************************************************************* -->
 
   <!--
   ****************************************************************************************************
-  devmode_commands
+  MARK devmode_commands
   The commands are processed here
   ****************************************************************************************************
   -->
@@ -321,7 +322,7 @@
 
   <!--
   ****************************************************************************************************
-  ParseToQuestCode
+  MARK ParseToQuestCode
   Converts the flyscript to quest code
   ****************************************************************************************************
   -->
@@ -523,7 +524,7 @@
 
   <!--
   ****************************************************************************************************
-  ParseToFlyScript
+  MARK ParseToFlyScript
   Converts the quest code to flyscript
   ****************************************************************************************************
   -->
@@ -599,7 +600,7 @@
 
   <!--
   ****************************************************************************************************
-  DevModeOutput
+  MARK DevModeOutput
   Output display of the DevMode in the selected color
   ****************************************************************************************************
   -->
@@ -615,7 +616,7 @@
 
   <!--
   ****************************************************************************************************
-  DevModeOutputError
+  MARK DevModeOutputError
   Output display of DevMode in red
   ****************************************************************************************************
   -->
@@ -629,7 +630,7 @@
 
   <!--
   ****************************************************************************************************
-  setWithoutChange
+  MARK setWithoutChange
   The intercept scripts are bypassed
   ****************************************************************************************************
   -->
@@ -651,7 +652,7 @@
 
   <!--
   ****************************************************************************************************
-  setDevMode
+  MARK setDevMode
   The DevMode is initialized
   ****************************************************************************************************
   -->
@@ -690,7 +691,7 @@
 
   <!--
   ****************************************************************************************************
-  getTableDataNames
+  MARK getTableDataNames
   All names of the objects are transferred to the table
   ****************************************************************************************************
   -->
@@ -737,7 +738,7 @@
 
   <!--
   ****************************************************************************************************
-  getTableDataAttr
+  MARK getTableDataAttr
   All attributes and values of the objects are transferred to the table
   ****************************************************************************************************
   -->
@@ -756,7 +757,7 @@
 
   <!--
   ****************************************************************************************************
-  setCommand
+  MARK setCommand
   Executing the object commands
   ****************************************************************************************************
   -->
@@ -767,7 +768,7 @@
 
   <!--
   ****************************************************************************************************
-  setAttribute
+  MARK setAttribute
   The changes to the table data are transferred to Quest
   ****************************************************************************************************
   -->
@@ -778,7 +779,7 @@
 
   <!--
   ****************************************************************************************************
-  commandOutput
+  MARK commandOutput
   The command is output with an arrow in front of it
   ****************************************************************************************************
   -->
@@ -789,7 +790,7 @@
 
   <!--
   ****************************************************************************************************
-  setVerbs
+  MARK setVerbs
   The verbs of the object commands are assigned to the object list
   ****************************************************************************************************
   -->
@@ -810,7 +811,7 @@
 
   <!--
   ****************************************************************************************************
-  getObjectExt
+  MARK getObjectExt
   Extended getObject, which takes into account the alias of the object instead of the name
   ****************************************************************************************************
   -->
@@ -828,7 +829,7 @@
 
   <!--
   ****************************************************************************************************
-  selfTest
+  MARK selfTest
   A test, at game start to check all functions of the DevMode
   ****************************************************************************************************
   -->
@@ -935,7 +936,7 @@
 
   <!--
   ****************************************************************************************************
-  Types
+  MARK Types
   The types required for the interface
   ****************************************************************************************************
   -->
@@ -952,17 +953,17 @@
     <devmode_attributes type="stringdictionary" />
     <devmode_verbs type="simplestringlist">#take;#drop;#open;#close;#on;#off;#to;#go</devmode_verbs>
     <!-- ******************************************************************************************* -->
-    <!-- // TODO: Start Exclude in core mode                                                         -->
+    <!-- TODO Start Exclude in core mode                                                             -->
     <inituserinterface type="script">
       setDevMode
     </inituserinterface>
-    <!-- // TODO: End Exclude in core mode                                                           -->
+    <!-- TODO End Exclude in core mode                                                               -->
     <!-- ******************************************************************************************* -->
  </type>
 
   <!--
   ****************************************************************************************************
-  Interface
+  MARK Interface
   The interface of the DevMode
   ****************************************************************************************************
   -->
@@ -970,9 +971,9 @@
     <parent>_GameEditor</parent>
     <caption>[EditorGameDevMode]</caption>
     <!-- ******************************************************************************************* -->
-    <!-- // TODO: Start Include in core mode                                                         -->
+    <!-- TODO Start Include in core mode                                                             -->
     <!-- <onlydisplayif>GetBoolean (game, "feature_devmode")</onlydisplayif> -->
-    <!-- // TODO: End Include in core mode                                                           -->
+    <!-- TODO End Include in core mode                                                               -->
     <!-- ******************************************************************************************* -->
 
     <control>
