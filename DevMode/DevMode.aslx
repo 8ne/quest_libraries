@@ -281,9 +281,6 @@
                     if (game.clearframe and not roomFrameExists) {
                       ClearFramePicture
                     }
-                    if (game.showdescriptiononenter) {
-                      ShowRoomDescription
-                    }
                   }
                 }
               }
