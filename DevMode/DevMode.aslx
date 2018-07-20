@@ -107,7 +107,7 @@
   <javascript src="DevMode/debugtable.js" />
 
   <!-- ******************************************************************************************* -->
-  <!-- TODO: Start Exclude in core mode                                                         -->
+  <!-- TODO: Start Exclude in core mode                                                            -->
 
   <!--
   ****************************************************************************************************
@@ -197,7 +197,7 @@
   <template name="EditorGameDevModeDescriptionAttribute"><![CDATA[In "Key" wird das Objekt mit dem zugehörigen Attribut eingetragen (z. B. game.showtitle oder player.look). In "Value" wird die Zuweisung eingetragen. Es ist möglich Strings ("Hallo Welt!"), Boolean (true oder false), Integer (15), Double (25.55), Lists (["Hallo","Welt","!"]) und Dictionarys ({H:"Hallo",W:"Welt"} zu erstellen.)]]></template>
   -->
 
-  <!-- TODO: End Exclude in core mode                                                           -->
+  <!-- TODO: End Exclude in core mode                                                              -->
   <!-- ******************************************************************************************* -->
 
   <!--
@@ -271,7 +271,7 @@
                   case ("go") {
                     setWithoutChange (game.pov, "parent", obj)
                     DevModeOutput (Template("DevModeComExecute"))
-                    if (HasString(game.pov.parent, "picture")) {
+                    if (HasString(game.pov.parent, "picture")) { // FIXME: Probleme mit dem Selftest fixen!
                       if (LengthOf(game.pov.parent.picture) > 0) {
                         roomFrameExists = true
                         SetFramePicture(game.pov.parent.picture)
@@ -952,11 +952,11 @@
     <devmode_attributes type="stringdictionary" />
     <devmode_verbs type="simplestringlist">#take;#drop;#open;#close;#on;#off;#to;#go</devmode_verbs>
     <!-- ******************************************************************************************* -->
-    <!-- TODO: Start Exclude in core mode                                                         -->
+    <!-- TODO: Start Exclude in core mode                                                            -->
     <inituserinterface type="script">
       setDevMode
     </inituserinterface>
-    <!-- TODO: End Exclude in core mode                                                           -->
+    <!-- TODO: End Exclude in core mode                                                              -->
     <!-- ******************************************************************************************* -->
  </type>
 
@@ -970,9 +970,9 @@
     <parent>_GameEditor</parent>
     <caption>[EditorGameDevMode]</caption>
     <!-- ******************************************************************************************* -->
-    <!-- TODO: Start Include in core mode                                                         -->
+    <!-- TODO: Start Include in core mode                                                            -->
     <!-- <onlydisplayif>GetBoolean (game, "feature_devmode")</onlydisplayif> -->
-    <!-- TODO: End Include in core mode                                                           -->
+    <!-- TODO: End Include in core mode                                                              -->
     <!-- ******************************************************************************************* -->
 
     <control>
