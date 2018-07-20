@@ -278,6 +278,7 @@
                   case ("go") {
                     setWithoutChange (game.pov, "parent", obj)
                     DevModeOutput (Template("DevModeComExecute"))
+                    roomFrameExists = false
                     if (HasString(game.pov.parent, "picture")) {
                       if (LengthOf(game.pov.parent.picture) > 0) {
                         roomFrameExists = true
