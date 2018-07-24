@@ -150,7 +150,7 @@
   <template name="EditorGameDevModeSetInitScript">Use an initialization script for DevMode</template>
   <template name="EditorGameDevModeInitScript">Initialization script for DevMode</template>
   <template name="EditorGameDevModeShowSidebar">Show Sidebar</template>
-  <template name="EditorGameDevModeSidebarPos">Position of the debugtable</template>
+  <template name="EditorGameDevModeSidebarPos">Position of the sidebar</template>
   <template name="EditorGameDevModeSidebarPosLeft">Left</template>
   <template name="EditorGameDevModeSidebarPosRight">Right</template>
   <template name="EditorGameDevModeSetVerbs">Add DevMode verbs to the verb list of objects</template>
@@ -174,7 +174,7 @@
   <template name="DevModeNotActive">Der DevMode ist nicht aktiv!</template>
   <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Hilfe</h3><b><u>Objekt-Kommandos</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b><u>Single-Kommandos</u></b><br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)<br/><br/><b><u>Objekt-Attribute</u></b><br/>#object1.attribute=object2.attribute (Attributzuweisung eines anderen Objektes)<br/>#object.attribute=true / false (Setze auf wahr / falsch)<br/>#object.attribute=? / ! (Setze auf wahr / falsch)<br/>#object.attribute=~ (Toggle auf wahr oder falsch)<br/>#object.attribute="value" (String)<br/>#object.attribute=15 (Integer)<br/>#object.attribute=25.55 (Double)<br/>#object.attribute=[item1,item2,item3] (List)<br/>#object.attribute[]=element (Element zur List hinzufügen)<br/>#object.attribute[key]=element (Element zur List hinzufügen oder überschreiben)<br/>#object.attribute=[] (Eine neue List erstellen)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (Dictionary)<br/>#object.attribute{key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribute={} (Neues Dictionary erstellen)<br/>#object.attribute (Lese Attribute)<br/>]]></template>
   <template name="DevModeActive"><![CDATA[<b>Entwicklermodus: Aktiviert</b>]]></template>
-  <template name="DevModeInitSidebar">Debugtabelle initialisiert.</template>
+  <template name="DevModeInitSidebar">Sidebar initialisiert.</template>
   <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
   <template name="DevModeSetVerbs">Verben zugeordnet.</template>
   <template name="DevModeComExecute">Kommando ausgeführt.</template>
@@ -194,8 +194,8 @@
   <template name="EditorGameDevModePlace">Ort</template>
   <template name="EditorGameDevModeSetInitScript">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
   <template name="EditorGameDevModeInitScript">Initialisierungsscript für den Entwicklermodus</template>
-  <template name="EditorGameDevModeShowSidebar">Zeige Debugtabelle</template>
-  <template name="EditorGameDevModeSidebarPos">Position der Debugtabelle</template>
+  <template name="EditorGameDevModeShowSidebar">Zeige Sidebar</template>
+  <template name="EditorGameDevModeSidebarPos">Position der Sidebar</template>
   <template name="EditorGameDevModeSidebarPosLeft">Links</template>
   <template name="EditorGameDevModeSidebarPosRight">Rechts</template>
   <template name="EditorGameDevModeSetVerbs">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>

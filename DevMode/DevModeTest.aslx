@@ -32,7 +32,7 @@
     <attr name="devmode_selftest" type="boolean">false</attr>
     <feature_pictureframe />
     <devmode_showsidebar />
-    <attr name="devmode_sidebarpos">right</attr>
+    <attr name="devmode_sidebarpos">left</attr>
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
       msg ("TEST")
