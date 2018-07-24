@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by SoonGames, 2018
-  Version 1.7.1
+  Version 1.8.0
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -104,8 +104,9 @@
   Files required for DevMode
   ****************************************************************************************************
   -->
+  <javascript src="DevMode/jquery.sidebar.min.js" />
   <javascript src="DevMode/tabulator.min.js" />
-  <javascript src="DevMode/debugtable.js" />
+  <javascript src="DevMode/devmode_sidebar.js" />
 
   <!--
   ****************************************************************************************************
@@ -128,7 +129,7 @@
   <template name="DevModeNotActive">DevMode is not active!</template>
   <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Help</h3><b><u>Object-Commends</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Unlike the commands in the game, they are executed directly and without detours via intercept scripts.</i><br/><br/><b><u>Single-Commands</u></b><br/>#clr (clear screen)<br/>#? (help)<br/># (close game)<br/><br/><b><u>Object-Attributes</u></b><br/>#object1.attribute=object2.attribute (attribute assignment of another object)<br/>#object.attribute=true / false (set true / false)<br/>#object.attribute=? / ! (set true / false)<br/>#object.attribute=~ (toggle true or false)<br/>#object.attribute="value" (string)<br/>#object.attribute=15 (integer)<br/>#object.attribute=25.55 (double)<br/>#object.attribute=[item1,item2,item3] (list)<br/>#object.attribute[]=element (add element to list)<br/>#object.attribute[key]=element (add or overwrite element to list)<br/>#object.attribute=[] (create new list)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (dictionary)<br/>#object.attribute{key}=element (add or overwrite element to dictionary)<br/>#object.attribute={} (create new dictionary)<br/>#object.attribute (read attribute)<br/>]]></template>
   <template name="DevModeActive"><![CDATA[<b>DevMode: Active</b>]]></template>
-  <template name="DevModeInitDegugTable">Debug table initialized.</template>
+  <template name="DevModeInitSidebar">Sidebar initialized.</template>
   <template name="DevModeStartScript">Initialization script started.</template>
   <template name="DevModeSetVerbs">Verbs assigned.</template>
   <template name="DevModeComExecute">Command executed.</template>
@@ -148,7 +149,10 @@
   <template name="EditorGameDevModePlace">Location</template>
   <template name="EditorGameDevModeSetInitScript">Use an initialization script for DevMode</template>
   <template name="EditorGameDevModeInitScript">Initialization script for DevMode</template>
-  <template name="EditorGameDevModeShowDebugTable">Show debugtable</template>
+  <template name="EditorGameDevModeShowSidebar">Show Sidebar</template>
+  <template name="EditorGameDevModeSidebarPos">Position of the sidebar</template>
+  <template name="EditorGameDevModeSidebarPosLeft">Left</template>
+  <template name="EditorGameDevModeSidebarPosRight">Right</template>
   <template name="EditorGameDevModeSetVerbs">Add DevMode verbs to the verb list of objects</template>
   <template name="EditorGameDevModeShowInfos">Display DevMode output</template>
   <template name="EditorGameDevModeOwnFontColour">Use your own font color for DevMode output</template>
@@ -170,7 +174,7 @@
   <template name="DevModeNotActive">Der DevMode ist nicht aktiv!</template>
   <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Hilfe</h3><b><u>Objekt-Kommandos</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b><u>Single-Kommandos</u></b><br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)<br/><br/><b><u>Objekt-Attribute</u></b><br/>#object1.attribute=object2.attribute (Attributzuweisung eines anderen Objektes)<br/>#object.attribute=true / false (Setze auf wahr / falsch)<br/>#object.attribute=? / ! (Setze auf wahr / falsch)<br/>#object.attribute=~ (Toggle auf wahr oder falsch)<br/>#object.attribute="value" (String)<br/>#object.attribute=15 (Integer)<br/>#object.attribute=25.55 (Double)<br/>#object.attribute=[item1,item2,item3] (List)<br/>#object.attribute[]=element (Element zur List hinzufügen)<br/>#object.attribute[key]=element (Element zur List hinzufügen oder überschreiben)<br/>#object.attribute=[] (Eine neue List erstellen)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (Dictionary)<br/>#object.attribute{key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribute={} (Neues Dictionary erstellen)<br/>#object.attribute (Lese Attribute)<br/>]]></template>
   <template name="DevModeActive"><![CDATA[<b>Entwicklermodus: Aktiviert</b>]]></template>
-  <template name="DevModeInitDegugTable">Debugtabelle initialisiert.</template>
+  <template name="DevModeInitSidebar">Sidebar initialisiert.</template>
   <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
   <template name="DevModeSetVerbs">Verben zugeordnet.</template>
   <template name="DevModeComExecute">Kommando ausgeführt.</template>
@@ -190,7 +194,10 @@
   <template name="EditorGameDevModePlace">Ort</template>
   <template name="EditorGameDevModeSetInitScript">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
   <template name="EditorGameDevModeInitScript">Initialisierungsscript für den Entwicklermodus</template>
-  <template name="EditorGameDevModeShowDebugTable">Zeige Debugtabelle</template>
+  <template name="EditorGameDevModeShowSidebar">Zeige Sidebar</template>
+  <template name="EditorGameDevModeSidebarPos">Position der Sidebar</template>
+  <template name="EditorGameDevModeSidebarPosLeft">Links</template>
+  <template name="EditorGameDevModeSidebarPosRight">Rechts</template>
   <template name="EditorGameDevModeSetVerbs">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>
   <template name="EditorGameDevModeShowInfos">Ausgaben des Entwicklungsmodus anzeigen</template>  
   <template name="EditorGameDevModeOwnFontColour">Eigene Schriftfarbe für die Ausgabe des Entwicklermodus verwenden</template>
@@ -681,10 +688,10 @@
         if (game.devmode_setverbs) {
           setVerbs
         }
-        if (game.devmode_showdebugtable) {
-          JS.initDebugTable (GetFileData("DevMode/devmode.css"), Join(game.devmode_verbs, ","))
+        if (game.devmode_showsidebar) {
+          JS.initDevModeSideBar (GetFileData("DevMode/devmode_sidebar.css"), game.devmode_sidebarpos, Join(game.devmode_verbs, ","))
           msg("")
-          DevModeOutput (Template("DevModeInitDegugTable"))
+          DevModeOutput (Template("DevModeInitSidebar"))
         }
         if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
           msg("")
@@ -954,7 +961,8 @@
     <devmode_setinitscript type="boolean">false</devmode_setinitscript>
     <devmode_setverbs type="boolean">true</devmode_setverbs>
     <devmode_showinfos type="boolean">true</devmode_showinfos>
-    <devmode_showdebugtable type="boolean">true</devmode_showdebugtable>
+    <devmode_showsidebar type="boolean">true</devmode_showsidebar>
+    <devmode_sidebarpos type="string">right</devmode_sidebarpos>
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
     <devmode_fontcolour type="string">Green</devmode_fontcolour>
     <devmode_attributes type="stringdictionary" />
@@ -1082,10 +1090,20 @@
     </control>
 
     <control>
-      <caption>[EditorGameDevModeShowDebugTable]</caption>
+      <caption>[EditorGameDevModeShowSidebar]</caption>
       <controltype>checkbox</controltype>
-      <attribute>devmode_showdebugtable</attribute>
+      <attribute>devmode_showsidebar</attribute>
       <mustinherit>devmode</mustinherit>
+    </control>
+
+    <control>
+      <caption>[EditorGameDevModeSidebarPos]</caption>
+      <controltype>dropdown</controltype>
+      <attribute>devmode_sidebarpos</attribute>
+      <validvalues type="simplestringdictionary">left=[EditorGameDevModeSidebarPosLeft]; right=[EditorGameDevModeSidebarPosRight]</validvalues>
+      <onlydisplayif>game.devmode_showsidebar</onlydisplayif>
+      <mustinherit>devmode</mustinherit>
+      <width>150</width>
     </control>
 
     <control>

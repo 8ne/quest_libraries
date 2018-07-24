@@ -1,48 +1,96 @@
 /*
 ----------------------------------------------------------------------------------------------------
-DEVMODE SIDEBAR
+SIDEBAR
 ----------------------------------------------------------------------------------------------------
 */
-#devmode_sidebar_labels_debugtable {
-  background-image: url('quest://res/DevMode/debugtable.png')
-}
 
-.devmode_sidebar_labels {
-  box-sizing: border-box;
-  text-align: center;
-  border-bottom-left-radius: 10px;
-  position: fixed;
-  top: 0px;
-  right: 500px;
-  height: 50px;
-  width: 50px;
-  background-color: ghostwhite;
-  background-repeat: no-repeat, repeat;
-  background-position: center;
-  box-shadow: none;
-  transition: box-shadow 0.5s;
-  z-index: 210;
-}
-
-.devmode_sidebar {
+#devmode_sidebar {
   box-sizing: border-box;
   display: flex;
   height: 100%;
   width: 500px;
   top: 0px;
-  right: 0px;
   display: flex;
   position: fixed;
-  width: 500px;
   border: none;
-  box-shadow: none;
-  transition: box-shadow 0.2s;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
   background-color: ghostwhite;
   z-index: 200;
 }
 
+#devmode_sidebar_placeholder {
+  width: 55px;
+  height: 100%;
+}
 
-#devmode_sidebar_popupmenu {
+#devmode_sidebar_container {
+  width: 100%;
+  height: 100%;
+}
+
+/*
+----------------------------------------------------------------------------------------------------
+SIDEBAR-STRIP
+----------------------------------------------------------------------------------------------------
+*/
+
+#devmode_sidebar_strip {
+  box-sizing: border-box;
+  text-align: center;
+  position: fixed;
+  top: 0px;
+  height: 100%;
+  width: 50px;
+  background-color: ghostwhite;
+  box-shadow: none;
+  transition: box-shadow 0.5s;
+  z-index: 210;
+}
+
+.devmode_sidebar_label {
+  width: 50px;
+  height: 50px;
+  background-color: transparent;
+  background-repeat: no-repeat, repeat;
+  background-position: center;
+}
+
+#devmode_sidebar_label_debugtable {
+  background-image: url('quest://res/DevMode/debugtable.png');
+}
+
+/*
+----------------------------------------------------------------------------------------------------
+DEBUGTABLE
+----------------------------------------------------------------------------------------------------
+*/
+
+#devmode_sidebar_debugtable {
+  width: 100%;
+  height: 100%;
+}
+
+#devmode_sidebar_debugtable_names {
+  box-sizing: border-box;
+  float: left;
+  height: 100%;
+  width: 40%;
+}
+
+#devmode_sidebar_debugtable_attr {
+  box-sizing: border-box;
+  float: left;
+  height: 100%;
+  width: 60%;
+}
+
+/*
+----------------------------------------------------------------------------------------------------
+POPUPMENU
+----------------------------------------------------------------------------------------------------
+*/
+
+#devmode_sidebar_debugtable_popupmenu {
   display: none;
   z-index: 1000;
   position: absolute;
@@ -52,44 +100,30 @@ DEVMODE SIDEBAR
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: #FFF;
   color: #333;
-  list-style:none;
-  padding-left:0;
+  list-style: none;
+  padding-left: 0;
   margin: 0;
 }
 
-.ui-resizable-w {
-  width: 10px;
-}
-
-#devmode_sidebar_popupmenu li {
+#devmode_sidebar_debugtable_popupmenu li {
   padding: 8px 12px;
   cursor: default;
 }
 
-#devmode_sidebar_popupmenu li:hover {
+#devmode_sidebar_debugtable_popupmenu li:hover {
   background-color: #DEF;
 }
 
 /*
 ----------------------------------------------------------------------------------------------------
-TABLES FOR TABULATOR
-----------------------------------------------------------------------------------------------------
 */
-#debugtable_names {
-  box-sizing: border-box;
-  float: right;
-  height: 100%;
-  width: 40%;
+
+.ui-resizable-w {
+  width: 10px;
 }
 
-#debugtable_attr {
-  box-sizing: border-box;
-  float: right;
-  height: 100%;
-  width: 60%;
-}
-
-#devmode_sidebar_popupmenu, #debugtable_names:not(input), #debugtable_attr:not(input) {
+#devmode_sidebar_debugtable_popupmenu,
+#devmode_sidebar_debugtable:not(input) {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -khtml-user-select: none;
@@ -104,6 +138,7 @@ TABULATOR
 Tabulator v3.5.3 (c) Oliver Folkerd
 ----------------------------------------------------------------------------------------------------
 */
+
 .tabulator {
   position: relative;
   /* border: 1px solid #999; */
@@ -123,9 +158,9 @@ Tabulator v3.5.3 (c) Oliver Folkerd
 
 .tabulator.tabulator-block-select {
   -webkit-user-select: none;
-     -moz-user-select: none;
-      -ms-user-select: none;
-          user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .tabulator .tabulator-header {
@@ -328,7 +363,7 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   width: 100%;
 }
 
@@ -379,7 +414,7 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   font-weight: bold;
   white-space: nowrap;
   -ms-user-select: none;
-      user-select: none;
+  user-select: none;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -463,7 +498,7 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   display: -ms-flexbox;
   display: flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   top: 0;
   left: 0;
   z-index: 100;
@@ -513,7 +548,6 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   color: white;
   /* background-color: #9ABCEA; */
   background-color: #1D1B61;
-
 }
 
 .tabulator-row.tabulator-selected:hover {
@@ -606,13 +640,15 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   padding: 0;
 }
 
-.tabulator-row .tabulator-cell.tabulator-editing input, .tabulator-row .tabulator-cell.tabulator-editing select {
+.tabulator-row .tabulator-cell.tabulator-editing input,
+.tabulator-row .tabulator-cell.tabulator-editing select {
   /* border: 1px; */
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   background: white;
 }
 
-.tabulator-row .tabulator-cell.tabulator-editing input, .tabulator-row .tabulator-cell.tabulator-editing select:focus {
+.tabulator-row .tabulator-cell.tabulator-editing input,
+.tabulator-row .tabulator-cell.tabulator-editing select:focus {
   /* border: 1px; */
   border: none;
   outline: none;
@@ -623,7 +659,8 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   border: 1px solid #dd0000;
 }
 
-.tabulator-row .tabulator-cell.tabulator-validation-fail input, .tabulator-row .tabulator-cell.tabulator-validation-fail select {
+.tabulator-row .tabulator-cell.tabulator-validation-fail input,
+.tabulator-row .tabulator-cell.tabulator-validation-fail select {
   border: 1px;
   background: transparent;
   color: #dd0000;
@@ -637,9 +674,9 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   display: -ms-inline-flexbox;
   display: inline-flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;
@@ -661,9 +698,9 @@ Tabulator v3.5.3 (c) Oliver Folkerd
   display: -ms-inline-flexbox;
   display: inline-flex;
   -ms-flex-align: center;
-      align-items: center;
+  align-items: center;
   -ms-flex-pack: center;
-      justify-content: center;
+  justify-content: center;
   -moz-user-select: none;
   -khtml-user-select: none;
   -webkit-user-select: none;

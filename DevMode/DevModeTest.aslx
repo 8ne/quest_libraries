@@ -1,4 +1,4 @@
-<!--Saved by Quest 5.8.6752.28129-->
+<!--Saved by Quest 5.8.6773.16526-->
 <asl version="580">
   <include ref="English.aslx" />
   <include ref="Core.aslx" />
@@ -31,6 +31,8 @@
     <devmode_ownfontcolour />
     <attr name="devmode_selftest" type="boolean">false</attr>
     <feature_pictureframe />
+    <devmode_showsidebar />
+    <attr name="devmode_sidebarpos">right</attr>
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
       msg ("TEST")
