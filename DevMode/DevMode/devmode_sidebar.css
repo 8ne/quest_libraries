@@ -122,6 +122,7 @@ POPUPMENU
   width: 10px;
 }
 
+#devmode_sidebar_strip,
 #devmode_sidebar_debugtable_popupmenu,
 #devmode_sidebar_debugtable:not(input) {
   -webkit-touch-callout: none;
