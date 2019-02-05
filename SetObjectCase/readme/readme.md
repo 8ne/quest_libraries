@@ -15,4 +15,4 @@
 
 *Have fun with the library!*
 
-![enter image description here](https://raw.githubusercontent.com/scriptgames/quest_libraries/master/scrgames.png)
+![enter image description here](https://raw.githubusercontent.com/scriptgames/quest_libraries/master/scriptgames.png)
