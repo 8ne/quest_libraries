@@ -8,17 +8,17 @@
 #### Now with a runtime table with all objects for controlling the object attributes, including the possibility to change the values at runtime. The code inside is in FlyScript.
 ---
 
-![Preview DevMode](https://raw.githubusercontent.com/scrgames/quest_libraries/master/DevMode/readme/DevMode.gif)
+![Preview DevMode](https://raw.githubusercontent.com/scriptgames/quest_libraries/master/DevMode/readme/DevMode.gif)
 
 ---
-**[To download the library simply right-click here and select "Save as..."!](https://github.com/scrgames/quest_libraries/raw/master/DevMode/DevMode.zip)**
+**[To download the library simply right-click here and select "Save as..."!](https://github.com/scriptgames/quest_libraries/raw/master/DevMode/DevMode.zip)**
 
 
 ---
-**[You want to see all libraries of scrgames? Just click here!](https://github.com/scrgames/quest_libraries)**
+**[You want to see all libraries of scriptgames? Just click here!](https://github.com/scriptgames/quest_libraries)**
 
 ---
 
 *Have fun with the library!*
 
-![enter image description here](https://raw.githubusercontent.com/scrgames/quest_libraries/master/scriptgames.png)
+![enter image description here](https://raw.githubusercontent.com/scriptgames/quest_libraries/master/scriptgames.png)
