@@ -30,7 +30,6 @@ function initDevModeSideBar(css, pos, verbs) {
     var placeholder = '<div id="devmode_sidebar_placeholder"></div>';
     switch (pos) {
         case "left":
-            $('html').css({'margin-left': '50px'});
             $('#devmode_sidebar_strip').css({
                 left: 0
             });
@@ -45,7 +44,6 @@ function initDevModeSideBar(css, pos, verbs) {
             });
             break;
         case "right":
-            $('html').css({'margin-right': '50px'});
             $('#devmode_sidebar_strip').css({
                 right: 0
             });
