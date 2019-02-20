@@ -5,7 +5,7 @@
 ---
 
 
-![Preview DevMode](https://raw.githubusercontent.com/scriptgames/quest_libraries/master/AdvancedGermanParser/readme/AdvancedGermanParser.gif)
+![Preview AdvancedGermanParser](https://raw.githubusercontent.com/scriptgames/quest_libraries/master/AdvancedGermanParser/readme/AdvancedGermanParser.gif)
 
 ---
 **[To download the library simply right-click here and select "Save as..."!](https://github.com/scriptgames/quest_libraries/raw/master/AdvancedGermanParser/AdvancedGermanParser.aslx)**
