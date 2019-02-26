@@ -544,7 +544,7 @@
     </script>
   </command>
   <command name="take">
-    <pattern type="string"><![CDATA[^(?!#)(?!.*?\b(?:von|vom|aus)\S{0,3}\b)(?=.*?\b(?:nimm|nehm|entgegennehm|aufnehm|entwend|hol|schnapp|ergreif|greif|einpack|einsteck|heb|i)\S{0,3}\b|.*?\b(?:steck|pack)\S{0,3}\b.*?\bein\b)(?=.*\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?!#)(?!.*?\b(?:von|vom|aus)\S{0,3}\b)(?=.*?\b(?:nimm|nehm|entgegennehm|aufnehm|entwend|hol|schnapp|ergreif|greif|einpack|einsteck|heb)\S{0,3}\b|.*?\bi\b|.*?\b(?:steck|pack)\S{0,3}\b.*?\bein\b)(?=.*\b(?<object>X)\b).*$]]></pattern>
     <allow_all />
     <scope>notheld</scope>
     <script>
