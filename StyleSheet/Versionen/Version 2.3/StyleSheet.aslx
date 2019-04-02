@@ -66,6 +66,7 @@
   <template name="EditorGameSSNoStyleSheet">Without</template>
   <template name="EditorGameSSInstruction">Instruction</template>
   <template name="EditorGameSSextracts">Extraction</template>
+  <template name="EditorGameSSInfoRelease">Important: Before publishing the game the extraction must be deactivated!</template>
   <template name="EditorGameSSExtractFromHTML">Extract CSS from HTML</template>
   <template name="EditorGameSSextractTempIDs">Temporarily generated IDs (IDs created during the game, e. g. divOutputAlign with sequence number. It is recommended to leave the checkbox unchecked)</template>
   <template name="EditorGameSSInternInstruction"><![CDATA[Select the 'Extract CSS from HTML' option. Start the game. Change the interface using HTML tools. Close the tool and press CTRL + ENTER. If a success message has appeared the game again stop and the extracted CSS code from the clipboard in the text field provided for this purpose. Adjustments may still have to be made in the CSS code to achieve the optimum result. Before publishing the game, the extraction option should be deactivated again.]]></template>
@@ -88,6 +89,7 @@
   <template name="EditorGameSSNoStyleSheetDE">Ohne</template>
   <template name="EditorGameSSInstructionDE">Anleitung</template>
   <template name="EditorGameSSextractsDE">Extrahierung</template>
+  <template name="EditorGameSSInfoReleaseDE">Wichtig: Vor Veröffentlichung des Spiels muss die Extrahierung deaktiviert werden!</template>
   <template name="EditorGameSSExtractFromHTMLDE">Extrahiere CSS aus HTML</template>
   <template name="EditorGameSSextractTempIDsDE">Temporär generierte IDs (IDs, die während des Spiels erstellt werden, z. B. divOutputAlign mit Folgenummer. Es wird empfohlen, die Checkbox nicht zu aktivieren)</template>
   <template name="EditorGameSSInternInstructionDE"><![CDATA[Die Option 'Extrahiere CSS aus HTML' wählen. Das Spiel starten. Die Oberfläche mithilfe der HTML-Tools ändern. Das Tool schließen und die Tastenkombination STRG + ENTER drücken. Ist eine Erfolgsmeldung erschienen das Spiel wieder stoppen und den extrahierten CSS-Code aus der Zwischenablage in das hierfür vorgesehene Textfeld einfügen. Es müssen eventuell noch Anpassungen im CSS-Code vorgenommen werden um das optimale Ergebnis zu erzielen. Vor dem Veröffentlichen des Spiels sollte die Extrahieren-Option wieder deaktiviert werden.]]></template>
@@ -272,6 +274,14 @@
     </control>
 
     <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSInfoRelease]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+      <bold/>
+    </control>
+
+    <control>
       <controltype>title</controltype>
       <caption>[EditorGameSSInternCSSCode]</caption>
       <mustinherit>cssintern</mustinherit>
@@ -376,6 +386,14 @@
       <attribute>cssextractowncode</attribute>
       <mustinherit>cssintern</mustinherit>
       <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+    </control>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorGameSSInfoReleaseDE]</caption>
+      <mustinherit>cssintern</mustinherit>
+      <onlydisplayif>game.cssextractfromhtml</onlydisplayif>
+      <bold/>
     </control>
 
     <control>
