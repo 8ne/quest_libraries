@@ -1,15 +1,13 @@
 ﻿// ----------------------------------------------------------------------------------------------------
 // CommandBar with Own Cursor
-// by ScriptGames, 2017-2019
-// Version 1.3.1
+// by SoonGames, 2017
+// Version 1.3
 // ----------------------------------------------------------------------------------------------------
 // Quest-Version: 5.7
 // ----------------------------------------------------------------------------------------------------
 // Just download the OwnCursor.js and integrate it as javascript in Quest.
 // ----------------------------------------------------------------------------------------------------
-// Version 1.3.1
-// Bug with blinking cursor in browser fixed.
-// ----------------------------------------------------------------------------------------------------
+
 // Version 1.3
 // incompatibility with DevMode removed.
 // OwnCursor can now be activated and deactivated with OwnCurActive so that the script does not have to
@@ -28,21 +26,24 @@
 	// --------------------------------------------------------------------------------------------------------------
 	var OwnCurActive = true; // owncursor on and off
 	// --------------------------------------------------------------------------------------------------------------
-	//var OwnCurCursor = "█"; // cursor
+	var OwnCurCursor = "█"; // cursor
 	//var OwnCurCursor = " "; // without cursor
-	var OwnCurCursor = "_"; // alternate cursors
+	//var OwnCurCursor = "_"; // alternate cursors
 	//var OwnCurCursor = "▌";
 	//var OwnCurCursor = "▄";
 	//var OwnCurCursor = "●";
 	//var OwnCurCursor = "►";
 	var OwnCurCursorLen = OwnCurCursor.length;
 	// --------------------------------------------------------------------------------------------------------------
-	var OwnCurBlinking = true; // determines whether the cursor flashes.
+	var OwnCurBlinking = false; // determines whether the cursor flashes.
 	var OwnCurBlinkinterval = 500; // how often the cursor of the indicated milliseconds should blink.
 	// --------------------------------------------------------------------------------------------------------------
 	var OwnCurBlinkcursor = " "; // without blinkcursor
 	//var OwnCurBlinkcursor = "▄"; // cursor, the one is replaced with the blinking. can be customized with any cursor.
 	var OwnCurBlinkcursorLen = OwnCurBlinkcursor.length;
+	// --------------------------------------------------------------------------------------------------------------
+	if (OwnCurBlinking) window.setInterval(OwnCurItsBlinking, OwnCurBlinkinterval);
+	// --------------------------------------------------------------------------------------------------------------
 
 	if (OwnCurActive) {
 
@@ -110,10 +111,7 @@
 				else var text = cmdbar.val().slice(0, -OwnCurBlinkcursorLen) + OwnCurCursor;
 				cmdbar.val(text);
 			}
-			setTimeout(OwnCurItsBlinking, OwnCurBlinkinterval);
 		}
-
-		if (OwnCurBlinking) OwnCurItsBlinking();
 		
 	}
 
