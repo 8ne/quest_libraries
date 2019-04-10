@@ -2,6 +2,8 @@
 #### Here you can find all libraries of ScriptGames. Just right click on the following links and select "Save us..."
 ---
 
+ - [AdvancedGermanParser](https://github.com/scriptgames/quest_libraries/raw/master/AdvancedGermanParser/AdvancedGermanParser.aslx)
+
  - [Developer Mode](https://github.com/scriptgames/quest_libraries/raw/master/DevMode/DevMode.aslx)
 
  - [ObjectExt](https://github.com/scriptgames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)
