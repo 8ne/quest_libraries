@@ -24,7 +24,8 @@
 
   ****************************************************************************************************
   Version 2.1
-  Optical improvement
+  Optical improvement.
+  The size of the content is normalized again, since nothing is covered by the sidebar anymore.
   ****************************************************************************************************
   Version 2.0
   Fixed a bug that prevented execution on the Internet.
