@@ -5,8 +5,8 @@
 
   ****************************************************************************************************
   DevMode - Tool for better testing the game
-  by ScriptGames, 2018 - 2019
-  Version 2.2
+  by SoonGames, 2018
+  Version 2.1
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -22,10 +22,6 @@
   Inspired by Pixie's Cheating-Code. ;-)
   ****************************************************************************************************
 
-  ****************************************************************************************************
-  Version 2.2
-  Adjustable sidebar size
-  New label for the display of the log area
   ****************************************************************************************************
   Version 2.1
   Optical improvement.
@@ -169,10 +165,9 @@
   <template name="EditorGameDevModeSetInitScript">Use an initialization script for DevMode</template>
   <template name="EditorGameDevModeInitScript">Initialization script for DevMode</template>
   <template name="EditorGameDevModeShowSidebar">Show Sidebar</template>
-  <template name="EditorGameDevModeSidebarPos">Position</template>
+  <template name="EditorGameDevModeSidebarPos">Position of the sidebar</template>
   <template name="EditorGameDevModeSidebarPosLeft">Left</template>
   <template name="EditorGameDevModeSidebarPosRight">Right</template>
-  <template name="EditorGameDevModeSidebarSize">Size</template>
   <template name="EditorGameDevModeSetVerbs">Add DevMode verbs to the verb list of objects</template>
   <template name="EditorGameDevModeShowInfos">Display DevMode output</template>
   <template name="EditorGameDevModeOwnFontColour">Use your own font color for DevMode output</template>
@@ -214,10 +209,9 @@
   <template name="EditorGameDevModeSetInitScript">Ein Initialisierungsscript für den Entwicklermodus verwenden</template>
   <template name="EditorGameDevModeInitScript">Initialisierungsscript für den Entwicklermodus</template>
   <template name="EditorGameDevModeShowSidebar">Zeige Sidebar</template>
-  <template name="EditorGameDevModeSidebarPos">Position</template>
+  <template name="EditorGameDevModeSidebarPos">Position der Sidebar</template>
   <template name="EditorGameDevModeSidebarPosLeft">Links</template>
   <template name="EditorGameDevModeSidebarPosRight">Rechts</template>
-  <template name="EditorGameDevModeSidebarSize">Größe</template>
   <template name="EditorGameDevModeSetVerbs">Verben des Entwicklungsmodus in die Verbliste der Objekte hinzufügen</template>
   <template name="EditorGameDevModeShowInfos">Ausgaben des Entwicklungsmodus anzeigen</template>  
   <template name="EditorGameDevModeOwnFontColour">Eigene Schriftfarbe für die Ausgabe des Entwicklermodus verwenden</template>
@@ -708,7 +702,7 @@
           setVerbs
         }
         if (game.devmode_showsidebar) {
-          JS.initDevModeSideBar (game.devmode_sidebarpos, game.devmode_sidebarsize, Join(game.devmode_verbs, ","))
+          JS.initDevModeSideBar (game.devmode_sidebarpos, Join(game.devmode_verbs, ","))
           msg("")
           DevModeOutput (Template("DevModeInitSidebar"))
         }
@@ -982,7 +976,6 @@
     <devmode_showinfos type="boolean">true</devmode_showinfos>
     <devmode_showsidebar type="boolean">true</devmode_showsidebar>
     <devmode_sidebarpos type="string">right</devmode_sidebarpos>
-    <devmode_sidebarsize type="string">25%</devmode_sidebarsize>
     <devmode_ownfontcolour type="boolean">true</devmode_ownfontcolour>
     <devmode_fontcolour type="string">Green</devmode_fontcolour>
     <devmode_attributes type="stringdictionary" />
@@ -1123,17 +1116,7 @@
       <validvalues type="simplestringdictionary">left=[EditorGameDevModeSidebarPosLeft]; right=[EditorGameDevModeSidebarPosRight]</validvalues>
       <onlydisplayif>game.devmode_showsidebar</onlydisplayif>
       <mustinherit>devmode</mustinherit>
-      <width>100</width>
-    </control>
-
-    <control>
-      <caption>[EditorGameDevModeSidebarSize]</caption>
-      <controltype>dropdown</controltype>
-      <attribute>devmode_sidebarsize</attribute>
-      <validvalues type="simplestringlist">25%;50%;75%;100%</validvalues>
-      <onlydisplayif>game.devmode_showsidebar</onlydisplayif>
-      <mustinherit>devmode</mustinherit>
-      <width>100</width>
+      <width>150</width>
     </control>
 
     <control>

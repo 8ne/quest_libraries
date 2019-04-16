@@ -1,4 +1,4 @@
-<!--Saved by Quest 5.8.6773.16526-->
+<!--Saved by Quest 5.8.6836.13983-->
 <asl version="580">
   <include ref="English.aslx" />
   <include ref="Core.aslx" />
@@ -32,7 +32,7 @@
     <attr name="devmode_selftest" type="boolean">false</attr>
     <feature_pictureframe />
     <devmode_showsidebar />
-    <attr name="devmode_sidebarpos">left</attr>
+    <attr name="devmode_sidebarpos">right</attr>
     <pov type="object">player1</pov>
     <attr name="devmode_initscript" type="script">
       msg ("TEST")
@@ -46,6 +46,7 @@
     <inituserinterface type="script">
       setDevMode
     </inituserinterface>
+    <attr name="devmode_sidebarsize">50%</attr>
   </game>
   <object name="room1">
     <inherit name="editor_room" />

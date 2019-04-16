@@ -1,4 +1,4 @@
-# DevMode 2.1
+# DevMode 2.2
 ### Compatible with Quest 5.7 and later.
 ---
 #### If the development mode is activated, new commands are available in the current game with which you can interact without detours via the change scripts. It is also possible to start the game with another player or in another room. Additionally, attributes can be adjusted in advance for the developer mode. An initialization script for developer mode only is also available. PS: Inspired by Pixie's Cheating-Code. ;-)
