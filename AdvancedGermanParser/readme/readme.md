@@ -1,4 +1,4 @@
-# AdvancedGermanParser 1.1
+# AdvancedGermanParser 1.1.1
 ### Compatible with Quest 5.8 and later.
 ---
 #### A German parser, which masters many new words, colloquial language and filler words.
