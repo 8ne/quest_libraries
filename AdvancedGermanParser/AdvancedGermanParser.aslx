@@ -7,7 +7,7 @@
   AdvancedGermanParser
   A German parser, which masters many new words, colloquial language and filler words.
   by ScriptGames, 2019
-  Version 1.1
+  Version 1.1.1
   ****************************************************************************************************
   Quest-Version: 5.8
   ****************************************************************************************************
@@ -33,19 +33,19 @@
   -->
 
   <command name="lie">
-    <pattern type="string">^(?=.*?\b(?:hin)?(?:lieg|leg)\S{0,3}\b)(?=.*?\bdich\b).*$</pattern>
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:hin)?(?:lieg|leg)\S{0,3}\b)(?=.*?\bdich\b).*$]]></pattern>
     <script>
       msg (Template("DefaultLieDown"))
     </script>
   </command>
   <command name="sleep">
-    <pattern type="string">^.*?\b(?:(?:aus)?(?:ruh|schlaf|penn)|nickerchen|dös)\S{0,3}\b.*$</pattern>
+    <pattern type="string"><![CDATA[^.*?\b(?:(?:aus)?(?:ruh|schlaf|penn)|nickerchen|dös)\S{0,3}\b.*$]]></pattern>
     <script>
       msg (Template("DefaultSleep"))
     </script>
   </command>
   <command name="save">
-    <pattern type="string">^.*?\b(?:save|speicher)\S{0,3}\b.*$</pattern>
+    <pattern type="string"><![CDATA[^.*?\b(?:save|speicher)\S{0,3}\b.*$]]></pattern>
     <script>
       if (HasAttribute(game, "questplatform")) {
         if (game.questplatform = "desktop") {
@@ -62,7 +62,7 @@
     </script>
   </command>
   <command name="jump">
-    <pattern type="string">^.*?\b(?:hoch|rauf|hinauf)?(?:spring|hüpf|hops)\S{0,3}\b.*$</pattern>
+    <pattern type="string"><![CDATA[^.*?\b(?:hoch|rauf|hinauf)?(?:spring|hüpf|hops)\S{0,3}\b.*$]]></pattern>
     <script>
       msg (Template("DefaultJump"))
     </script>
@@ -86,7 +86,7 @@
     </script>
   </command>
   <command name="undo">
-    <pattern type="string">^.*?\b(?:undo|rückgängig)\b|.*?\bschritt\b.*?\bzurück\b.*$</pattern>
+    <pattern type="string"><![CDATA[^.*?\b(?:undo|rückgängig)\b|.*?\bschritt\b.*?\bzurück\b.*$]]></pattern>
     <isundo />
     <script>
       undo
@@ -125,7 +125,7 @@
     ]]></script>
   </command>
   <command name="quit">
-    <pattern type="string">^.*?\b(?:beend|end|exit|quit)\S{0,3}\b.*$</pattern>
+    <pattern type="string"><![CDATA[^.*?\b(?:beend|end|exit|quit)\S{0,3}\b.*$]]></pattern>
     <script>
       finish
     </script>
@@ -355,7 +355,7 @@
     </script>
   </command>
   <command name="inventory">
-    <pattern type="string">^.*?\binventar\b.*$|\b^(?:inv|i)\b$</pattern>
+    <pattern type="string"><![CDATA[^.*?\binventar\b.*$|\b^(?:inv|i)\b$]]></pattern>
     <script>
       list = FormatObjectList(Template("CarryingListHeader"), game.pov, Template("And"), ".")
       if (list = "") {
@@ -367,7 +367,7 @@
     </script>
   </command>
   <command name="look">
-    <pattern type="string">^(?:(?=.*?\b(?:um(?:schau|seh|blick|guck|glotz)\S{0,3}|^schau$|^l$)\b|.*?\b(?:schau|sieh|seh|blick|guck|glotz)\S{0,3}\b.*?\bum\b)|(?=.*?\b(?:an|be|zu|nach|hin|durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\b(?:hier|raum|zimmer|bude|wohnung|gegend|natur|umgebung)\b)).*$</pattern>
+    <pattern type="string"><![CDATA[^(?:(?=.*?\b(?:um(?:schau|seh|blick|guck|glotz)\S{0,3}|^schau$|^l$)\b|.*?\b(?:schau|sieh|seh|blick|guck|glotz)\S{0,3}\b.*?\bum\b)|(?=.*?\b(?:an|be|zu|nach|hin|durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\b(?:hier|raum|zimmer|bude|wohnung|gegend|natur|umgebung)\b)).*$]]></pattern>
     <script>
       ShowRoomDescription
     </script>
@@ -504,7 +504,7 @@
     </script>
   </command>
   <command name="use">
-    <pattern type="string"><![CDATA[^(?!.*?\b(?:mit|auf)\S{0,3}\b|.*?\bm\b)(?=.*?\b(?:benutz|nutz|verwend|gebrauch|bedien|betätig)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:mit|auf|aufs)\b|.*?\bm\b)(?=.*?\b(?:benutz|nutz|verwend|gebrauch|bedien|betätig)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
     <script><![CDATA[
       if (HasScript(object, "use")) {
         do (object, "use")
@@ -535,10 +535,11 @@
           msg (DynamicTemplate("CantUse", object))
         }
       }
-    ]]></script>
+    ]]>
+    </script>
   </command>
   <command name="useon">
-    <pattern type="string"><![CDATA[^(?=.*?\b(?:benutz|nutz|verwend|gebrauch|kombinier)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?:mit|auf)\S{0,3}\b|.*?\bm\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:benutz|nutz|verwend|gebrauch|kombinier)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?:mit|auf|aufs)\b|.*?\bm\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
     <script>
       HandleUseOn (object1, object2)
     </script>
@@ -559,13 +560,13 @@
     </script>
   </command>
   <command name="wait">
-    <pattern type="string">^.*?\b(?:ab)?wart\S{0,3}\b.*$</pattern>
+    <pattern type="string"><![CDATA[^.*?\b(?:ab)?wart\S{0,3}\b.*$]]></pattern>
     <script>
       msg (Template("DefaultWait"))
     </script>
   </command>
   <command name="help">
-    <pattern type="string">^\?|.*?\b(?:hilf|helf|weiterhelf)\S{0,3}\b.*$</pattern>
+    <pattern type="string"><![CDATA[^\?|.*?\b(?:hilf|helf|weiterhelf)\S{0,3}\b.*$]]></pattern>
     <script>
       msg (Template("DefaultHelp"))
     </script>
@@ -707,6 +708,7 @@
       cmd.pattern = Replace (cmd.pattern, "<object>X", "<object>" + objRegExp)
       cmd.pattern = Replace (cmd.pattern, "<object1>X", "<object1>" + objRegExp)
       cmd.pattern = Replace (cmd.pattern, "<object2>X", "<object2>" + objRegExp)
+      // Log (cmd.pattern)
     }
   ]]>
   </function>
