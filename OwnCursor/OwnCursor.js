@@ -1,14 +1,15 @@
 ﻿// ----------------------------------------------------------------------------------------------------
 // CommandBar with Own Cursor
 // by ScriptGames, 2017-2019
-// Version 1.3.1
+// Version 1.3.2
 // ----------------------------------------------------------------------------------------------------
 // Quest-Version: 5.7
 // ----------------------------------------------------------------------------------------------------
 // Just download the OwnCursor.js and integrate it as javascript in Quest.
 // ----------------------------------------------------------------------------------------------------
-// Version 1.3.1
+// Version 1.3.2
 // Bug with blinking cursor in browser fixed.
+// Bug with wait ist fixed.
 // ----------------------------------------------------------------------------------------------------
 // Version 1.3
 // incompatibility with DevMode removed.
@@ -43,6 +44,7 @@
 	var OwnCurBlinkcursor = " "; // without blinkcursor
 	//var OwnCurBlinkcursor = "▄"; // cursor, the one is replaced with the blinking. can be customized with any cursor.
 	var OwnCurBlinkcursorLen = OwnCurBlinkcursor.length;
+	var cmdbar = $("#txtCommand");
 
 	if (OwnCurActive) {
 
@@ -64,46 +66,46 @@
 		}
 		
 		function OwnCurInit () {
-			var cmdbar = $("#txtCommand"); // commandbar-reference
+			cmdbar = $("#txtCommand"); // commandbar-reference
 			cmdbar.css("height", "26px") // with some buttons it may be necessary to adjust the height of the CommandBar.
 			cmdbar.prop("disabled", true);
 			cmdbar.val(OwnCurCursor);
 		}
 		
 		function OwnCurInput (event, typ) {
-			var cmdbar = $("#txtCommand"); // commandbar-reference
-			if (typeof event !== 'undefined' && event.target.nodeName !== "INPUT") {
-				var key = event.which; // keycode
-				var strkey = String.fromCharCode(key); // key
-				
-				if ( typ === "keydown" && key === 8) { // backspace
-					event.preventDefault();
-					var text = cmdbar.val().slice(0, -(OwnCurCursorLen + 1)) + OwnCurCursor;
-					cmdbar.val(text);
-				}
-				else if ((typ === "keydown") && (key === 32)) { // space
-					event.preventDefault();
-					var text = cmdbar.val().slice(0, -OwnCurCursorLen) + " " + OwnCurCursor;
-					cmdbar.val(text);	    		
-				}	    	
-				else if ((typ === "keydown") && (key === 13 || key === 38 || key === 40 || key === 27)) { // return, etc.
-					event.preventDefault();
-					var text = cmdbar.val().slice(0, -OwnCurCursorLen);
-					cmdbar.val(text);
-					commandKey(event);
-					var text = cmdbar.val() + OwnCurCursor;
-					cmdbar.val(text);
-				}
-				else if (typ === "keypress") { // another key
-					event.preventDefault();
-					var text = cmdbar.val().slice(0, -OwnCurCursorLen) + strkey + OwnCurCursor;
-					cmdbar.val(text);
+			if (cmdbar.css("display") !== "none") {
+				if (typeof event !== 'undefined' && event.target.nodeName !== "INPUT") {
+					var key = event.which; // keycode
+					var strkey = String.fromCharCode(key); // key
+					
+					if ( typ === "keydown" && key === 8) { // backspace
+						event.preventDefault();
+						var text = cmdbar.val().slice(0, -(OwnCurCursorLen + 1)) + OwnCurCursor;
+						cmdbar.val(text);
+					}
+					else if ((typ === "keydown") && (key === 32)) { // space
+						event.preventDefault();
+						var text = cmdbar.val().slice(0, -OwnCurCursorLen) + " " + OwnCurCursor;
+						cmdbar.val(text);	    		
+					}	    	
+					else if ((typ === "keydown") && (key === 13 || key === 38 || key === 40 || key === 27)) { // return, etc.
+						event.preventDefault();
+						var text = cmdbar.val().slice(0, -OwnCurCursorLen);
+						cmdbar.val(text);
+						commandKey(event);
+						var text = cmdbar.val() + OwnCurCursor;
+						cmdbar.val(text);
+					}
+					else if (typ === "keypress") { // another key
+						event.preventDefault();
+						var text = cmdbar.val().slice(0, -OwnCurCursorLen) + strkey + OwnCurCursor;
+						cmdbar.val(text);
+					}
 				}
 			}
 		}
 		
 		function OwnCurItsBlinking () {
-			var cmdbar = $("#txtCommand");
 			if ( cmdbar.length > 0 ) {
 				var lastchar = cmdbar.val().slice(-OwnCurCursorLen);
 				if (lastchar === OwnCurCursor) var text = cmdbar.val().slice(0, -OwnCurCursorLen) + OwnCurBlinkcursor;
