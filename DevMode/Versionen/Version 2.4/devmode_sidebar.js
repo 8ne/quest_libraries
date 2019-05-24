@@ -219,11 +219,7 @@ function initDevModeSideBar(pos, size, verbs) {
                         break;
                     }
                 }
-                if (hasMatch) {
-                    setTimeout( function () {
-                        $("#devmode_sidebar_debugtable_names").tabulator("selectRow", selectedname);
-                    }, 500); 
-                }
+                if (hasMatch) $("#devmode_sidebar_debugtable_names").tabulator("selectRow", selectedname);
             }
         });
 
@@ -268,9 +264,7 @@ function initDevModeSideBar(pos, size, verbs) {
         // ----------------------------------------------------------------------------------------------------
         // Debugtable - Read Names
         // ----------------------------------------------------------------------------------------------------
-        setTimeout( function () {
-            ASLEvent("getTableDataNames", "");
-        }, 500);
+        ASLEvent("getTableDataNames", "");
 
         // ----------------------------------------------------------------------------------------------------
         // MARK Popop-Menu

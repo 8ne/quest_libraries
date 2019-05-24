@@ -6,7 +6,7 @@
   ****************************************************************************************************
   DevMode - Tool for better testing the game
   by ScriptGames, 2018 - 2019
-  Version 2.4.1
+  Version 2.4
   ****************************************************************************************************
   Compatible with Quest 5.7
   ****************************************************************************************************
@@ -21,12 +21,7 @@
   Tool for better testing the game.
   Inspired by Pixie's Cheating-Code. ;-)
   ****************************************************************************************************
-  
-  ****************************************************************************************************
-  Versione 2.4.1
-  Command #awake to #wake
-  Removed error when loading debug table data (online)
-  Fixed a bug where the category 'Rooms' was not listed (online)
+
   ****************************************************************************************************
   Version 2.4
   Add Standbye-Mode.
@@ -99,7 +94,7 @@
   ****************************************************************************************************
   DevMode-Single-Commands
   ****************************************************************************************************
-  #wake (Wake up from standbye)
+  #awake (Wake up from standbye)
   #sleep (Send to standbye)
   #clr (clear screen)
   #? (help)
@@ -160,8 +155,8 @@
   <template name="DevModeErrorWrongKey">The key was not found.</template>
   <template name="DevModeExecuteCommand">The command was executed.</template>
   <template name="DevModeNotActive">DevMode is not active!</template>
-  <template name="DevModeNotAwake">The DevMode is not awake! If you want to wake it up, enter the command '#wake'!</template>
-  <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Help</h3><b><u>Object-Commends</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Unlike the commands in the game, they are executed directly and without detours via intercept scripts.</i><br/><br/><b><u>Single-Commands</u></b><br/>#wake (Wake up from standbye)<br/>#sleep (Send to standbye)<br/>#clr (clear screen)<br/>#? (help)<br/># (close game)<br/><br/><b><u>Object-Attributes</u></b><br/>#object1.attribute=object2.attribute (attribute assignment of another object)<br/>#object.attribute=true / false (set true / false)<br/>#object.attribute=? / ! (set true / false)<br/>#object.attribute=~ (toggle true or false)<br/>#object.attribute="value" (string)<br/>#object.attribute=15 (integer)<br/>#object.attribute=25.55 (double)<br/>#object.attribute=[item1,item2,item3] (list)<br/>#object.attribute[]=element (add element to list)<br/>#object.attribute[key]=element (add or overwrite element to list)<br/>#object.attribute=[] (create new list)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (dictionary)<br/>#object.attribute{key}=element (add or overwrite element to dictionary)<br/>#object.attribute={} (create new dictionary)<br/>#object.attribute (read attribute)<br/>]]></template>
+  <template name="DevModeNotAwake">The DevMode is not awake! If you want to wake it up, enter the command '#awake'!</template>
+  <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Help</h3><b><u>Object-Commends</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Unlike the commands in the game, they are executed directly and without detours via intercept scripts.</i><br/><br/><b><u>Single-Commands</u></b><br/>#awake (Wake up from standbye)<br/>#sleep (Send to standbye)<br/>#clr (clear screen)<br/>#? (help)<br/># (close game)<br/><br/><b><u>Object-Attributes</u></b><br/>#object1.attribute=object2.attribute (attribute assignment of another object)<br/>#object.attribute=true / false (set true / false)<br/>#object.attribute=? / ! (set true / false)<br/>#object.attribute=~ (toggle true or false)<br/>#object.attribute="value" (string)<br/>#object.attribute=15 (integer)<br/>#object.attribute=25.55 (double)<br/>#object.attribute=[item1,item2,item3] (list)<br/>#object.attribute[]=element (add element to list)<br/>#object.attribute[key]=element (add or overwrite element to list)<br/>#object.attribute=[] (create new list)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (dictionary)<br/>#object.attribute{key}=element (add or overwrite element to dictionary)<br/>#object.attribute={} (create new dictionary)<br/>#object.attribute (read attribute)<br/>]]></template>
   <template name="DevModeActive"><![CDATA[<b>DevMode: Active</b>]]></template>
   <template name="DevModeInitSidebar">Sidebar initialized.</template>
   <template name="DevModeStartScript">Initialization script started.</template>
@@ -180,7 +175,7 @@
   <template name="EditorGameDevMode">DevMode</template>
   <template name="EditorGameDevModeStandbye">Start the developer mode in standbye</template>
   <template name="EditorGameDevModeInfoRelease">Important: Before releasing the game DevMode must be deactivated!</template>
-  <template name="EditorGameDevModeInfoCommands">Enhanced commands are available in the current game. Enter '#?' to get more information. In standby mode the DevMode is awakened by entering '#wake' and sent back to standby mode with '#sleep'.</template>
+  <template name="EditorGameDevModeInfoCommands">Enhanced commands are available in the current game. Enter '#?' to get more information. In standby mode the DevMode is awakened by entering '#awake' and sent back to standby mode with '#sleep'.</template>
   <template name="EditorGameDevModeOptions">Options</template>
   <template name="EditorGameDevModeChangePov">Select another player</template>
   <template name="EditorGameDevModeChangePovPos">Select another starting location for the player</template>
@@ -205,7 +200,7 @@
   <template name="EditorGameDevModeTasksAndNotesTab">Tasks and Notes</template>
   <template name="EditorGameDevModeTasks">Tasks</template>
   <template name="EditorGameDevModeNotes">Notes</template>
-  <template name="EditorGameDevModeTasksPleaseenter">Add or edit task</template>
+  <template name="EditorGameDevModeTasksPleaseenter">Add a new task</template>
     
 
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
@@ -216,8 +211,8 @@
   <template name="DevModeErrorWrongKey">Der Key wurde nicht gefunden.</template>
   <template name="DevModeExecuteCommand">Der Befehl wurde ausgeführt.</template>
   <template name="DevModeNotActive">Der DevMode ist nicht aktiv!</template>
-  <template name="DevModeNotAwake">Der DevMode ist nicht im Wachzustand! Möchten Sie ihn aufwecken, geben sie das Kommando '#wake' ein!</template>
-  <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Hilfe</h3><b><u>Objekt-Kommandos</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b><u>Single-Kommandos</u></b><br/>#wake (Aus dem Standbye wecken)<br/>#sleep (In den Standbye schicken)<br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)<br/><br/><b><u>Objekt-Attribute</u></b><br/>#object1.attribute=object2.attribute (Attributzuweisung eines anderen Objektes)<br/>#object.attribute=true / false (Setze auf wahr / falsch)<br/>#object.attribute=? / ! (Setze auf wahr / falsch)<br/>#object.attribute=~ (Toggle auf wahr oder falsch)<br/>#object.attribute="value" (String)<br/>#object.attribute=15 (Integer)<br/>#object.attribute=25.55 (Double)<br/>#object.attribute=[item1,item2,item3] (List)<br/>#object.attribute[]=element (Element zur List hinzufügen)<br/>#object.attribute[key]=element (Element zur List hinzufügen oder überschreiben)<br/>#object.attribute=[] (Eine neue List erstellen)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (Dictionary)<br/>#object.attribute{key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribute={} (Neues Dictionary erstellen)<br/>#object.attribute (Lese Attribute)<br/>]]></template>
+  <template name="DevModeNotAwake">Der DevMode ist nicht im Wachzustand! Möchten Sie ihn aufwecken, geben sie das Kommando '#awake' ein!</template>
+  <template name="DevModeDescriptionCommands"><![CDATA[<h3>FlyScript - Hilfe</h3><b><u>Objekt-Kommandos</u></b><br/>#take object<br/>#drop object<br/>#put object1 in object2<br/>#open object<br/>#close object<br/>#on object<br/>#off object<br/>#to player<br/>#go room<br/><br/><i>Im Gegensatz zu den Kommandos im Spiel werden sie direkt und ohne Umwege über Abfangskripte ausgeführt.</i><br/><br/><b><u>Single-Kommandos</u></b><br/>#awake (Aus dem Standbye wecken)<br/>#sleep (In den Standbye schicken)<br/>#clr (Bildschirminhalt löschen)<br/>#? (Hilfe)<br/># (Spiel schliessen)<br/><br/><b><u>Objekt-Attribute</u></b><br/>#object1.attribute=object2.attribute (Attributzuweisung eines anderen Objektes)<br/>#object.attribute=true / false (Setze auf wahr / falsch)<br/>#object.attribute=? / ! (Setze auf wahr / falsch)<br/>#object.attribute=~ (Toggle auf wahr oder falsch)<br/>#object.attribute="value" (String)<br/>#object.attribute=15 (Integer)<br/>#object.attribute=25.55 (Double)<br/>#object.attribute=[item1,item2,item3] (List)<br/>#object.attribute[]=element (Element zur List hinzufügen)<br/>#object.attribute[key]=element (Element zur List hinzufügen oder überschreiben)<br/>#object.attribute=[] (Eine neue List erstellen)<br/>#object.attribute={key1:item1,key2:item2,key3:item3} (Dictionary)<br/>#object.attribute{key}=element (Element zum Dictionary hinzufügen oder überschreiben)<br/>#object.attribute={} (Neues Dictionary erstellen)<br/>#object.attribute (Lese Attribute)<br/>]]></template>
   <template name="DevModeActive"><![CDATA[<b>Entwicklermodus: Aktiviert</b>]]></template>
   <template name="DevModeInitSidebar">Sidebar initialisiert.</template>
   <template name="DevModeStartScript">Initialisierungsscript gestartet.</template>
@@ -236,7 +231,7 @@
   <template name="EditorGameDevMode">Entwicklermodus</template>
   <template name="EditorGameDevModeStandbye">Den Entwicklermodus im Standbye starten</template>
   <template name="EditorGameDevModeInfoRelease">Wichtig: Vor Veröffentlichung des Spiels muss der Entwicklermodus deaktiviert werden!</template>  
-  <template name="EditorGameDevModeInfoCommands">Es stehen im laufenden Spiel erweiterte Kommandos zur Verfügung. Geben Sie '#?' ein um weitere Informationen zu erhalten. Im Standbye-Modus wird der DevMode durch Eingabe von '#wake' geweckt und mit '#sleep' wieder in den Standbye geschickt.</template>
+  <template name="EditorGameDevModeInfoCommands">Es stehen im laufenden Spiel erweiterte Kommandos zur Verfügung. Geben Sie '#?' ein um weitere Informationen zu erhalten. Im Standbye-Modus wird der DevMode durch Eingabe von '#awake' geweckt und mit '#sleep' wieder in den Standbye geschickt.</template>
   <template name="EditorGameDevModeOptions">Optionen</template>
   <template name="EditorGameDevModeChangePov">Einen anderen Spieler wählen</template>
   <template name="EditorGameDevModePov">Spieler</template>
@@ -261,7 +256,7 @@
   <template name="EditorGameDevModeTasksAndNotesTab">Aufgaben und Notizen</template>
   <template name="EditorGameDevModeTasks">Aufgaben</template>
   <template name="EditorGameDevModeNotes">Notizen</template>
-  <template name="EditorGameDevModeTasksPleaseenter">Aufgabe hinzufügen oder bearbeiten</template>
+  <template name="EditorGameDevModeTasksPleaseenter">Fügen Sie eine neue Aufgabe hinzu</template>
 
   <!--
   ****************************************************************************************************
@@ -283,10 +278,10 @@
       if (HasAttribute(game, "devmode_active")) {
         if (game.devmode_active) {
           if (IsDefined("text")) {
-            if (text = "wake") {
+            if (text = "awake") {
               if (game.devmode_standbye) {
                 game.devmode_standbye = false
-                wakeDevMode
+                setDevMode
                 DevModeOutput (Template("DevModeAwake"))
               }
               else {
@@ -296,7 +291,7 @@
             else if (text = "sleep") {
               if (not game.devmode_standbye) {
                 game.devmode_standbye = true
-                sleepDevMode
+                setDevMode
                 DevModeOutput (Template("DevModeSleep"))
               }
               else {
@@ -304,7 +299,7 @@
               }
             }
             else if (not game.devmode_standbye) {
-              regex = "^(?<command2>put) (?<object1>.+) (in|on) (?<object2>.+)$|^(?<command1>drop|take|to|go|open|close|on|off) (?<object>.+)$|^(?<command0>wake|sleep|selftest|clr|\\?)$"
+              regex = "^(?<command2>put) (?<object1>.+) (in|on) (?<object2>.+)$|^(?<command1>drop|take|to|go|open|close|on|off) (?<object>.+)$|^(?<command0>awake|sleep|selftest|clr|\\?)$"
               if (IsRegexMatch (regex, text)) {
                 result = populate (regex, text)
                 com0 = ToString(DictionaryItem(result, "command0"))
@@ -753,59 +748,45 @@
   -->
   <function name="setDevMode">
 	  if (HasAttribute(game, "devmode_active")) {
-      if (game.devmode_active and not game.devmode_standbye) {
-        wakeDevMode
+      if (game.devmode_active) {
+        if (not game.devmode_standbye) {
+          DevModeOutput (Template("DevModeActive"))
+          if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
+            foreach(key, game.devmode_attributes) {
+              setAttribute (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
+            }
+          }
+          if (game.devmode_changepov) {
+            setCommand ("#to " + game.devmode_pov)
+          }
+          if (game.devmode_changepovpos) {
+            setCommand ("#go " + game.devmode_povpos)
+          }
+          if (game.devmode_setverbs) {
+            setVerbs
+          }
+          if (game.devmode_showsidebar) {
+            JS.initDevModeSideBar (game.devmode_sidebarpos, game.devmode_sidebarsize, Join(game.devmode_verbs, ","))
+            msg("")
+            DevModeOutput (Template("DevModeInitSidebar"))
+          }
+          if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
+            msg("")
+            DevModeOutput (Template("DevModeStartScript"))
+            do (game, "devmode_initscript")
+          }
+          msg("")
+        }
+        else {
+          if (game.devmode_showsidebar) {
+            JS.removeDevModeSideBar ()
+          }
+          if (game.devmode_setverbs) {
+            unsetVerbs
+          }
+        }
       }
-    }
-  </function>
-
-  <!--
-  ****************************************************************************************************
-  MARK wakeDevMode
-  The DevMode wakes up
-  ****************************************************************************************************
-  -->
-  <function name="wakeDevMode">
-    DevModeOutput (Template("DevModeActive"))
-    if (HasAttribute(game, "devmode_attributes") and not DictionaryCount(game.devmode_attributes) = 0) {
-      foreach(key, game.devmode_attributes) {
-        setAttribute (key + "=" + ToString(DictionaryItem(game.devmode_attributes, key)))
-      }
-    }
-    if (game.devmode_changepov) {
-      setCommand ("#to " + game.devmode_pov)
-    }
-    if (game.devmode_changepovpos) {
-      setCommand ("#go " + game.devmode_povpos)
-    }
-    if (game.devmode_setverbs) {
-      setVerbs
-    }
-    if (game.devmode_showsidebar) {
-      JS.initDevModeSideBar (game.devmode_sidebarpos, game.devmode_sidebarsize, Join(game.devmode_verbs, ","))
-      msg("")
-      DevModeOutput (Template("DevModeInitSidebar"))
-    }
-    if (game.devmode_setinitscript and HasScript(game, "devmode_initscript")) {
-      msg("")
-      DevModeOutput (Template("DevModeStartScript"))
-      do (game, "devmode_initscript")
-    }
-  </function>
-
-  <!--
-  ****************************************************************************************************
-  MARK sleepDevMode
-  The DevMode is put to sleep
-  ****************************************************************************************************
-  -->
-  <function name="sleepDevMode">
-    if (game.devmode_showsidebar) {
-      JS.removeDevModeSideBar ()
-    }
-    if (game.devmode_setverbs) {
-      unsetVerbs
-    }
+	  }
   </function>
 
   <!--
@@ -822,7 +803,7 @@
     // ALL OBJECTS
     // ----------------------------------------------------------------------------------------------------
     foreach (obj, AllObjects()) {
-      if (HasAttribute(obj, "isroom") and HasBoolean(obj, "isroom") and GetBoolean(obj, "isroom") or HasAttribute(obj, "type") and GetString(obj, "type") = "object" and not HasAttribute(obj, "parent")) {
+      if (HasBoolean(obj, "isroom") and GetBoolean(obj, "isroom")) {
         list add (data, "{\"name\":\"" + obj.name + "\",\"typ\":\"Rooms\"}")
       }
       else {
