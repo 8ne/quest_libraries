@@ -1,4 +1,4 @@
-# ParserPlus 1.0 in German
+# Parser Plus 1.0 in German
 ### Compatible with Quest 5.8 and later.
 ---
 #### A parser, which masters many new words, colloquial language and filler words.
