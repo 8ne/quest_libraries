@@ -1,0 +1,716 @@
+﻿<?xml version="1.0"?>
+<library>
+
+<!--
+
+  ****************************************************************************************************
+  AdvancedGermanParser
+  A German parser, which masters many new words, colloquial language and filler words.
+  by ScriptGames, 2019
+  Version 1.1.1
+  ****************************************************************************************************
+  Quest-Version: 5.8
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  1. Download the ultimate-german-parser.aslx, integrate it as Library in Quest.
+  2. Insert the function "ExtendPatterns" under Advanced Scripts.
+  ****************************************************************************************************
+
+  ****************************************************************************************************
+  Version 1.1
+  abbreviation for the command "take" is now possible with "i": i object
+  ****************************************************************************************************
+
+-->
+
+  <!--
+  ****************************************************************************************************
+  MARK Commands
+  All commands from quest
+  ****************************************************************************************************
+  -->
+
+  <command name="lie">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:hin)?(?:lieg|leg)\S{0,3}\b)(?=.*?\bdich\b).*$]]></pattern>
+    <script>
+      msg (Template("DefaultLieDown"))
+    </script>
+  </command>
+  <command name="sleep">
+    <pattern type="string"><![CDATA[^.*?\b(?:(?:aus)?(?:ruh|schlaf|penn)|nickerchen|dös)\S{0,3}\b.*$]]></pattern>
+    <script>
+      msg (Template("DefaultSleep"))
+    </script>
+  </command>
+  <command name="save">
+    <pattern type="string"><![CDATA[^.*?\b(?:save|speicher)\S{0,3}\b.*$]]></pattern>
+    <script>
+      if (HasAttribute(game, "questplatform")) {
+        if (game.questplatform = "desktop") {
+          requestsave
+        }
+        else {
+          JS.saveGame ()
+        }
+      }
+      else {
+        requestsave
+      }
+      game.suppressturnscripts = true
+    </script>
+  </command>
+  <command name="jump">
+    <pattern type="string"><![CDATA[^.*?\b(?:hoch|rauf|hinauf)?(?:spring|hüpf|hops)\S{0,3}\b.*$]]></pattern>
+    <script>
+      msg (Template("DefaultJump"))
+    </script>
+  </command>
+  <command name="sit">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?<object>X)\b)(?:(?=.*?\b(?:hin)?(?:setz|sitz|hock|pflanz)\S{0,3}\b)(?=.*?\bdich\b)|(?=.*?\bplatz\snehm\S{0,3}\b)|(?=.*?\b(?:nehm|nimm)\S{0,3}\b.*?\bplatz\b)).*$]]></pattern>
+    <script>
+      msg (Template("DefaultSitDown"))
+    </script>
+  </command>
+  <command name="tell">
+    <pattern type="string"><![CDATA[^.*?\b(?:erzähl|sprech|red|schwätz|plapper|plauder|quassel)\S{0,3}.*?\b(?<object>X)\b.*?\b(?:von|vom|über)\s\b(?<text>.*).*$|^.*?\b(?<object>X)\b.*?\b(?:von|vom|über)\s\b.*?\b(?<text>.*)\b\serzählen\b.*$]]></pattern>
+    <script>
+      DoAskTell (object, text, "tell", "telldefault", "DefaultTell")
+    </script>
+  </command>
+  <command name="listen">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?<object>X)\b)(?=.*?\b(?:be|ab|zu|mit|hin)?(?:hör|lausch|horch)\S{0,3}\b).*$]]></pattern>
+    <script>
+      msg (Template("DefaultListen"))
+    </script>
+  </command>
+  <command name="undo">
+    <pattern type="string"><![CDATA[^.*?\b(?:undo|rückgängig)\b|.*?\bschritt\b.*?\bzurück\b.*$]]></pattern>
+    <isundo />
+    <script>
+      undo
+      game.suppressturnscripts = true
+      if (GetBoolean (game, "gridmap")) {
+        Grid_DrawPlayerInRoom (game.pov.parent)
+      }
+    </script>
+  </command>
+  <command name="lookdir">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b)(?=.*?\b(?<exit>norden|osten|süden|westen|nordosten|nordwesten|südosten|südwesten|raus|hoch|runter|rein|raus|n|o|s|w|no|nw|so|sw|h|r)\b).*$]]></pattern>
+    <script><![CDATA[
+      if (HasScript(exit, "look")) {
+        do (exit, "look")
+      }
+      else {
+        message = DynamicTemplate("YouLooking",exit.alias)
+        if (HasString(exit, "look")) {
+          if (exit.look <> "") {
+            message = exit.look
+          }
+        }
+        if (exit.locked) {
+          if (HasString(exit,"lockmessage")) {
+            lockmessage = exit.lockmessage
+          }
+          else {
+            lockmessage = Template("LockedExit")
+          }
+          msg (message+" "+lockmessage)
+        }
+        else {
+          msg (message)
+        }
+      }
+    ]]></script>
+  </command>
+  <command name="quit">
+    <pattern type="string"><![CDATA[^.*?\b(?:beend|end|exit|quit)\S{0,3}\b.*$]]></pattern>
+    <script>
+      finish
+    </script>
+  </command>
+  <command name="go">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:an|be|zu|nach|hin)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b)(?=.*?\b(?<exit>norden|osten|süden|westen|nordosten|nordwesten|südosten|südwesten|raus|hoch|oben|runter|unten|rein|raus|n|o|s|w|no|nw|so|sw|h|r)\b).*$]]></pattern>
+    <unresolved>Dort kann man nicht hingehen.</unresolved>
+    <script>
+      if (exit.visible) {
+        if (exit.locked) {
+          msg (exit.lockmessage)
+        }
+        else if (exit.runscript) {
+          if (HasScript(exit, "script")) {
+            do (exit, "script")
+          }
+        }
+        else if (exit.lookonly) {
+          msg ("Dort kann man nicht hingehen.")
+        }
+        else {
+          if (HasString(exit, "message")) {
+            if (not exit.message = "") {
+              if (game.clearscreenonroomenter) {
+                game.currentexitmessage = exit.message
+              }
+              else {
+                msg (exit.message)
+              }
+            }
+          }
+          game.pov.parent = exit.to
+        }
+      }
+      else {
+        msg ("Dort kann man nicht hingehen.")
+      }
+    </script>
+  </command>
+  <command name="givesingle">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:an|zu|der|dem|auf|in|im|unter|über)\S{0,3}\b)(?=.*?\b(?:(?:über|hin|dar|ab|weg)?(?:geb|gib|reich|bring)|(?:be|ver)?schenk|teil)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script><![CDATA[
+      if (HasScript(object, "givesingle")) {
+        do (object, "givesingle")
+      }
+      else {
+        if (GetBoolean(object, "givesingle")) {
+          candidates = CreateGiveMenuList (object)
+          if (ListCount(candidates) = 0) {
+            msg (Template("NoObjectsAvailable"))
+          }
+          else {
+            game.pov.givemenuobject = object
+            if (HasString(object, "givemenuprompt")) {
+              menucaption = object.givemenuprompt
+            }
+            else {
+              menucaption = Template("GiveToMenu")
+            }
+            ShowMenu (menucaption, candidates, true) {
+              if (result <> null) {
+                HandleGiveTo (game.pov.givemenuobject, GetObject(result))
+                game.pov.givemenuobject = null
+              }
+            }
+          }
+        }
+        else {
+          msg (DynamicTemplate("CantGive", object))
+        }
+      }
+    ]]></script>
+  </command>
+  <command name="give">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:auf|in|im|unter|über)\S{0,3}\b)(?=.*?\b(?:(?:über|hin|dar|ab|weg)?(?:geb|gib|reich|bring)|(?:be|ver)?schenk|teil)\S{0,3}\b)(?=.*?\b(?:an|zu|der|dem)\S{0,3}\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <script>
+      HandleGiveTo (object1, object2)
+    </script>
+  </command>
+  <command name="ask">
+    <pattern type="string"><![CDATA[^.*?\bfrag\S{0,3}\b.*?\b(?<object>X)\b.*?\bnach\s\b(?<text>.*).*$|^.*?\b(?<object>X)\b.*?\bnach\s\b.*?\b(?<text>.*)\b\sfragen\b.*$]]></pattern>
+    <script>
+      Log (text)
+      DoAskTell (object, text, "ask", "askdefault", "DefaultAsk")
+    </script>
+  </command>
+  <verb name="smell">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:be)?(?:riech|schnüff|schnupper)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>smell</property>
+    <defaulttemplate>DefaultSmell</defaulttemplate>
+  </verb>
+  <verb name="taste">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:schmeck|probier|gustier)\S{0,3}\b|.*?\b(?:nehme|nimm)\b.*?\bkostprobe\b|.*?\bkostprobe\b.*?\bnehmen\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>taste</property>
+    <defaulttemplate>DefaultTaste</defaulttemplate>
+  </verb>
+  <verb name="throw">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:werf|wirf|schleuder|schmeiß|schmetter)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>throw</property>
+    <defaulttemplate>DefaultThrow</defaulttemplate>
+  </verb>
+  <verb name="tie">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:(?:an|fest)(?:bind|kett)|fess)\S{0,3}\b|.*?\b(?:bind|kett)\S{0,3}\b.*?\b(?:an|fest)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>tie</property>
+    <defaulttemplate>DefaultTie</defaulttemplate>
+  </verb>
+  <verb name="touch">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:be|an)?(?:streich|berühr|tätsch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>touch</property>
+    <defaulttemplate>DefaultTouch</defaulttemplate>
+  </verb>
+  <verb name="turn">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:um)?(?:dreh|wend)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>turn</property>
+    <defaulttemplate>DefaultTurn</defaulttemplate>
+  </verb>
+  <verb name="untie">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:(?:los)(?:bind|kett)|entfess|lös)\S{0,3}\b|.*?\b(?:bind|kett)\S{0,3}\b.*?\blos\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>untie</property>
+    <defaulttemplate>DefaultUntie</defaulttemplate>
+  </verb>
+  <verb name="climb">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:er|be|auf|rauf|hinauf|empor)?(?:kletter|klimm|steig|kraxel|ranke)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>climb</property>
+    <defaulttemplate>DefaultClimb</defaulttemplate>
+  </verb>
+  <verb name="eat">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ess|fress|friss|(?:ver)?speis|(?:ein)?verleib|mampf|verputz|verdrück|verzehr|(?:ver)?spachtel)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>eat</property>
+    <defaulttemplate>DefaultEat</defaulttemplate>
+  </verb>
+  <verb name="hit">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:zusammen|ein|ver|be)?(?:schlag|prügel|dresch|kämpf|box|hau|klopp|möbel)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>hit</property>
+    <defaulttemplate>DefaultHit</defaulttemplate>
+  </verb>
+  <verb name="kill">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:töt|töd|umleg|umbring|ermord|kaltmach|liquidier|lynch|exekudier|eliminier|totschlag|erschlag|terminier|meuchel|abmurks|kill)\S{0,3}\b|.*?\b(?:bring|leg|mach)\S{0,3}\b.*?\b(?:um|kalt)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>kill</property>
+    <defaulttemplate>DefaultKill</defaulttemplate>
+  </verb>
+  <verb name="kiss">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ab)?(?:küss|kuss|knutsch|schmatz|liebkos|bussi|bütz)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>kiss</property>
+    <defaulttemplate>DefaultKiss</defaulttemplate>
+  </verb>
+  <verb name="knock">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an)?(?:klopf|poch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>knock</property>
+    <defaulttemplate>DefaultKnock</defaulttemplate>
+  </verb>
+  <verb name="lick">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ab)?(?:leck|schleck|lutsch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>lick</property>
+    <defaulttemplate>DefaultLick</defaulttemplate>
+  </verb>
+  <verb name="lieon">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:hin)?(?:lieg|leg)\S{0,3}\b)(?=.*?\bdich\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>lie</property>
+    <defaulttemplate>DefaultLie</defaulttemplate>
+  </verb>
+  <verb name="listento">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:be|ab|zu|mit|hin)?(?:hör|lausch|horch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>listen</property>
+    <defaulttemplate>DefaultListenTo</defaulttemplate>
+  </verb>
+  <verb name="lock">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ver|ab|zu)(?:sperr|riegel|schließ|schliess)\S{0,3}\b|.*?\b(?:sperr|riegel|schließ|schliess)\S{0,3}\b.*?\b(?:ab|zu)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>lock</property>
+    <defaulttemplate>DefaultLock</defaulttemplate>
+  </verb>
+  <verb name="move">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:beweg|schieb|(?:ver)?(rück|schieb))\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>move</property>
+    <defaulttemplate>DefaultMove</defaulttemplate>
+  </verb>
+  <verb name="pull">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:an|um|drüber|über)\b)(?=.*?\bzieh\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>pull</property>
+    <defaulttemplate>DefaultPull</defaulttemplate>
+  </verb>
+  <verb name="push">
+    <pattern type="string"><![CDATA[^(?=.*?\bdrück\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>push</property>
+    <defaulttemplate>DefaultPush</defaulttemplate>
+  </verb>
+  <verb name="search">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:such|aufspür|erforsch|recherchier)\S{0,3}\b|.*?\b(?:spür|forsch)\S{0,3}\b.*?\b(?:auf|aus)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>search</property>
+    <defaulttemplate>DefaultSearch</defaulttemplate>
+  </verb>
+  <verb name="show">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:(?:vor)?zeig|(?:hin)?deut|präsentier|vorführ|vorstell)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>show</property>
+    <defaulttemplate>DefaultShow</defaulttemplate>
+  </verb>
+  <verb name="siton">
+    <pattern type="string"><![CDATA[^(?:(?=.*?\b(?:hin)?(?:setz|sitz|hock|pflanz)\S{0,3}\b)(?=.*?\bdich\b)|(?=.*?\bplatz\snehm\S{0,3}\b)|(?=.*?\b(?:nehm|nimm)\S{0,3}\b.*?\bplatz\b))(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>sit</property>
+    <defaulttemplate>DefaultSit</defaulttemplate>
+  </verb>
+  <verb name="unlock">
+    <pattern type="string"><![CDATA[^(?=.*?\bauf(?:sperr|schließ|schliess)\S{0,3}\b|.*?\b(?:sperr|schließ|schliess)\S{0,3}\b.*?\bauf\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>unlock</property>
+    <defaulttemplate>DefaultUnlock</defaulttemplate>
+  </verb>
+  <verb name="buy">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|ab|an|er)?(?:kauf|werb)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>buy</property>
+    <defaulttemplate>DefaultBuy</defaulttemplate>
+  </verb>
+  <command name="drop">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:ab|hin|weg|nieder|fort)(?:leg|stell|setz)\S{0,3}\b|.*?\b(?:leg|stell|setz)\S{0,3}\b.*?\b(?:ab|hin|weg|nieder|fort)\b|.*?\b(?:entledig|entfern)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <allow_all />
+    <scope>inventory</scope>
+    <script>
+      if (multiple and ListCount(object) = 0) {
+        msg ("Das Inventar ist leer.")
+      }
+      else {
+        foreach (obj, object) {
+          if (Contains(game.pov,obj)) {
+            DoDrop (obj, multiple)
+          }
+        }
+      }
+    </script>
+  </command>
+  <command name="inventory">
+    <pattern type="string"><![CDATA[^.*?\binventar\b.*$|\b^(?:inv|i)\b$]]></pattern>
+    <script>
+      list = FormatObjectList(Template("CarryingListHeader"), game.pov, Template("And"), ".")
+      if (list = "") {
+        msg (Template("NotCarryingAnything"))
+      }
+      else {
+        msg (list)
+      }
+    </script>
+  </command>
+  <command name="look">
+    <pattern type="string"><![CDATA[^(?:(?=.*?\b(?:um(?:schau|seh|blick|guck|glotz)\S{0,3}|^schau$|^l$)\b|.*?\b(?:schau|sieh|seh|blick|guck|glotz)\S{0,3}\b.*?\bum\b)|(?=.*?\b(?:an|be|zu|nach|hin|durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\b(?:hier|raum|zimmer|bude|wohnung|gegend|natur|umgebung)\b)).*$]]></pattern>
+    <script>
+      ShowRoomDescription
+    </script>
+  </command>
+  <command name="open">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:öffne\S{0,3}|auf\s?(?:mach|schraub|dreh|knöpf)\S{0,3})\b|.*?\b(?:mach|schraub|dreh|knöpf)\S{0,3}\b.*?\bauf\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      TryOpenClose (true, object)
+    </script>
+  </command>
+  <command name="close">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:schließ|schliess)\S{0,3}\b|.*?\bzu\s?(?:mach|schraub|dreh|knöpf)\S{0,3}\b|.*?\b(?:mach|schraub|dreh|knöpf)\S{0,3}\b.*?\bzu\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      TryOpenClose (false, object)
+    </script>
+  </command>
+  <command name="put">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:leg|stell|schütt|füll|geb|gib|tu|mach|häng|halt)\S{0,3}\b)(?=.*?\b(?:auf|in|im|unter|über)\S{0,3}\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <scope>object1=inventory|object2=container</scope>
+    <script>
+      // put object1 in/on object 2
+      canbedropped = true
+      if (HasBoolean(object1, "drop")) {
+        if (not object1.drop) {
+          canbedropped = false
+        }
+      }
+      if (object1.parent = object2) {
+        msg (DynamicTemplate("AlreadyThere", object1))
+      }
+      else if (not ListContains(ScopeInventory(), object1)) {
+        msg (DynamicTemplate("NotCarrying", object1))
+      }
+      else if (not canbedropped) {
+        msg (DynamicTemplate("ObjectCannotBeStored", object1))
+      }
+      else if (not ListContains(ScopeReachable(), object1)) {
+        msg (BlockingMessage(object1, ""))
+      }
+      else if (not ListContains(ScopeReachable(), object2)) {
+        msg (BlockingMessage(object2, ""))
+      }
+      else if (not object2.container) {
+        msg (Template("CannotDoThat"))
+      }
+      else if (not object2.isopen) {
+        msg (BlockingMessage(object2, ""))
+      }
+      else {
+        if (GetBoolean(object2, "hidechildren")) {
+          object2.hidechildren = false
+        }
+        params = NewDictionary()
+        dictionary add (params, "object", object1)
+        dictionary add (params, "destination", object2)
+        if (HasScript(object2, "addscript")) {
+          do (object2, "addscript", params)
+        }
+        else if (HasScript(object1, "drop")) {
+          do (object1, "drop", params)
+        }
+        else {
+          object1.parent = object2
+          msg (Template("Done"))
+        }
+      }
+      // must be carrying object1
+      // item cannot be dropped
+      // object1 must not be inside a closed container
+      // object2 must not be inside a closed container
+      // object2 must be an open container or surface
+    </script>
+  </command>
+  <command name="removefrom">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:nimm|nehm|entgegennehm|entfern|entwend|hol|tu|schnapp|greif|pack|einsteck)\S{0,3}\b|.*?\bsteck\S{0,3}\b.*?\bein\b)(?=.*?\b(?:von|vom|aus)\S{0,3}\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <scope>object1=contents|object2=container</scope>
+    <script>
+      // remove object1 from object2
+      // if object2 does indeed contain object1, this is a synonym for "take object1"
+      if (not Contains(object2, object1)) {
+        msg (DynamicTemplate("ObjectDoesNotContain", object2, object1))
+      }
+      else {
+        DoTake
+      }
+    </script>
+  </command>
+  <verb name="speak">
+    <pattern type="string"><![CDATA[^(?!.*?\bnach|über|von|vom\b)(?=.*?\b(?:an|aus|mit)?(?:sprech|sag|red|schwätz|plapper|plauder|frag|quassel|tausch|richt|teil)\S{0,3}\b|.*?\b(?:sprich|gespräch|unterhalt|antwort)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>speak</property>
+    <defaulttemplate>DefaultSpeakTo</defaulttemplate>
+  </verb>
+  <verb name="read">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:durch)?(?:les|studier|stöber|schmöker|blätter|lies)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>read</property>
+    <defaulttemplate>DefaultRead</defaulttemplate>
+  </verb>
+  <command name="wear">
+    <pattern type="string"><![CDATA[^(?!\bhäng\S{0,3}\b.*?\büber\S{0,3}\b)(?=.*?\b(?:an|drüber|über|be|um|ein)(?:zieh|streif|werf|kleid|leg|hüll|häng|bind)\S{0,3}\b|.*?\b(?:zieh|leg|kleid|streif|werf|wirf|häng|bind)\S{0,3}\b.*?\b(?:an|um|drüber|über)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <allow_all />
+    <scope>inventory</scope>
+    <script>
+      if (multiple and ListCount(object) = 0) {
+        msg ("Du besitzt nichts zum anziehen.")
+      }
+      else {
+        foreach (obj, object) {
+          if (multiple) {
+            OutputTextNoBr (GetDisplayAlias(obj) + ": ")
+          }
+          f = _DoWear(obj)
+        }
+        UpdateArmour
+      }
+    </script>
+  </command>
+  <command name="remove">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|runter|ent|ab)(?:zieh|streif|kleid|hüll)\S{0,3}\b|.*?\b(?:zieh|kleid|streif|häng)\S{0,3}\b.*?\b(?:ab|aus|runter)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <allow_all />
+    <scope>inventory</scope>
+    <script>
+      if (multiple and ListCount(object) = 0) {
+        msg ("Du besitzt nichts zum ausziehen.")
+      }
+      else {
+        foreach (obj, object) {
+          if (multiple) {
+            OutputTextNoBr (GetDisplayAlias(obj) + ": ")
+          }
+          f = _DoRemove(obj)
+        }
+      }
+      UpdateArmour
+    </script>
+  </command>
+  <command name="use">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:mit|auf|aufs)\b|.*?\bm\b)(?=.*?\b(?:benutz|nutz|verwend|gebrauch|bedien|betätig)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script><![CDATA[
+      if (HasScript(object, "use")) {
+        do (object, "use")
+      }
+      else {
+        if (GetBoolean(object, "use")) {
+          candidates = CreateUseMenuList (object)
+          if (ListCount(candidates) = 0) {
+            msg (Template("NoObjectsAvailable"))
+          }
+          else {
+            game.pov.usemenuobject = object
+            if (HasString(object, "usemenuprompt")) {
+              menucaption = object.usemenuprompt
+            }
+            else {
+              menucaption = Template("UseOnMenu")
+            }
+            ShowMenu (menucaption, candidates, true) {
+              if (result <> null) {
+                HandleUseOn (game.pov.usemenuobject, GetObject(result))
+                game.pov.usemenuobject = null
+              }
+            }
+          }
+        }
+        else {
+          msg (DynamicTemplate("CantUse", object))
+        }
+      }
+    ]]>
+    </script>
+  </command>
+  <command name="useon">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:benutz|nutz|verwend|gebrauch|kombinier)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?:mit|auf|aufs)\b|.*?\bm\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <script>
+      HandleUseOn (object1, object2)
+    </script>
+  </command>
+  <command name="take">
+    <pattern type="string"><![CDATA[^(?!#)(?!.*?\b(?:von|vom|aus)\S{0,3}\b)(?=.*?\b(?:nimm|nehm|entgegennehm|aufnehm|entwend|hol|schnapp|ergreif|greif|einpack|einsteck|heb)\S{0,3}\b|.*?\bi\b|.*?\b(?:steck|pack)\S{0,3}\b.*?\bein\b)(?=.*\b(?<object>X)\b).*$]]></pattern>
+    <allow_all />
+    <scope>notheld</scope>
+    <script>
+      if (multiple and ListCount(object) = 0) {
+        msg ("Hier gibt es nichts zum nehmen.")
+      }
+      else {
+        foreach (obj, object) {
+          DoTake (obj, multiple)
+        }
+      }
+    </script>
+  </command>
+  <command name="wait">
+    <pattern type="string"><![CDATA[^.*?\b(?:ab)?wart\S{0,3}\b.*$]]></pattern>
+    <script>
+      msg (Template("DefaultWait"))
+    </script>
+  </command>
+  <command name="help">
+    <pattern type="string"><![CDATA[^\?|.*?\b(?:hilf|helf|weiterhelf)\S{0,3}\b.*$]]></pattern>
+    <script>
+      msg (Template("DefaultHelp"))
+    </script>
+  </command>
+
+  <!--
+  ****************************************************************************************************
+  MARK Verbs
+  All verbs from quest
+  ****************************************************************************************************
+  -->
+
+  <verb name="drink">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|weg|leer|be|runter|hinunter)?(?:trink|sauf|schlürf|schlurf|schluck|nipp|kipp)\S{0,3}\b|.*?\b(?:hinunter|runter)(?:gieß|schütt)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>drink</property>
+    <defaulttemplate>DefaultDrink</defaulttemplate>
+  </verb>
+  <command name="lookat">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin|durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein|unter\sdie\slupe)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b|\b(?:u|x)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      if (GetBoolean(object, "hidechildren")) {
+        object.hidechildren = false
+      }
+      if (TypeOf(object, "look") = "script") {
+        if (not HasAttribute(object,"timesexamined")) {
+          object.timesexamined = 0
+        }
+        do (object, "look")
+        object.timesexamined = object.timesexamined + 1
+      }
+      else {
+        lookdesc = ""
+        if (HasString(object, "look")) {
+          lookdesc = object.look
+        }
+        if (LengthOf(lookdesc) = 0) {
+          lookdesc = Template("DefaultObjectDescription")
+        }
+        if (GetBoolean(object, "switchedon")) {
+          if (HasString(object, "switchedondesc")) {
+            lookdesc = lookdesc + " " + object.switchedondesc
+          }
+        }
+        else {
+          if (HasString(object, "switchedoffdesc")) {
+            lookdesc = lookdesc + " " + object.switchedoffdesc
+          }
+        }
+        isDark = CheckDarkness()
+        if (isDark and not GetBoolean(object, "lightsource")) {
+          lookdesc = DynamicTemplate("LookAtDarkness", object)
+        }
+        else {
+          if (not HasAttribute(object,"timesexamined")) {
+            object.timesexamined = 0
+          }
+          object.timesexamined = object.timesexamined + 1
+        }
+        msg (lookdesc)
+      }
+      ListObjectContents (object)
+    </script>
+  </command>
+  <verb name="lookbehind">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin|(?:hin)?durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\bhinte\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>lookbehind</property>
+    <defaulttemplate>DefaultLookBehind</defaulttemplate>
+    <defaulttext>Dahinter ist nichts zu sehen.</defaulttext>
+  </verb>
+  <verb name="lookunder">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin|(?:hin)?durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\bunte\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>lookunder</property>
+    <defaulttemplate>DefaultLookUnder</defaulttemplate>
+    <defaulttext>Darunter ist nichts zu sehen.</defaulttext>
+  </verb>
+  <verb name="turnon">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|an)(?:stell|schalt)\S{0,3}\b|.*?\ban(?:mach|zünd|dreh|knips)\S{0,3}\b|.*?\b(?:entzünd|aktivier|start|hochfahr)\S{0,3}\b|.*?\b(?:schalt|stell)\S{0,3}\b.*?\b(?:an|ein)\b|.*?\b(?:mach|zünd|knips|dreh)\S{0,3}\b.*?\ban\b|.*?\bfahr\S{0,3}\b.*?\bhoch\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>turnon</property>
+    <defaulttemplate>DefaultTurnOn</defaulttemplate>
+  </verb>
+  <verb name="turnoff">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|ab)(?:schalt|dreh)\S{0,3}\b|.*?\baus(?:mach|zünd|lösch|knips|stell)\S{0,3}\b|.*?\b(?:lösch|deaktivier|(?:he)?runterfahr)\S{0,3}\b|.*?\b(?:schalt|dreh)\S{0,3}\b.*?\b(?:ab|aus)\b|.*?\b(?:mach|zünd|knips|dreh|stell)\S{0,3}\b.*?\baus\b|.*?\bfahr\S{0,3}\b.*?\b(?:he)?runter\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <property>turnoff</property>
+    <defaulttemplate>DefaultTurnOff</defaulttemplate>
+  </verb>
+
+  <!--
+  ****************************************************************************************************
+  MARK ExtendPatterns
+  The patterns are extended
+  ****************************************************************************************************
+  -->
+
+  <function name="ExtendPatterns">
+  <![CDATA[
+    // Additional words
+    objRegExAddList = NewStringList()
+    list add (objRegExAddList, "es")
+    list add (objRegExAddList, "sie")
+    list add (objRegExAddList, "ihn")
+    list add (objRegExAddList, "alles?")
+    // list add (objRegExAddList, "\\S+$")
+    // list add (objRegExAddList, "\\S+(?=\\s\\b(?:an|zu|der|dem|nach|auf|in|im|unter|über|von|vom|aus|um|drüber|ab|runter|mit)\\b)")
+    objRegExpList = NewStringList()
+    // Absolutely all visible objects are read out and converted into a format for regular expressions
+    foreach (obj, AllObjects()) {
+      if (HasAttribute (obj, "visible")) {
+        if (obj.visible) {
+          objValList = NewStringList()
+          // Add Alias
+          objAlias = GetDisplayAlias(obj)
+          list add (objValList, objAlias)
+          // Add alternative names
+          if (HasAttribute(obj, "alt")) {
+            objAlt = obj.alt
+            objValList = ListCombine (objValList, objAlt)
+          }
+          // Processed values
+          foreach (objVal, objValList) {
+            // Everything in parentheses is excluded because it contains states
+            brackPos = Instr (objVal, " (")
+            if (brackPos > 0) {
+              objVal = Left (objVal, brackPos - 1)
+            }
+            // Convert all object names to lowercase letters
+            objVal = LCase(objVal)
+            // If the list of regular expressions does not yet contain the new name, it is added
+            if (not ListContains(objRegExpList, objVal)) {
+              list add (objRegExpList, objVal)
+            }
+          }
+        }
+      }
+    }
+    objRegExpList = ListCombine (objRegExpList, objRegExAddList)
+    objRegExp = join(objRegExpList, "|")
+    // Replacement of object and exit placeholders
+    foreach (cmd, ScopeCommands()) {
+      cmd.pattern = Replace (cmd.pattern, "<object>X", "<object>" + objRegExp)
+      cmd.pattern = Replace (cmd.pattern, "<object1>X", "<object1>" + objRegExp)
+      cmd.pattern = Replace (cmd.pattern, "<object2>X", "<object2>" + objRegExp)
+      // Log (cmd.pattern)
+    }
+  ]]>
+  </function>
+  
+</library>
