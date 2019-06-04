@@ -7,7 +7,7 @@
   Parser Plus in German
   The parser contains extended and improved commands.
   by ScriptGames, 2019
-  Version 1.1
+  Version 1.0
   ****************************************************************************************************
   Quest-Version: 5.8
   ****************************************************************************************************
@@ -21,10 +21,6 @@
   ****************************************************************************************************
   1. Download the ParserPlusDeutsch.aslx, integrate it as Library in Quest.
   2. Insert the function "setParserPlus" under Advanced Scripts.
-  ****************************************************************************************************
-
-  ****************************************************************************************************
-  Added Auf/Zudrehen.
   ****************************************************************************************************
 
 -->
@@ -740,13 +736,13 @@
   </verb>
   <!-- MARK TurnOn -->
   <verb name="turnon">
-    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|an)(?:stell|schalt)\S{0,3}\b|.*?\b(?:an|auf)(?:mach|zünd|dreh|knips)\S{0,3}\b|.*?\b(?:entzünd|aktivier|start|hochfahr)\S{0,3}\b|.*?\b(?:schalt|stell)\S{0,3}\b.*?\b(?:an|ein)\b|.*?\b(?:mach|zünd|knips|dreh)\S{0,3}\b.*?\b(?:an|auf)\b|.*?\bfahr\S{0,3}\b.*?\bhoch\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|an)(?:stell|schalt)\S{0,3}\b|.*?\ban(?:mach|zünd|dreh|knips)\S{0,3}\b|.*?\b(?:entzünd|aktivier|start|hochfahr)\S{0,3}\b|.*?\b(?:schalt|stell)\S{0,3}\b.*?\b(?:an|ein)\b|.*?\b(?:mach|zünd|knips|dreh)\S{0,3}\b.*?\ban\b|.*?\bfahr\S{0,3}\b.*?\bhoch\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
     <property>turnon</property>
     <defaulttemplate>DefaultTurnOn</defaulttemplate>
   </verb>
   <!-- MARK TurnOff -->
   <verb name="turnoff">
-    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|ab|zu)(?:schalt|dreh)\S{0,3}\b|.*?\b(?:aus)(?:mach|zünd|lösch|knips|stell)\S{0,3}\b|.*?\b(?:lösch|deaktivier|(?:he)?runterfahr)\S{0,3}\b|.*?\b(?:schalt|dreh)\S{0,3}\b.*?\b(?:ab|aus)\b|.*?\b(?:mach|zünd|knips|dreh|stell)\S{0,3}\b.*?\b(?:aus|zu)\b|.*?\bfahr\S{0,3}\b.*?\b(?:he)?runter\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|ab)(?:schalt|dreh)\S{0,3}\b|.*?\baus(?:mach|zünd|lösch|knips|stell)\S{0,3}\b|.*?\b(?:lösch|deaktivier|(?:he)?runterfahr)\S{0,3}\b|.*?\b(?:schalt|dreh)\S{0,3}\b.*?\b(?:ab|aus)\b|.*?\b(?:mach|zünd|knips|dreh|stell)\S{0,3}\b.*?\baus\b|.*?\bfahr\S{0,3}\b.*?\b(?:he)?runter\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
     <property>turnoff</property>
     <defaulttemplate>DefaultTurnOff</defaulttemplate>
   </verb>
