@@ -4,9 +4,9 @@
 
  - [Developer Mode](https://github.com/scriptgames/quest_libraries/raw/master/DevMode/DevMode.aslx)
 
- - [ParserPlus](https://github.com/scriptgames/quest_libraries/raw/master/ParserPlus/ParserPlusDeutsch.aslx)
+ - [Parser Plus](https://github.com/scriptgames/quest_libraries/raw/master/ParserPlus/ParserPlusDeutsch.aslx)
 
- - [MessagePlus](https://github.com/scriptgames/quest_libraries/raw/master/MessagePlus/MessagePlus.aslx) 
+ - [Message Plus](https://github.com/scriptgames/quest_libraries/raw/master/MessagePlus/MessagePlus.aslx) 
  
  - [ObjectExt](https://github.com/scriptgames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)
 
