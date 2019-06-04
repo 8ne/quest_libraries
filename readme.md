@@ -6,6 +6,8 @@
 
  - [ParserPlus](https://github.com/scriptgames/quest_libraries/raw/master/ParserPlus/ParserPlusDeutsch.aslx)
 
+ - [MessagePlus](https://github.com/scriptgames/quest_libraries/raw/master/MessagePlus/MessagePlus.aslx) 
+ 
  - [ObjectExt](https://github.com/scriptgames/quest_libraries/raw/master/ObjectExt/ObjectExt.aslx)
 
  - [OwnCursor](https://github.com/scriptgames/quest_libraries/raw/master/OwnCursor/OwnCursor.js)
