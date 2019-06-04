@@ -6,7 +6,7 @@
   ****************************************************************************************************
   Message Plus - Output Text with style elements
   by ScriptGames, 2019
-  Version 1.0
+  Version 1.0.1
   ****************************************************************************************************
   Quest-Version: 5.8
   ****************************************************************************************************
@@ -24,13 +24,11 @@
   <!-- English -->
   <template name="EditorScriptsOutputPrintamessagePlus">Print a message plus</template>
   <template name="EditorScriptsOutputPrintPlusBr">B - Break</template>
-  <template name="EditorScriptsOutputPrintPlusNoBr">X - No Break</template>
   <template name="EditorScriptsOutputPrintPlusParagraph">P - Paragraphs</template>
   <template name="EditorScriptsOutputPrintPlusLeft">L - Left</template>
   <template name="EditorScriptsOutputPrintPlusCenter">C - Center</template>
   <template name="EditorScriptsOutputPrintPlusRight">R - Right</template>
   <template name="EditorScriptsOutputPrintPlusJustify">J - Justify</template>
-  <template name="EditorScriptsOutputPrintPlusStandard">___ - Standard</template>
   <template name="EditorScriptsOutputPrintPlusBold">B__ - Bold</template>
   <template name="EditorScriptsOutputPrintPlusBoldItalic">BI_ - Bold, Italic</template>
   <template name="EditorScriptsOutputPrintPlusBoldUnderline">B_U - Bold, Underline</template>
@@ -38,19 +36,19 @@
   <template name="EditorScriptsOutputPrintPlusItalic">_I_ - Italic</template>
   <template name="EditorScriptsOutputPrintPlusItalicUnderline">_IU - Italic, Underline</template>
   <template name="EditorScriptsOutputPrintPlusUnderline">__U - Underline</template>
+  <template name="EditorScriptsOutputPrintPlusEnglish">EN - English</template>
+  <template name="EditorScriptsOutputPrintPlusDeutsch">DE - German</template>
 
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
   <!-- Deutsch -->
   <!-- -->
   <template name="EditorScriptsOutputPrintamessagePlus">Text anzeigen (Message Plus)</template>
   <template name="EditorScriptsOutputPrintPlusBr">U - Umbruch</template>
-  <template name="EditorScriptsOutputPrintPlusNoBr">X - Ohne Umbruch</template>
   <template name="EditorScriptsOutputPrintPlusParagraph">P - Paragrafen</template>
   <template name="EditorScriptsOutputPrintPlusLeft">L - Links</template>
   <template name="EditorScriptsOutputPrintPlusCenter">Z - Zentriert</template>
   <template name="EditorScriptsOutputPrintPlusRight">R - Rechts</template>
   <template name="EditorScriptsOutputPrintPlusJustify">B - Block</template>
-  <template name="EditorScriptsOutputPrintPlusStandard">___ - Standard</template>
   <template name="EditorScriptsOutputPrintPlusBold">F__ - Fett</template>
   <template name="EditorScriptsOutputPrintPlusBoldItalic">FK_ - Fett, Kursiv</template>
   <template name="EditorScriptsOutputPrintPlusBoldUnderline">F_U - Fett, Unterstrichen</template>
@@ -58,6 +56,8 @@
   <template name="EditorScriptsOutputPrintPlusItalic">_K_ - Kursiv</template>
   <template name="EditorScriptsOutputPrintPlusItalicUnderline">_KU - Kursiv, Unterstrichen</template>
   <template name="EditorScriptsOutputPrintPlusUnderline">__U - Unterstrichen</template>
+  <template name="EditorScriptsOutputPrintPlusEnglish">EN - Englisch</template>
+  <template name="EditorScriptsOutputPrintPlusDeutsch">DE - Deutsch</template>
   <!-- -->
 
   <!-- Script-inscription -->
@@ -65,9 +65,9 @@
   <!-- OutputTextPlus -->
   <editor>
     <appliesto>(function)OutputTextPlus</appliesto>
-    <display>Print (Message Plus) #0 with parameters #1 #2 #3</display>
+    <display>Print (Message Plus) #0 with parameters #1 #2 #3 #4</display>
     <category>[EditorScriptsOutputOutput]</category>
-    <create>OutputTextPlus ("","br","left","s")</create>
+    <create>OutputTextPlus ("","br","left","","")</create>
     <add>[EditorScriptsOutputPrintamessagePlus]</add>
     <advanced/>
 
@@ -75,6 +75,15 @@
       <controltype>label</controltype>
       <caption>[EditorScriptsOutputPrintamessage]</caption>
     </control>
+
+    <!-- * * * Multi-Language-Feature * * *  -->
+    <!-- <control>
+      <controltype>dropdown</controltype>
+      <attribute>4</attribute>
+      <validvalues type="simplestringdictionary">""=___;"en"=[EditorScriptsOutputPrintPlusEnglish];"de"=[EditorScriptsOutputPrintPlusDeutsch];</validvalues>
+      <width>50</width>
+    </control> -->
+    <!-- * * * * * * * * * * * * * * * * * * -->
 
     <control>
       <controltype>expression</controltype>
@@ -87,7 +96,7 @@
     <control>
       <controltype>dropdown</controltype>
       <attribute>1</attribute>
-      <validvalues type="simplestringdictionary">"br"=[EditorScriptsOutputPrintPlusBr];"nobr"=[EditorScriptsOutputPrintPlusNoBr];"p"=[EditorScriptsOutputPrintPlusParagraph];</validvalues>
+      <validvalues type="simplestringdictionary">""=_;"br"=[EditorScriptsOutputPrintPlusBr];"p"=[EditorScriptsOutputPrintPlusParagraph];</validvalues>
       <width>40</width>
     </control>
 
@@ -101,14 +110,15 @@
     <control>
       <controltype>dropdown</controltype>
       <attribute>3</attribute>
-      <validvalues type="simplestringdictionary">"s"=[EditorScriptsOutputPrintPlusStandard];"b"=[EditorScriptsOutputPrintPlusBold];"bi"=[EditorScriptsOutputPrintPlusBoldItalic];"bu"=[EditorScriptsOutputPrintPlusBoldUnderline];"biu"=[EditorScriptsOutputPrintPlusBoldItalicUnderline];"i"=[EditorScriptsOutputPrintPlusItalic];"iu"=[EditorScriptsOutputPrintPlusItalicUnderline];"u"=[EditorScriptsOutputPrintPlusUnderline];</validvalues>
+      <validvalues type="simplestringdictionary">""=___;"b"=[EditorScriptsOutputPrintPlusBold];"bi"=[EditorScriptsOutputPrintPlusBoldItalic];"bu"=[EditorScriptsOutputPrintPlusBoldUnderline];"biu"=[EditorScriptsOutputPrintPlusBoldItalicUnderline];"i"=[EditorScriptsOutputPrintPlusItalic];"iu"=[EditorScriptsOutputPrintPlusItalicUnderline];"u"=[EditorScriptsOutputPrintPlusUnderline];</validvalues>
       <width>55</width>
     </control>
 
   </editor>
 
-  <function name="OutputTextPlus" parameters="text, sec, pos, pro">
+  <function name="OutputTextPlus" parameters="text, sec, pos, pro, lang">
     <![CDATA[
+      if (lang = "" or game.languageid = lang) {
         before = ""
         after = ""
         switch (sec) {
@@ -148,10 +158,11 @@
                 after = after + "</u>"
             }
         }
-        SetAlignment (pos)
+        if (not pos = "left") SetAlignment (pos)
         JS.addText("<span style=\"" + GetCurrentTextFormat("") + "\">" + before + ProcessText(text) + after + "</span>")
         RequestSpeak (text)
         if (not pos = "left") SetAlignment ("left")
+      }
     ]]>
   </function>
 
