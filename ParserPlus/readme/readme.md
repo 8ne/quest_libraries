@@ -1,4 +1,4 @@
-# Parser Plus 1.0 in German
+# Parser Plus 1.1 in German
 ### Compatible with Quest 5.8 and later.
 ---
 #### A parser, which masters many new words, colloquial language and filler words.
@@ -13,6 +13,11 @@
 
 ---
 **[You want to see all libraries of scriptgames? Just click here!](https://github.com/scriptgames/quest_libraries)**
+
+---
+
+#### Version history
+Version 1.1: Added Auf/Zudrehen
 
 ---
 
