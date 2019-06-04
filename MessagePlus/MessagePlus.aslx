@@ -41,7 +41,7 @@
 
   <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
   <!-- Deutsch -->
-  <!-- -->
+  <!--
   <template name="EditorScriptsOutputPrintamessagePlus">Text anzeigen (Message Plus)</template>
   <template name="EditorScriptsOutputPrintPlusBr">U - Umbruch</template>
   <template name="EditorScriptsOutputPrintPlusParagraph">P - Paragrafen</template>
@@ -58,7 +58,7 @@
   <template name="EditorScriptsOutputPrintPlusUnderline">__U - Unterstrichen</template>
   <template name="EditorScriptsOutputPrintPlusEnglish">EN - Englisch</template>
   <template name="EditorScriptsOutputPrintPlusDeutsch">DE - Deutsch</template>
-  <!-- -->
+  -->
 
   <!-- Script-inscription -->
 
