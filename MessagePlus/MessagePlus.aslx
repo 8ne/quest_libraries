@@ -1,0 +1,158 @@
+﻿<?xml version="1.0"?>
+<library>
+
+<!--
+
+  ****************************************************************************************************
+  Message Plus - Output Text with style elements
+  by ScriptGames, 2019
+  Version 1.0
+  ****************************************************************************************************
+  Quest-Version: 5.8
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  Download the MessagePlus.aslx, integrate it as Library in Quest.
+  ****************************************************************************************************
+  Under Add Script / Add Scripts you will find a new item named "Print a message plus".
+  ****************************************************************************************************
+
+-->
+
+  <!-- Languages -->
+  <!-- English -->
+  <template name="EditorScriptsOutputPrintamessagePlus">Print a message plus</template>
+  <template name="EditorScriptsOutputPrintPlusBr">B - Break</template>
+  <template name="EditorScriptsOutputPrintPlusNoBr">X - No Break</template>
+  <template name="EditorScriptsOutputPrintPlusParagraph">P - Paragraphs</template>
+  <template name="EditorScriptsOutputPrintPlusLeft">L - Left</template>
+  <template name="EditorScriptsOutputPrintPlusCenter">C - Center</template>
+  <template name="EditorScriptsOutputPrintPlusRight">R - Right</template>
+  <template name="EditorScriptsOutputPrintPlusJustify">J - Justify</template>
+  <template name="EditorScriptsOutputPrintPlusStandard">___ - Standard</template>
+  <template name="EditorScriptsOutputPrintPlusBold">B__ - Bold</template>
+  <template name="EditorScriptsOutputPrintPlusBoldItalic">BI_ - Bold, Italic</template>
+  <template name="EditorScriptsOutputPrintPlusBoldUnderline">B_U - Bold, Underline</template>
+  <template name="EditorScriptsOutputPrintPlusBoldItalicUnderline">BIU - Bold, Italic, Underline</template>
+  <template name="EditorScriptsOutputPrintPlusItalic">_I_ - Italic</template>
+  <template name="EditorScriptsOutputPrintPlusItalicUnderline">_IU - Italic, Underline</template>
+  <template name="EditorScriptsOutputPrintPlusUnderline">__U - Underline</template>
+
+  <!-- Zur Umstellung auf Deutsch folgende Zeilen einklammern -->
+  <!-- Deutsch -->
+  <!-- -->
+  <template name="EditorScriptsOutputPrintamessagePlus">Text anzeigen (Message Plus)</template>
+  <template name="EditorScriptsOutputPrintPlusBr">U - Umbruch</template>
+  <template name="EditorScriptsOutputPrintPlusNoBr">X - Ohne Umbruch</template>
+  <template name="EditorScriptsOutputPrintPlusParagraph">P - Paragrafen</template>
+  <template name="EditorScriptsOutputPrintPlusLeft">L - Links</template>
+  <template name="EditorScriptsOutputPrintPlusCenter">Z - Zentriert</template>
+  <template name="EditorScriptsOutputPrintPlusRight">R - Rechts</template>
+  <template name="EditorScriptsOutputPrintPlusJustify">B - Block</template>
+  <template name="EditorScriptsOutputPrintPlusStandard">___ - Standard</template>
+  <template name="EditorScriptsOutputPrintPlusBold">F__ - Fett</template>
+  <template name="EditorScriptsOutputPrintPlusBoldItalic">FK_ - Fett, Kursiv</template>
+  <template name="EditorScriptsOutputPrintPlusBoldUnderline">F_U - Fett, Unterstrichen</template>
+  <template name="EditorScriptsOutputPrintPlusBoldItalicUnderline">FKU - Fett, Kursiv, Unterstrichen</template>
+  <template name="EditorScriptsOutputPrintPlusItalic">_K_ - Kursiv</template>
+  <template name="EditorScriptsOutputPrintPlusItalicUnderline">_KU - Kursiv, Unterstrichen</template>
+  <template name="EditorScriptsOutputPrintPlusUnderline">__U - Unterstrichen</template>
+  <!-- -->
+
+  <!-- Script-inscription -->
+
+  <!-- OutputTextPlus -->
+  <editor>
+    <appliesto>(function)OutputTextPlus</appliesto>
+    <display>Print (Message Plus) #0 with parameters #1 #2 #3</display>
+    <category>[EditorScriptsOutputOutput]</category>
+    <create>OutputTextPlus ("","br","left","s")</create>
+    <add>[EditorScriptsOutputPrintamessagePlus]</add>
+    <advanced/>
+
+    <control>
+      <controltype>label</controltype>
+      <caption>[EditorScriptsOutputPrintamessage]</caption>
+    </control>
+
+    <control>
+      <controltype>expression</controltype>
+      <attribute>0</attribute>
+      <simple>message</simple>
+      <expand/>
+      <multiline/>
+    </control>
+
+    <control>
+      <controltype>dropdown</controltype>
+      <attribute>1</attribute>
+      <validvalues type="simplestringdictionary">"br"=[EditorScriptsOutputPrintPlusBr];"nobr"=[EditorScriptsOutputPrintPlusNoBr];"p"=[EditorScriptsOutputPrintPlusParagraph];</validvalues>
+      <width>40</width>
+    </control>
+
+    <control>
+      <controltype>dropdown</controltype>
+      <attribute>2</attribute>
+      <validvalues type="simplestringdictionary">"left"=[EditorScriptsOutputPrintPlusLeft];"center"=[EditorScriptsOutputPrintPlusCenter];"right"=[EditorScriptsOutputPrintPlusRight];"justify"=[EditorScriptsOutputPrintPlusJustify]</validvalues>
+      <width>40</width>
+    </control>
+
+    <control>
+      <controltype>dropdown</controltype>
+      <attribute>3</attribute>
+      <validvalues type="simplestringdictionary">"s"=[EditorScriptsOutputPrintPlusStandard];"b"=[EditorScriptsOutputPrintPlusBold];"bi"=[EditorScriptsOutputPrintPlusBoldItalic];"bu"=[EditorScriptsOutputPrintPlusBoldUnderline];"biu"=[EditorScriptsOutputPrintPlusBoldItalicUnderline];"i"=[EditorScriptsOutputPrintPlusItalic];"iu"=[EditorScriptsOutputPrintPlusItalicUnderline];"u"=[EditorScriptsOutputPrintPlusUnderline];</validvalues>
+      <width>55</width>
+    </control>
+
+  </editor>
+
+  <function name="OutputTextPlus" parameters="text, sec, pos, pro">
+    <![CDATA[
+        before = ""
+        after = ""
+        switch (sec) {
+            case ("br") after = "<br/>"
+            case ("p") {
+                before = "<p>"
+                after = "</p>"
+            }
+        }
+        switch (pro) {
+            case ("b") {
+                before = before + "<b>"
+                after = after + "</b>"
+            }
+            case ("bi") {
+                before = before + "<b><i>"
+                after = after + "</b></i>"
+            }
+            case ("bu") {
+                before = before + "<b><u>"
+                after = after + "</b></u>"
+            }
+            case ("biu") {
+                before = before + "<b><i><u>"
+                after = after + "</b></i></u>"
+            }            
+            case ("i") {
+                before = before + "<i>"
+                after = after + "</i>"
+            }
+            case ("iu") {
+                before = before + "<i><u>"
+                after = after + "</i></u>"
+            }
+            case ("u") {
+                before = before + "<u>"
+                after = after + "</u>"
+            }
+        }
+        SetAlignment (pos)
+        JS.addText("<span style=\"" + GetCurrentTextFormat("") + "\">" + before + ProcessText(text) + after + "</span>")
+        RequestSpeak (text)
+        if (not pos = "left") SetAlignment ("left")
+    ]]>
+  </function>
+
+</library>
