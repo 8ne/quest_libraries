@@ -7,7 +7,7 @@
   Parser Plus in German
   The parser contains extended and improved commands.
   by ScriptGames, 2019
-  Version 1.1
+  Version 1.1.1
   ****************************************************************************************************
   Quest-Version: 5.8
   ****************************************************************************************************
@@ -24,7 +24,7 @@
   ****************************************************************************************************
 
   ****************************************************************************************************
-  Added Auf/Zudrehen.
+  Version 1.1: Added Auf/Zudrehen.
   ****************************************************************************************************
 
 -->
@@ -97,7 +97,7 @@
   </command>
   <!-- MARK AltTellTo -->
   <command name="alttellto">
-    <pattern type="string"><![CDATA[^(?<objekt>X), (?<text>.*)$]]></pattern>
+    <pattern type="string"><![CDATA[^(?<object>X), (?<text>.*)$]]></pattern>
     <script>
       DoAskTell (object, text, "tellto", "telltodefault", "DefaultTellTo")
     </script>
@@ -602,7 +602,7 @@
   </verb>
   <!-- MARK Turn -->
   <verb name="turn">
-    <pattern type="string"><![CDATA[^(?=.*?\b(?:um)?(?:dreh|wend)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:auf|zu)\b)(?=.*?\b(?!auf|zu)(?:um)?(?:dreh|wend)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
     <property>turn</property>
     <defaulttemplate>DefaultTurn</defaulttemplate>
   </verb>
@@ -740,13 +740,13 @@
   </verb>
   <!-- MARK TurnOn -->
   <verb name="turnon">
-    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|an)(?:stell|schalt)\S{0,3}\b|.*?\b(?:an|auf)(?:mach|zünd|dreh|knips)\S{0,3}\b|.*?\b(?:entzünd|aktivier|start|hochfahr)\S{0,3}\b|.*?\b(?:schalt|stell)\S{0,3}\b.*?\b(?:an|ein)\b|.*?\b(?:mach|zünd|knips|dreh)\S{0,3}\b.*?\b(?:an|auf)\b|.*?\bfahr\S{0,3}\b.*?\bhoch\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|an)(?:stell|schalt)\S{0,3}\b|.*?\b(?:an)(?:mach|zünd|dreh|knips)\S{0,3}\b|.*?\b(?:entzünd|aktivier|start|hochfahr)\S{0,3}\b|.*?\b(?:schalt|stell)\S{0,3}\b.*?\b(?:an|ein)\b|.*?\b(?:mach|zünd|knips|dreh)\S{0,3}\b.*?\b(?:an)\b|.*?\bfahr\S{0,3}\b.*?\bhoch\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
     <property>turnon</property>
     <defaulttemplate>DefaultTurnOn</defaulttemplate>
   </verb>
   <!-- MARK TurnOff -->
   <verb name="turnoff">
-    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|ab|zu)(?:schalt|dreh)\S{0,3}\b|.*?\b(?:aus)(?:mach|zünd|lösch|knips|stell)\S{0,3}\b|.*?\b(?:lösch|deaktivier|(?:he)?runterfahr)\S{0,3}\b|.*?\b(?:schalt|dreh)\S{0,3}\b.*?\b(?:ab|aus)\b|.*?\b(?:mach|zünd|knips|dreh|stell)\S{0,3}\b.*?\b(?:aus|zu)\b|.*?\bfahr\S{0,3}\b.*?\b(?:he)?runter\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|ab)(?:schalt|dreh)\S{0,3}\b|.*?\b(?:aus)(?:mach|zünd|lösch|knips|stell)\S{0,3}\b|.*?\b(?:lösch|deaktivier|(?:he)?runterfahr)\S{0,3}\b|.*?\b(?:schalt|dreh)\S{0,3}\b.*?\b(?:ab|aus)\b|.*?\b(?:mach|zünd|knips|dreh|stell)\S{0,3}\b.*?\b(?:aus)\b|.*?\bfahr\S{0,3}\b.*?\b(?:he)?runter\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
     <property>turnoff</property>
     <defaulttemplate>DefaultTurnOff</defaulttemplate>
   </verb>
