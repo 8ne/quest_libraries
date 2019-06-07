@@ -1,11 +1,14 @@
 ﻿// ----------------------------------------------------------------------------------------------------
 // CommandBar with Own Cursor
 // by ScriptGames, 2017-2019
-// Version 1.3.2
+// Version 1.3.3
 // ----------------------------------------------------------------------------------------------------
 // Quest-Version: 5.7
 // ----------------------------------------------------------------------------------------------------
 // Just download the OwnCursor.js and integrate it as javascript in Quest.
+// ----------------------------------------------------------------------------------------------------
+// Cersion 1.3.3
+// Added Waitmode and Cursorkeys for left and right
 // ----------------------------------------------------------------------------------------------------
 // Version 1.3.2
 // Bug with blinking cursor in browser fixed.
@@ -73,7 +76,7 @@
 		}
 		
 		function OwnCurInput (event, typ) {
-			if (cmdbar.css("display") !== "none") {
+			if (cmdbar.css("display") !== "none" && !_waitMode) {
 				if (typeof event !== 'undefined' && event.target.nodeName !== "INPUT") {
 					var key = event.which; // keycode
 					var strkey = String.fromCharCode(key); // key
@@ -88,7 +91,7 @@
 						var text = cmdbar.val().slice(0, -OwnCurCursorLen) + " " + OwnCurCursor;
 						cmdbar.val(text);	    		
 					}	    	
-					else if ((typ === "keydown") && (key === 13 || key === 38 || key === 40 || key === 27)) { // return, etc.
+					else if ((typ === "keydown") && (key === 13 || key === 38 || key === 40 || key === 27 || key === 37 || key === 39)) { // return, etc.
 						event.preventDefault();
 						var text = cmdbar.val().slice(0, -OwnCurCursorLen);
 						cmdbar.val(text);
