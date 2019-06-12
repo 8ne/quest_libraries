@@ -18,7 +18,7 @@
 
  - [SetObjectCase](https://github.com/scriptgames/quest_libraries/raw/master/SetObjectCase/SetObjectCase.aslx)
 
- - [StyleSheet](https://github.com/scriptgames/quest_libraries/blob/master/StyleSheet/StyleSheet.zip)
+ - [StyleSheet](https://github.com/scriptgames/quest_libraries/blob/master/StyleSheet/StyleSheet.zip?raw=true)
 
  - [UseAllround](https://github.com/scriptgames/quest_libraries/raw/master/UseAllround/UseAllround.aslx)
 
