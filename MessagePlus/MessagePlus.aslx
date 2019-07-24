@@ -6,7 +6,7 @@
   ****************************************************************************************************
   Message Plus - Output Text with style elements
   by ScriptGames, 2019
-  Version 1.0.1
+  Version 1.0.2
   ****************************************************************************************************
   Quest-Version: 5.8
   ****************************************************************************************************
@@ -162,6 +162,7 @@
         JS.addText("<span style=\"" + GetCurrentTextFormat("") + "\">" + before + ProcessText(text) + after + "</span>")
         RequestSpeak (text)
         if (not pos = "left") SetAlignment ("left")
+        JS.scrollToEnd ()
       }
     ]]>
   </function>
