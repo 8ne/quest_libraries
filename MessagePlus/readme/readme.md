@@ -23,3 +23,7 @@
 _Have fun with the library!_
 
 ![EightOne](https://raw.githubusercontent.com/8ne/quest_libraries/master/8ne.png)
+
+---
+
+**[Website](https://www.eightone.de/) | [E-Mail](mailto:kontakt@eightone.de) | [GitHub](https://github.com/8ne) | [Libraries](https://github.com/8ne/quest_libraries)**
