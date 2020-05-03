@@ -121,6 +121,7 @@ function initDevModeSideBar(pos, size, verbs) {
             opensidebar = "";
         }
         else {
+            if (sidebar == "#devmode_sidebar_logarea") updateDevModeLogArea();
             $('#devmode_sidebar_container > div').hide();
             $(sidebar).show();
             $('#devmode_sidebar').trigger("sidebar:open");
@@ -347,8 +348,6 @@ function initDevModeSideBar(pos, size, verbs) {
             '<div id="devmode_logarea"></div>' +
             '</div>'
         );
-
-        updateDevModeLogArea();
     }
 
     initDevModeDebugTable();

@@ -1,0 +1,640 @@
+﻿<?xml version="1.0"?>
+<library>
+
+<!--
+
+  ****************************************************************************************************
+  Parser Plus in German
+  The parser contains extended and improved commands.
+  by EightOne, 2019
+  Version 1.0
+  ****************************************************************************************************
+  Quest-Version: 5.8
+  ****************************************************************************************************
+  If you are viewing this on GitHub and want to download it, right click on the RAW button
+  just above, and select "Save link as..."
+  ****************************************************************************************************
+  1. Download the ParserPlus.aslx, integrate it as Library in Quest.
+  2. Insert the function "setParserPlus" under Advanced Scripts.
+  ****************************************************************************************************
+
+-->
+
+  <!--
+  ****************************************************************************************************
+  MARK * * * COMMANDS * * *
+  ****************************************************************************************************
+  -->
+
+  <!-- MARK Lie -->
+  <command name="pp_lie">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:hin)?(?:lieg|leg)\S{0,3}\b)(?=.*?\bdich\b).*$]]></pattern>
+    <script>
+      do (lie, "script")
+    </script>
+  </command>
+  <!-- MARK Sleep -->
+  <command name="pp_sleep">
+    <pattern type="string"><![CDATA[^.*?\b(?:(?:aus)?(?:ruh|schlaf|penn)|nickerchen|dös)\S{0,3}\b.*$]]></pattern>
+    <script>
+      do (sleep, "script")
+    </script>
+  </command>
+  <!-- MARK Save -->
+  <command name="pp_save">
+    <pattern type="string"><![CDATA[^.*?\b(?:save|speicher)\S{0,3}\b.*$]]></pattern>
+    <script>
+      do (save, "script")
+    </script>
+  </command>
+  <!-- MARK Jump -->
+  <command name="pp_jump">
+    <pattern type="string"><![CDATA[^.*?\b(?:hoch|rauf|hinauf)?(?:spring|hüpf|hops)\S{0,3}\b.*$]]></pattern>
+    <script>
+      do (jump, "script")
+    </script>
+  </command>
+  <!-- MARK Sit -->
+  <command name="pp_sit">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?<object>X)\b)(?:(?=.*?\b(?:hin)?(?:setz|sitz|hock|pflanz)\S{0,3}\b)(?=.*?\bdich\b)|(?=.*?\bplatz\snehm\S{0,3}\b)|(?=.*?\b(?:nehm|nimm)\S{0,3}\b.*?\bplatz\b)).*$]]></pattern>
+    <script>
+      do (sit, "script")
+    </script>
+  </command>
+  <!-- MARK Tell -->
+  <command name="pp_tell">
+    <pattern type="string"><![CDATA[^.*?\b(?:erzähl|sprech|red|schwätz|plapper|plauder|quassel)\S{0,3}.*?\b(?<object>X)\b.*?\b(?:von|vom|über)\s\b(?<text>.*).*$|^.*?\b(?<object>X)\b.*?\b(?:von|vom|über)\s\b.*?\b(?<text>.*)\b\s(?:erzählen|berichten)\b.*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (tell, "script", dict)
+    </script>
+  </command>
+  <!-- MARK TellTo -->
+  <command name="pp_tellto">
+    <pattern type="string"><![CDATA[^.*?\b(?:frag)\S{0,3}.*?\b(?<object>X)\b.*?\b(?:nach)\s\b(?<text>.*).*$|^.*?\b(?<object>X)\b.*?\b(?:nach)\s\b.*?\b(?<text>.*)\b\sfragen\b.*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      dictionary add (dict, "text", text)
+      do (tellto, "script", dict)
+    </script>
+  </command>
+  <!-- MARK AltTellTo -->
+  <command name="pp_alttellto">
+    <pattern type="string"><![CDATA[^(?<Objekt>X), (?<Text>.*)$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      dictionary add (dict, "text", text)
+      do (altellto, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Listen -->
+  <command name="pp_listen">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?<object>X)\b)(?=.*?\b(?:be|ab|zu|mit|hin)?(?:hör|lausch|horch)\S{0,3}\b).*$]]></pattern>
+    <script>
+      do (listen, "script")
+    </script>
+  </command>
+  <!-- MARK Undo -->
+  <command name="pp_undo">
+    <pattern type="string"><![CDATA[^.*?\b(?:undo|rückgängig)\b|.*?\bschritt\b.*?\bzurück\b.*$]]></pattern>
+    <script>
+      do (undo, "script")
+    </script>
+  </command>
+  <!-- MARK LookDir -->
+  <command name="pp_lookdir">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b)(?=.*?\b(?<exit>norden|osten|süden|westen|nordosten|nordwesten|südosten|südwesten|raus|hoch|runter|rein|raus|n|o|s|w|no|nw|so|sw|h|r)\b).*$]]></pattern>
+    <script>
+      do (lookdir, "script")
+    </script>
+  </command>
+  <!-- MARK Quit -->
+  <command name="pp_quit">
+    <pattern type="string"><![CDATA[^.*?\b(?:beend|end|exit|quit)\S{0,3}\b.*$]]></pattern>
+    <script>
+      do (quit, "script")
+    </script>
+  </command>
+  <!-- MARK Go -->
+  <command name="pp_go">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:an|be|zu|nach|hin)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b)(?=.*?\b(?<exit>norden|osten|süden|westen|nordosten|nordwesten|südosten|südwesten|raus|hoch|oben|runter|unten|rein|raus|n|o|s|w|no|nw|so|sw|h|r)\b).*$]]></pattern>
+    <script>
+      do (go, "script")
+    </script>
+  </command>
+  <!-- MARK GiveSingle -->
+  <command name="pp_givesingle">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:an|zu|der|dem|auf|in|im|unter|über)\S{0,3}\b)(?=.*?\b(?:(?:über|hin|dar|ab|weg)?(?:geb|gib|reich|bring)|(?:be|ver)?schenk|teil)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (givesingle, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Give -->
+  <command name="pp_give">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:auf|in|im|unter|über)\S{0,3}\b)(?=.*?\b(?:(?:über|hin|dar|ab|weg)?(?:geb|gib|reich|bring)|(?:be|ver)?schenk|teil)\S{0,3}\b)(?=.*?\b(?:an|zu|der|dem)\S{0,3}\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object1", object1)
+      dictionary add (dict, "object2", object2)
+      do (give, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Ask -->
+  <command name="pp_ask">
+    <pattern type="string"><![CDATA[^.*?\bfrag\S{0,3}\b.*?\b(?<object>X)\b.*?\bnach\s\b(?<text>.*).*$|^.*?\b(?<object>X)\b.*?\bnach\s\b.*?\b(?<text>.*)\b\sfragen\b.*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      dictionary add (dict, "text", text)
+      do (ask, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Drop -->
+  <command name="pp_drop">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:ab|hin|weg|nieder|fort)(?:leg|stell|setz)\S{0,3}\b|.*?\b(?:leg|stell|setz)\S{0,3}\b.*?\b(?:ab|hin|weg|nieder|fort)\b|.*?\b(?:entledig|entfern)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (drop, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Inventory -->
+  <command name="pp_inventory">
+    <pattern type="string"><![CDATA[^.*?\binventar\b.*$|\b^(?:inv|i)\b$]]></pattern>
+    <script>
+      do (inventory, "script")
+    </script>
+  </command>
+  <!-- MARK Look -->
+  <command name="pp_look">
+    <pattern type="string"><![CDATA[^(?:(?=.*?\b(?:um(?:schau|seh|blick|guck|glotz)\S{0,3}|^schau$|^l$)\b|.*?\b(?:schau|sieh|seh|blick|guck|glotz)\S{0,3}\b.*?\bum\b)|(?=.*?\b(?:an|be|zu|nach|hin|durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\b(?:hier|raum|zimmer|bude|wohnung|gegend|natur|umgebung)\b)).*$]]></pattern>
+    <script>
+      do (look, "script")
+    </script>
+  </command>
+  <!-- MARK Open -->
+  <command name="pp_open">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:öffne\S{0,3}|auf\s?(?:mach|schraub|dreh|knöpf)\S{0,3})\b|.*?\b(?:mach|schraub|dreh|knöpf)\S{0,3}\b.*?\bauf\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (open, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Close -->
+  <command name="pp_close">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:schließ|schliess)\S{0,3}\b|.*?\bzu\s?(?:mach|schraub|dreh|knöpf)\S{0,3}\b|.*?\b(?:mach|schraub|dreh|knöpf)\S{0,3}\b.*?\bzu\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (close, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Put -->
+  <command name="pp_put">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:leg|stell|schütt|füll|geb|gib|tu|mach|häng|halt)\S{0,3}\b)(?=.*?\b(?:auf|in|im|unter|über)\S{0,3}\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object1", object1)
+      dictionary add (dict, "object2", object2)
+      do (put, "script", dict)
+    </script>
+  </command>
+  <!-- MARK RemoveFrom -->
+  <command name="pp_removefrom">
+    <pattern type="string"><![CDATA[^(?!#)(?=.*?\b(?:nimm|nehm|entgegennehm|entfern|entwend|hol|tu|schnapp|greif|pack|einsteck)\S{0,3}\b|.*?\bsteck\S{0,3}\b.*?\bein\b)(?=.*?\b(?:von|vom|aus)\S{0,3}\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object1", object1)
+      dictionary add (dict, "object2", object2)
+      do (removefrom, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Wear -->
+  <command name="pp_wear">
+    <pattern type="string"><![CDATA[^(?!\bhäng\S{0,3}\b.*?\büber\S{0,3}\b)(?=.*?\b(?:an|drüber|über|be|um|ein)(?:zieh|streif|werf|kleid|leg|hüll|häng|bind)\S{0,3}\b|.*?\b(?:zieh|leg|kleid|streif|werf|wirf|häng|bind)\S{0,3}\b.*?\b(?:an|um|drüber|über)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (wear, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Remove -->
+  <command name="pp_remove">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|runter|ent|ab)(?:zieh|streif|kleid|hüll)\S{0,3}\b|.*?\b(?:zieh|kleid|streif|häng)\S{0,3}\b.*?\b(?:ab|aus|runter)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (remove, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Use -->
+  <command name="pp_use">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:mit|auf|aufs)\b|.*?\bm\b)(?=.*?\b(?:benutz|nutz|verwend|gebrauch|bedien|betätig)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (use, "script", dict)
+    </script>
+  </command>
+  <!-- MARK UseOn -->
+  <command name="pp_useon">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:benutz|nutz|verwend|gebrauch|kombinier)\S{0,3}\b|.*?\bb\b)(?=.*?\b(?:mit|auf|aufs)\b|.*?\bm\b)(?=.*?\b(?<object1>X)\b)(?=.*\b(?<object2>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object1", object1)
+      dictionary add (dict, "object2", object2)
+      do (useon, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Take -->
+  <command name="pp_take">
+    <pattern type="string"><![CDATA[^(?!#)(?!.*?\b(?:von|vom|aus)\S{0,3}\b)(?=.*?\b(?:nimm|nehm|entgegennehm|aufnehm|entwend|hol|schnapp|ergreif|greif|einpack|einsteck|heb)\S{0,3}\b|.*?\bi\b|.*?\b(?:steck|pack)\S{0,3}\b.*?\bein\b)(?=.*\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (take, "script", dict)
+    </script>
+  </command>
+  <!-- MARK Wait -->
+  <command name="pp_wait">
+    <pattern type="string"><![CDATA[^.*?\b(?:ab)?wart\S{0,3}\b.*$]]></pattern>
+    <script>
+      do (wait, "script")
+    </script>
+  </command>
+  <!-- MARK Help -->
+  <command name="pp_help">
+    <pattern type="string"><![CDATA[^\?|.*?\b(?:hilf|helf|weiterhelf)\S{0,3}\b.*$]]></pattern>
+    <script>
+      do (help, "script")
+    </script>
+  </command>
+  <!-- MARK LookAt -->
+  <command name="pp_lookat">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin|durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein|unter\sdie\slupe)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b|\b(?:u|x)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (lookat, "script", dict)
+    </script>
+  </command>
+
+  <!--
+  ****************************************************************************************************
+  MARK * * * VERBS * * *
+  ****************************************************************************************************
+  -->
+
+  <!-- MARK Speak -->
+  <verb name="pp_speak">
+    <pattern type="string"><![CDATA[^(?!.*?\bnach|über|von|vom\b)(?=.*?\b(?:an|aus|mit)?(?:sprech|sag|red|schwätz|plapper|plauder|frag|quassel|tausch|richt|teil)\S{0,3}\b|.*?\b(?:sprich|gespräch|unterhalt|antwort)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (speak, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Read -->
+  <verb name="pp_read">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:durch)?(?:les|studier|stöber|schmöker|blätter|lies)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (read, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Smell -->
+  <verb name="pp_smell">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:be)?(?:riech|schnüff|schnupper)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (smell, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Taste -->
+  <verb name="pp_taste">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:schmeck|probier|gustier)\S{0,3}\b|.*?\b(?:nehme|nimm)\b.*?\bkostprobe\b|.*?\bkostprobe\b.*?\bnehmen\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (taste, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Throw -->
+  <verb name="pp_throw">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:werf|wirf|schleuder|schmeiß|schmetter)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (throw, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Tie -->
+  <verb name="pp_tie">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:(?:an|fest)(?:bind|kett)|fess)\S{0,3}\b|.*?\b(?:bind|kett)\S{0,3}\b.*?\b(?:an|fest)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (tie, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Touch -->
+  <verb name="pp_touch">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:be|an)?(?:streich|berühr|tätsch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (touch, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Turn -->
+  <verb name="pp_turn">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:um)?(?:dreh|wend)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (turn, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Untie -->
+  <verb name="pp_untie">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:(?:los)(?:bind|kett)|entfess|lös)\S{0,3}\b|.*?\b(?:bind|kett)\S{0,3}\b.*?\blos\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (untie, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Climb -->
+  <verb name="pp_climb">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:er|be|auf|rauf|hinauf|empor)?(?:kletter|klimm|steig|kraxel|ranke)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (climb, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Eat -->
+  <verb name="pp_eat">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ess|fress|friss|(?:ver)?speis|(?:ein)?verleib|mampf|verputz|verdrück|verzehr|(?:ver)?spachtel)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (eat, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Hit -->
+  <verb name="pp_hit">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:zusammen|ein|ver|be)?(?:schlag|prügel|dresch|kämpf|box|hau|klopp|möbel)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (hit, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Kill -->
+  <verb name="pp_kill">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:töt|töd|umleg|umbring|ermord|kaltmach|liquidier|lynch|exekudier|eliminier|totschlag|erschlag|terminier|meuchel|abmurks|kill)\S{0,3}\b|.*?\b(?:bring|leg|mach)\S{0,3}\b.*?\b(?:um|kalt)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (kill, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Kiss -->
+  <verb name="pp_kiss">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ab)?(?:küss|kuss|knutsch|schmatz|liebkos|bussi|bütz)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (kiss, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Knock -->
+  <verb name="pp_knock">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an)?(?:klopf|poch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (knock, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Lick -->
+  <verb name="pp_lick">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ab)?(?:leck|schleck|lutsch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (lick, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Lieon -->
+  <verb name="pp_lieon">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:hin)?(?:lieg|leg)\S{0,3}\b)(?=.*?\bdich\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (lieon, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK ListenTo -->
+  <verb name="pp_listento">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:be|ab|zu|mit|hin)?(?:hör|lausch|horch)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (listento, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Lock -->
+  <verb name="pp_lock">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ver|ab|zu)(?:sperr|riegel|schließ|schliess)\S{0,3}\b|.*?\b(?:sperr|riegel|schließ|schliess)\S{0,3}\b.*?\b(?:ab|zu)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (lock, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Move -->
+  <verb name="pp_move">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:beweg|schieb|(?:ver)?(rück|schieb))\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (move, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Pull -->
+  <verb name="pp_pull">
+    <pattern type="string"><![CDATA[^(?!.*?\b(?:an|um|drüber|über)\b)(?=.*?\bzieh\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (pull, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Push -->
+  <verb name="pp_push">
+    <pattern type="string"><![CDATA[^(?=.*?\bdrück\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (push, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Search -->
+  <verb name="pp_search">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:such|aufspür|erforsch|recherchier)\S{0,3}\b|.*?\b(?:spür|forsch)\S{0,3}\b.*?\b(?:auf|aus)\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (search, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Show -->
+  <verb name="pp_show">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:(?:vor)?zeig|(?:hin)?deut|präsentier|vorführ|vorstell)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (show, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK SitOn -->
+  <verb name="pp_siton">
+    <pattern type="string"><![CDATA[^(?:(?=.*?\b(?:hin)?(?:setz|sitz|hock|pflanz)\S{0,3}\b)(?=.*?\bdich\b)|(?=.*?\bplatz\snehm\S{0,3}\b)|(?=.*?\b(?:nehm|nimm)\S{0,3}\b.*?\bplatz\b))(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (siton, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK UnLock -->
+  <verb name="pp_unlock">
+    <pattern type="string"><![CDATA[^(?=.*?\bauf(?:sperr|schließ|schliess)\S{0,3}\b|.*?\b(?:sperr|schließ|schliess)\S{0,3}\b.*?\bauf\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (unlock, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Buy -->
+  <verb name="pp_buy">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|ab|an|er)?(?:kauf|werb)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (buy, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK Drink -->
+  <verb name="pp_drink">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|weg|leer|be|runter|hinunter)?(?:trink|sauf|schlürf|schlurf|schluck|nipp|kipp)\S{0,3}\b|.*?\b(?:hinunter|runter)(?:gieß|schütt)\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (drink, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK LookBehind -->
+  <verb name="pp_lookbehind">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin|(?:hin)?durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\bhinte\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (lookbehind, "script", dict)
+    </script>
+    <defaulttext>Dahinter ist nichts zu sehen.</defaulttext>
+  </verb>
+  <!-- MARK LookUnder -->
+  <verb name="pp_lookunder">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:an|be|zu|nach|hin|(?:hin)?durch)?(?:schau|seh|guck|blick|glotz|gaff|muster)\S{0,3}\b|.*?\b(?:betracht|erblick|sieh|begutacht|beäug|beaugapfel|besichtig|augenschein)\S{0,3}\b|.*?\b(?:unter|durch)such\S{0,3}\b)(?=.*?\bunte\S{0,3}\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (lookunder, "script", dict)
+    </script>
+    <defaulttext>Darunter ist nichts zu sehen.</defaulttext>
+  </verb>
+  <!-- MARK TurnOn -->
+  <verb name="pp_turnon">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:ein|an)(?:stell|schalt)\S{0,3}\b|.*?\ban(?:mach|zünd|dreh|knips)\S{0,3}\b|.*?\b(?:entzünd|aktivier|start|hochfahr)\S{0,3}\b|.*?\b(?:schalt|stell)\S{0,3}\b.*?\b(?:an|ein)\b|.*?\b(?:mach|zünd|knips|dreh)\S{0,3}\b.*?\ban\b|.*?\bfahr\S{0,3}\b.*?\bhoch\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (turnon, "script", dict)
+    </script>
+  </verb>
+  <!-- MARK TurnOff -->
+  <verb name="pp_turnoff">
+    <pattern type="string"><![CDATA[^(?=.*?\b(?:aus|ab)(?:schalt|dreh)\S{0,3}\b|.*?\baus(?:mach|zünd|lösch|knips|stell)\S{0,3}\b|.*?\b(?:lösch|deaktivier|(?:he)?runterfahr)\S{0,3}\b|.*?\b(?:schalt|dreh)\S{0,3}\b.*?\b(?:ab|aus)\b|.*?\b(?:mach|zünd|knips|dreh|stell)\S{0,3}\b.*?\baus\b|.*?\bfahr\S{0,3}\b.*?\b(?:he)?runter\b)(?=.*?\b(?<object>X)\b).*$]]></pattern>
+    <script>
+      dict = NewDictionary()
+      dictionary add (dict, "object", object)
+      do (turnoff, "script", dict)
+    </script>
+  </verb>
+
+  <!--
+  ****************************************************************************************************
+  MARK Set Parser Plus
+  ****************************************************************************************************
+  -->
+  <function name="setParserPlus">
+  <![CDATA[
+    // Additional words
+    objRegExAddList = NewStringList()
+    list add (objRegExAddList, "es")
+    list add (objRegExAddList, "sie")
+    list add (objRegExAddList, "ihn")
+    list add (objRegExAddList, "alles?")
+    objRegExpList = NewStringList()
+    // Absolutely all visible objects are read out and converted into a format for regular expressions
+    foreach (obj, AllObjects()) {
+      if (HasAttribute (obj, "visible")) {
+        if (obj.visible) {
+          objValList = NewStringList()
+          // Add Alias
+          objAlias = GetDisplayAlias(obj)
+          list add (objValList, objAlias)
+          // Add alternative names
+          if (HasAttribute(obj, "alt")) {
+            objAlt = obj.alt
+            objValList = ListCombine (objValList, objAlt)
+          }
+          // Processed values
+          foreach (objVal, objValList) {
+            // Everything in parentheses is excluded because it contains states
+            brackPos = Instr (objVal, " (")
+            if (brackPos > 0) {
+              objVal = Left (objVal, brackPos - 1)
+            }
+            // Convert all object names to lowercase letters
+            objVal = LCase(objVal)
+            // If the list of regular expressions does not yet contain the new name, it is added
+            if (not ListContains(objRegExpList, objVal)) {
+              list add (objRegExpList, objVal)
+            }
+          }
+        }
+      }
+    }
+    objRegExpList = ListCombine (objRegExpList, objRegExAddList)
+    objRegExp = join(objRegExpList, "|")
+    // Replacement of object and exit placeholders
+    foreach (cmd, ScopeCommands()) {
+      cmd.pattern = Replace (cmd.pattern, "<object>X", "<object>" + objRegExp)
+      cmd.pattern = Replace (cmd.pattern, "<object1>X", "<object1>" + objRegExp)
+      cmd.pattern = Replace (cmd.pattern, "<object2>X", "<object2>" + objRegExp)
+    }
+  ]]>
+  </function>
+
+</library>
