@@ -1,4 +1,4 @@
-# DevMode 2.6
+# DevMode 2.5
 
 ### Compatible with Quest 5.7 and later.
 
